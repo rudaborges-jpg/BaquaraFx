@@ -7,6 +7,7 @@ import com.baquara.modelo.Pergunta.Dificuldade;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import java.util.Random;
@@ -31,7 +32,7 @@ public class TelaCapoeiraController {
     @FXML private TextArea txtPergunta;
     @FXML private TextArea txtDialogo;
     @FXML private VBox painelAlternativas;
-    @FXML private HBox painelLacuna;
+    @FXML private VBox painelLacuna;  // ⭐ AGORA É VBox (corrigido)
     @FXML private TextField txtRespostaLacuna;
     @FXML private Button btnEnviarLacuna;
     @FXML private Label lblTurno;
@@ -41,7 +42,6 @@ public class TelaCapoeiraController {
     @FXML private Button btnDificil;
     @FXML private Button btnCombinado;
     @FXML private Button btnEsquiva;
-    @FXML private Button btnVoltarMenu;
 
     private Jogador jogador;
     private Capoeirista capoeirista;
@@ -111,31 +111,40 @@ public class TelaCapoeiraController {
     }
 
     private void limparPergunta() {
-        txtPergunta.setText("");
-        painelAlternativas.getChildren().clear();
-        painelLacuna.setVisible(false);
-        lblDificuldade.setText("⭐ Aguardando ação...");
-        aguardandoResposta = false;
-        tipoAtaqueSelecionado = 0;
-        lblTurnoMsg.setText("🥋 Escolha seu movimento ao lado! 🥋");
+        Platform.runLater(() -> {
+            txtPergunta.setText("⚡ Clique em um ataque para começar!");
+            painelAlternativas.getChildren().clear();
+            if (painelLacuna != null) {
+                painelLacuna.setVisible(false);
+                painelLacuna.setManaged(false);
+            }
+            lblDificuldade.setText("⭐ Aguardando ação...");
+            aguardandoResposta = false;
+            tipoAtaqueSelecionado = 0;
+            lblTurnoMsg.setText("🥋 Escolha seu movimento ao lado! 🥋");
+        });
     }
 
     private void carregarPergunta(int tipoAtaque) {
         Dificuldade dificuldade;
         String nomeDificuldade;
+        String nomeAtaque;
 
         switch (tipoAtaque) {
             case 1:
                 dificuldade = Dificuldade.FACIL;
                 nomeDificuldade = "⭐ FÁCIL";
+                nomeAtaque = "GINGA BÁSICA";
                 break;
             case 2:
                 dificuldade = Dificuldade.MEDIO;
                 nomeDificuldade = "⭐⭐ MÉDIO";
+                nomeAtaque = "ATAQUE DIFÍCIL";
                 break;
             default:
                 dificuldade = Dificuldade.DIFICIL;
                 nomeDificuldade = "⭐⭐⭐ DIFÍCIL";
+                nomeAtaque = "COMBINAÇÃO MORTAL";
                 break;
         }
 
@@ -148,54 +157,77 @@ public class TelaCapoeiraController {
 
         tipoAtaqueSelecionado = tipoAtaque;
         aguardandoResposta = true;
-        lblDificuldade.setText(nomeDificuldade);
-        txtPergunta.setText(perguntaAtual.getTexto());
-        painelAlternativas.getChildren().clear();
-        painelLacuna.setVisible(false);
 
-        if (perguntaAtual instanceof PerguntaMultiplaEscolha) {
-            PerguntaMultiplaEscolha p = (PerguntaMultiplaEscolha) perguntaAtual;
-            var opcoes = p.getOpcoes();
+        Platform.runLater(() -> {
+            lblDificuldade.setText(nomeDificuldade + " - " + nomeAtaque);
+            txtPergunta.setText(perguntaAtual.getTexto());
+            txtPergunta.setStyle("-fx-background-color: #FFF8DC; -fx-text-fill: #000; -fx-font-size: 14px; -fx-font-weight: bold; -fx-border-color: #FFD700; -fx-border-width: 3; -fx-border-radius: 8;");
+            painelAlternativas.getChildren().clear();
 
-            for (int i = 0; i < opcoes.size(); i++) {
-                char letra = (char) ('A' + i);
-                Button btn = new Button(letra + ") " + opcoes.get(i));
-                btn.setStyle("-fx-background-color: #306830; -fx-text-fill: white; -fx-font-size: 12px; -fx-padding: 8px; -fx-background-radius: 8;");
-                btn.setMaxWidth(Double.MAX_VALUE);
-                final String resposta = String.valueOf(letra);
-                btn.setOnAction(e -> avaliarResposta(resposta));
-                painelAlternativas.getChildren().add(btn);
+            if (painelLacuna != null) {
+                painelLacuna.setVisible(false);
+                painelLacuna.setManaged(false);
             }
 
-        } else if (perguntaAtual instanceof PerguntaVerdadeiroFalso) {
-            HBox hboxVF = new HBox(10.0);
-            hboxVF.setAlignment(javafx.geometry.Pos.CENTER);
+            if (perguntaAtual instanceof PerguntaMultiplaEscolha) {
+                PerguntaMultiplaEscolha p = (PerguntaMultiplaEscolha) perguntaAtual;
+                var opcoes = p.getOpcoes();
 
-            Button btnV = new Button("✅ VERDADEIRO");
-            Button btnF = new Button("❌ FALSO");
-
-            String estilo = "-fx-background-color: #306830; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10px 20px; -fx-background-radius: 8;";
-            btnV.setStyle(estilo);
-            btnF.setStyle(estilo);
-
-            btnV.setOnAction(e -> avaliarResposta("V"));
-            btnF.setOnAction(e -> avaliarResposta("F"));
-
-            hboxVF.getChildren().addAll(btnV, btnF);
-            painelAlternativas.getChildren().add(hboxVF);
-
-        } else if (perguntaAtual instanceof PerguntaCompletarLacuna) {
-            painelLacuna.setVisible(true);
-            txtRespostaLacuna.clear();
-            btnEnviarLacuna.setOnAction(e -> {
-                String resposta = txtRespostaLacuna.getText().trim();
-                if (!resposta.isEmpty()) {
-                    avaliarResposta(resposta);
+                for (int i = 0; i < opcoes.size(); i++) {
+                    char letra = (char) ('A' + i);
+                    Button btn = new Button(letra + ") " + opcoes.get(i));
+                    btn.setStyle("-fx-background-color: #306830; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 10px; -fx-background-radius: 8;");
+                    btn.setMaxWidth(Double.MAX_VALUE);
+                    final String resposta = String.valueOf(letra);
+                    btn.setOnAction(e -> avaliarResposta(resposta));
+                    painelAlternativas.getChildren().add(btn);
                 }
-            });
-        }
 
-        lblTurnoMsg.setText("📚 Responda a pergunta para executar o golpe!");
+            } else if (perguntaAtual instanceof PerguntaVerdadeiroFalso) {
+                HBox hboxVF = new HBox(15.0);
+                hboxVF.setAlignment(javafx.geometry.Pos.CENTER);
+
+                Button btnV = new Button("✅ VERDADEIRO");
+                Button btnF = new Button("❌ FALSO");
+
+                String estilo = "-fx-background-color: #306830; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10px 25px; -fx-background-radius: 8;";
+                btnV.setStyle(estilo);
+                btnF.setStyle(estilo);
+
+                btnV.setOnAction(e -> avaliarResposta("V"));
+                btnF.setOnAction(e -> avaliarResposta("F"));
+
+                hboxVF.getChildren().addAll(btnV, btnF);
+                painelAlternativas.getChildren().add(hboxVF);
+
+            } else if (perguntaAtual instanceof PerguntaCompletarLacuna) {
+                if (painelLacuna != null) {
+                    painelLacuna.setVisible(true);
+                    painelLacuna.setManaged(true);
+                    txtRespostaLacuna.clear();
+                    txtRespostaLacuna.requestFocus();
+
+                    // ⭐ ENTER PARA RESPONDER
+                    txtRespostaLacuna.setOnKeyPressed(event -> {
+                        if (event.getCode() == KeyCode.ENTER) {
+                            String resposta = txtRespostaLacuna.getText().trim();
+                            if (!resposta.isEmpty()) {
+                                avaliarResposta(resposta);
+                            }
+                        }
+                    });
+
+                    btnEnviarLacuna.setOnAction(e -> {
+                        String resposta = txtRespostaLacuna.getText().trim();
+                        if (!resposta.isEmpty()) {
+                            avaliarResposta(resposta);
+                        }
+                    });
+                }
+            }
+
+            lblTurnoMsg.setText("📚 Responda a pergunta para executar o golpe!");
+        });
     }
 
     private void avaliarResposta(String resposta) {
@@ -215,7 +247,7 @@ public class TelaCapoeiraController {
 
             if (!inimigoAtual.vivo()) {
                 if (inimigoAtual instanceof BesouroManganga) {
-                    adicionarDialogo("\n🏆 VOCÊ DERROTOU O BESOURO MANGANGÁ!");
+                    adicionarDialogo("\n🏆🏆🏆 VOCÊ DERROTOU O BESOURO MANGANGÁ!");
                     adicionarDialogo("👑 Você se tornou uma LENDA DA CAPOEIRA!");
                     finalizarJogo(true);
                     return;
@@ -320,7 +352,18 @@ public class TelaCapoeiraController {
             lblJogadorVida.setText("Vida: " + capoeirista.getVida() + "/" + capoeirista.getVidaMax());
             barraJogadorVida.setProgress((double) capoeirista.getVida() / capoeirista.getVidaMax());
             lblJogadorGinga.setText("🌀 Ginga: " + capoeirista.getEnergiaGinga() + "/" + capoeirista.getEnergiaMaxima());
-            lblEsquivas.setText("🔄 Esquivas: " + capoeirista.getEsquivasRestantes() + "/" + capoeirista.getEsquivasMaximas());
+
+            // Atualiza botão esquiva
+            int esquivasRestantes = capoeirista.getEsquivasRestantes();
+            btnEsquiva.setText("🌀 ESQUIVA (" + esquivasRestantes + " restante" + (esquivasRestantes != 1 ? "s" : "") + ")");
+
+            if (esquivasRestantes <= 0) {
+                btnEsquiva.setStyle("-fx-background-color: #555; -fx-text-fill: #aaa; -fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 8px 15px; -fx-background-radius: 8;");
+                btnEsquiva.setDisable(true);
+            } else {
+                btnEsquiva.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 8px 15px; -fx-background-radius: 8;");
+                btnEsquiva.setDisable(false);
+            }
         });
     }
 
@@ -344,11 +387,9 @@ public class TelaCapoeiraController {
     private void finalizarJogo(boolean vitoria) {
         Platform.runLater(() -> {
             if (vitoria) {
-                adicionarDialogo("\n🏆🏆🏆 VOCÊ É UMA LENDA VIVA! 🏆🏆🏆");
-                adicionarDialogo("👑 O BERIMBAU CANTA SEU NOME!");
+                txtDialogo.setText("\n🏆🏆🏆 VOCÊ É UMA LENDA VIVA! 🏆🏆🏆\n👑 O BERIMBAU CANTA SEU NOME!");
             } else {
-                adicionarDialogo("\n💀 VOCÊ CAIU NA RODA...");
-                adicionarDialogo("🎵 A capoeira continua viva!");
+                txtDialogo.setText("\n💀 VOCÊ CAIU NA RODA...\n🎵 A capoeira continua viva!");
             }
             btnBasico.setDisable(true);
             btnDificil.setDisable(true);
@@ -407,13 +448,6 @@ public class TelaCapoeiraController {
                 } else {
                     adicionarDialogo("❌ Sem esquivas disponíveis!");
                 }
-            }
-        });
-
-        btnVoltarMenu.setOnAction(e -> {
-            if (aguardandoResposta) {
-                adicionarDialogo("❌ Ação cancelada!");
-                limparPergunta();
             }
         });
     }

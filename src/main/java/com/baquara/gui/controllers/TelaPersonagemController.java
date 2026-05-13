@@ -1,8 +1,6 @@
 package com.baquara.gui.controllers;
 
 import com.baquara.controle.GerenciadorBatalha;
-import com.baquara.controle.GerenciadorRodaCapoeira;
-import com.baquara.dados.BancoPerguntas;
 import com.baquara.modelo.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -36,11 +34,9 @@ public class TelaPersonagemController {
         this.nomeJogador = nome;
         System.out.println("Jogador: " + nomeJogador);
 
-        // ⭐ SE FOR "Rudá", ESCONDE AS PORTAS NORMAIS E MOSTRA SÓ A SECRETA
         if ("Rudá".equalsIgnoreCase(nome.trim())) {
             mostrarApenasPortaSecreta();
             System.out.println("🔮 ROTA SECRETA DESBLOQUEADA! 🔮");
-            System.out.println("🥋 A PORTA DA CAPOEIRA APARECEU! 🥋");
         }
     }
 
@@ -118,10 +114,13 @@ public class TelaPersonagemController {
         Jogador jogador = new Jogador(nomeJogador);
         jogador.escolherPersonagem(capoeirista);
 
-        iniciarRodaCapoeira(jogador);
+        iniciarTelaCapoeira(jogador);
     }
 
-    private void iniciarRodaCapoeira(Jogador jogador) {
+    /**
+     * ⭐ INICIA A TELA DE CAPOEIRA (SEM USAR O GERENCIADOR DE CONSOLE)
+     */
+    private void iniciarTelaCapoeira(Jogador jogador) {
         try {
             System.out.println("Carregando tela de capoeira...");
 
@@ -136,6 +135,7 @@ public class TelaPersonagemController {
             stage.setTitle("Baquara - Roda de Capoeira");
             stage.setResizable(false);
 
+            // ⭐ INICIA A RODA DIRETAMENTE NA CONTROLLER, SEM O GERENCIADOR DE CONSOLE
             controller.iniciarRoda();
 
             System.out.println("Tela de capoeira carregada com sucesso!");
@@ -145,10 +145,13 @@ public class TelaPersonagemController {
             System.out.println("Erro ao carregar tela de capoeira: " + e.getMessage());
             personagemEscolhido = false;
 
-            // Fallback: console
-            System.out.println("\n⚠️ Erro na interface gráfica. Usando modo texto...\n");
-            GerenciadorRodaCapoeira gerenciador = new GerenciadorRodaCapoeira(jogador);
-            gerenciador.iniciarRodaProibida();
+            // ⭐ MOSTRA MENSAGEM DE ERRO NA INTERFACE
+            Stage stage = (Stage) btnRotaSecreta.getScene().getWindow();
+            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setHeaderText("Não foi possível carregar a Roda de Capoeira");
+            alert.setContentText("Erro: " + e.getMessage() + "\n\nVerifique se o arquivo tela-capoeira.fxml existe.");
+            alert.showAndWait();
         }
     }
 

@@ -316,9 +316,22 @@ public class TelaBatalhaController {
             painelAlternativas.getChildren().add(hboxVF);
 
         } else if (perguntaAtual instanceof PerguntaCompletarLacuna) {
+            painelAlternativas.setVisible(false);
             painelLacuna.setVisible(true);
             painelLacuna.setManaged(true);
+            txtRespostaLacuna.clear();
             txtRespostaLacuna.requestFocus();
+
+            // ⭐ ADICIONA SUPORTE À TECLA ENTER
+            txtRespostaLacuna.setOnKeyPressed(event -> {
+                if (event.getCode() == javafx.scene.input.KeyCode.ENTER) {
+                    String resposta = txtRespostaLacuna.getText().trim();
+                    if (!resposta.isEmpty()) {
+                        avaliarResposta(resposta);
+                    }
+                }
+            });
+
         }
     }
 
