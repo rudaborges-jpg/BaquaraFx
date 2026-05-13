@@ -16,10 +16,8 @@ public class TelaInicialController {
 
     @FXML
     public void initialize() {
-        // Configurações iniciais
         btnJogar.setOnAction(e -> iniciarJogo());
         btnSair.setOnAction(e -> sair());
-
         txtNome.setPromptText("Digite seu nome");
     }
 
@@ -32,19 +30,15 @@ public class TelaInicialController {
             return;
         }
 
-        // Limpar estilo de erro
         txtNome.setStyle("");
 
         try {
-            // Carregar a tela de seleção de personagem
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/tela-personagem.fxml"));
             Parent root = loader.load();
 
-            // Passar o nome do jogador para a próxima tela
-            com.baquara.gui.controller.TelaPersonagemController controller = loader.getController();
+            TelaPersonagemController controller = loader.getController();
             controller.setNomeJogador(nome);
 
-            // Trocar a tela
             Stage stage = (Stage) btnJogar.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Baquara - Escolha seu Personagem");
