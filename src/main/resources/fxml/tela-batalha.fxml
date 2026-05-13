@@ -20,60 +20,58 @@
 
         <Label fx:id="lblTurno" layoutX="500.0" layoutY="15.0" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #333; -fx-padding: 5 15; -fx-background-radius: 20;" text="⚔️ SEU TURNO ⚔️" textFill="#FFD700" />
 
-        <!-- ==================== INIMIGO ==================== -->
-        <VBox alignment="TOP_CENTER" layoutX="580.0" layoutY="50.0" spacing="5.0">
+        <!-- ==================== INIMIGO (Sprite + Status lado a lado) ==================== -->
+        <HBox alignment="CENTER" layoutX="530.0" layoutY="50.0" spacing="15.0">
             <children>
-                <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #2a2a4a; -fx-background-radius: 10; -fx-border-color: #ff4444; -fx-border-radius: 10; -fx-border-width: 2;">
+                <!-- Sprite do Inimigo -->
+                <VBox alignment="CENTER" prefHeight="90.0" prefWidth="90.0" style="-fx-background-color: #2a2a4a; -fx-background-radius: 10; -fx-border-color: #ff4444; -fx-border-radius: 10; -fx-border-width: 2;">
                     <children>
                         <Label fx:id="lblInimigoSprite" style="-fx-font-size: 48px;" text="👾" />
                     </children>
                 </VBox>
 
-                <HBox alignment="CENTER_LEFT" prefWidth="180.0" style="-fx-background-color: rgba(0,0,0,0.7); -fx-background-radius: 8;">
+                <!-- Status do Inimigo (ao lado do sprite) -->
+                <VBox spacing="3.0" style="-fx-background-color: rgba(0,0,0,0.7); -fx-background-radius: 8; -fx-padding: 8 12;">
                     <children>
-                        <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
                             <children>
                                 <Label fx:id="lblInimigoNome" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="INIMIGO" textFill="WHITE" />
-                                <Label fx:id="lblInimigoNivel" style="-fx-font-size: 10px;" text="Nv. 1" textFill="#ccc" />
-                                <ProgressBar fx:id="barraInimigoVida" prefWidth="160.0" progress="1.0" style="-fx-accent: #ff4444;" />
-                                <Label fx:id="lblInimigoVida" style="-fx-font-size: 10px;" text="HP: 100/100" textFill="WHITE" />
+                                <Label fx:id="lblInimigoNivel" style="-fx-font-size: 10px;" text="Lv.1" textFill="#ccc" />
                             </children>
-                            <padding>
-                                <Insets bottom="5.0" left="8.0" right="8.0" top="5.0" />
-                            </padding>
-                        </VBox>
+                        </HBox>
+                        <ProgressBar fx:id="barraInimigoVida" prefWidth="160.0" progress="1.0" style="-fx-accent: #ff4444;" />
+                        <Label fx:id="lblInimigoVida" style="-fx-font-size: 10px;" text="HP: 100/100" textFill="WHITE" />
                     </children>
-                </HBox>
+                </VBox>
             </children>
-        </VBox>
+        </HBox>
 
-        <!-- ==================== JOGADOR (Sprite mais para cima) ==================== -->
-        <VBox alignment="BOTTOM_CENTER" layoutX="80.0" layoutY="320.0" spacing="5.0">
+        <!-- ==================== JOGADOR (Sprite + Status lado a lado) ==================== -->
+        <HBox alignment="CENTER" layoutX="80.0" layoutY="380.0" spacing="15.0">
             <children>
-                <VBox alignment="CENTER" prefHeight="80.0" prefWidth="80.0" style="-fx-background-color: #2a2a4a; -fx-background-radius: 10; -fx-border-color: #44ff44; -fx-border-radius: 10; -fx-border-width: 2;">
+                <!-- Status do Jogador (ao lado do sprite) -->
+                <VBox spacing="3.0" style="-fx-background-color: rgba(0,0,0,0.7); -fx-background-radius: 8; -fx-padding: 8 12;">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                            <children>
+                                <Label fx:id="lblJogadorNome" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="JOGADOR" textFill="WHITE" />
+                                <Label fx:id="lblJogadorNivel" style="-fx-font-size: 10px;" text="Lv.1" textFill="#ccc" />
+                            </children>
+                        </HBox>
+                        <ProgressBar fx:id="barraJogadorVida" prefWidth="160.0" progress="1.0" style="-fx-accent: #44ff44;" />
+                        <Label fx:id="lblJogadorVida" style="-fx-font-size: 10px;" text="HP: 100/100" textFill="WHITE" />
+                        <Label fx:id="lblJogadorAtributo" style="-fx-font-size: 10px;" text="✨ Poder: 100" textFill="#aaa" />
+                    </children>
+                </VBox>
+
+                <!-- Sprite do Jogador -->
+                <VBox alignment="CENTER" prefHeight="90.0" prefWidth="90.0" style="-fx-background-color: #2a2a4a; -fx-background-radius: 10; -fx-border-color: #44ff44; -fx-border-radius: 10; -fx-border-width: 2;">
                     <children>
                         <Label fx:id="lblJogadorSprite" style="-fx-font-size: 48px;" text="⚔️" />
                     </children>
                 </VBox>
-
-                <HBox alignment="CENTER_LEFT" prefWidth="180.0" style="-fx-background-color: rgba(0,0,0,0.7); -fx-background-radius: 8;">
-                    <children>
-                        <VBox spacing="2.0" HBox.hgrow="ALWAYS">
-                            <children>
-                                <Label fx:id="lblJogadorNome" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="JOGADOR" textFill="WHITE" />
-                                <Label fx:id="lblJogadorNivel" style="-fx-font-size: 10px;" text="Nv. 1" textFill="#ccc" />
-                                <ProgressBar fx:id="barraJogadorVida" prefWidth="160.0" progress="1.0" style="-fx-accent: #44ff44;" />
-                                <Label fx:id="lblJogadorVida" style="-fx-font-size: 10px;" text="HP: 100/100" textFill="WHITE" />
-                                <Label fx:id="lblJogadorAtributo" style="-fx-font-size: 10px;" text="✨ Poder: 100" textFill="#aaa" />
-                            </children>
-                            <padding>
-                                <Insets bottom="5.0" left="8.0" right="8.0" top="5.0" />
-                            </padding>
-                        </VBox>
-                    </children>
-                </HBox>
             </children>
-        </VBox>
+        </HBox>
 
         <!-- ==================== CAIXA DE DIÁLOGO ==================== -->
         <VBox layoutX="20.0" layoutY="430.0" prefWidth="400.0" prefHeight="140.0" style="-fx-background-color: rgba(0,0,0,0.85); -fx-background-radius: 15; -fx-border-color: #FFD700; -fx-border-radius: 15; -fx-border-width: 2;">
@@ -86,7 +84,7 @@
             </padding>
         </VBox>
 
-        <!-- ==================== MENU DE AÇÕES (apenas Atacar e Habilidade) ==================== -->
+        <!-- ==================== MENU DE AÇÕES ==================== -->
         <VBox layoutX="440.0" layoutY="430.0" spacing="10.0" prefWidth="180.0">
             <children>
                 <Button fx:id="btnAtacar" style="-fx-background-color: #306830; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 10px 20px; -fx-background-radius: 8;" text="⚔️ ATACAR" />
@@ -106,7 +104,7 @@
                     </content>
                 </ScrollPane>
 
-                <!-- Alternativas usando HBox para V/F lado a lado -->
+                <!-- Alternativas -->
                 <VBox fx:id="painelAlternativas" spacing="5.0" />
 
                 <!-- Lacuna -->

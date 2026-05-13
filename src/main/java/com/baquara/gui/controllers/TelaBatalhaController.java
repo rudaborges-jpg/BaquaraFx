@@ -15,11 +15,11 @@ import java.util.*;
 
 public class TelaBatalhaController {
 
-    // Componentes do menu principal
+    // Componentes do menu principal (APENAS os que existem no FXML)
     @FXML private Button btnAtacar;
     @FXML private Button btnHabilidade;
-    @FXML private Button btnItem;
-    @FXML private Button btnFugir;
+    // @FXML private Button btnItem;  // REMOVIDO - não existe no FXML
+    // @FXML private Button btnFugir;  // REMOVIDO - não existe no FXML
 
     // Componentes do painel de pergunta
     @FXML private VBox painelPergunta;
@@ -48,6 +48,7 @@ public class TelaBatalhaController {
     @FXML private Button btnEnviarLacuna;
     @FXML private Label lblCooldown;
     @FXML private Label lblTurno;
+    @FXML private Label lblTurnoMsg;
 
     private Jogador jogador;
     private Inimigo inimigoAtual;
@@ -69,7 +70,7 @@ public class TelaBatalhaController {
     private Set<Integer> perguntasUsadas = new HashSet<>();
     private Map<Dificuldade, List<Pergunta>> perguntasDisponiveis = new HashMap<>();
 
-    // Sprites diferentes para cada personagem
+    // Sprites
     private final Map<PerTipo, String> sprites = new HashMap<>();
     {
         sprites.put(PerTipo.PALADINO, "🛡️");
@@ -87,7 +88,6 @@ public class TelaBatalhaController {
         inicializarHabilidadeDoPersonagem();
         atualizarStatusJogador();
 
-        // Configura sprite do jogador
         String sprite = sprites.getOrDefault(jogador.getPersonagem().getTipo(), "⚔️");
         lblJogadorSprite.setText(sprite);
 
@@ -162,11 +162,9 @@ public class TelaBatalhaController {
         // Configura menu principal
         btnAtacar.setOnAction(e -> mostrarPainelPergunta());
         btnHabilidade.setOnAction(e -> usarHabilidade());
-        btnItem.setDisable(true);
-        btnFugir.setDisable(true);
         btnVoltarMenu.setOnAction(e -> voltarAoMenu());
 
-        // Configura ENTER para responder
+        // Configura ENTER para responder na lacuna
         txtRespostaLacuna.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 String resposta = txtRespostaLacuna.getText().trim();
@@ -185,13 +183,17 @@ public class TelaBatalhaController {
     private void mostrarMenuPrincipal() {
         painelPergunta.setVisible(false);
         painelPergunta.setManaged(false);
-        lblTurno.setText("⚔️ Escolha sua ação! ⚔️");
+        if (lblTurnoMsg != null) {
+            lblTurnoMsg.setText("⚔️ Escolha sua ação! ⚔️");
+        }
     }
 
     private void mostrarPainelPergunta() {
         painelPergunta.setVisible(true);
         painelPergunta.setManaged(true);
-        lblTurno.setText("📚 Responda a pergunta para atacar! 📚");
+        if (lblTurnoMsg != null) {
+            lblTurnoMsg.setText("📚 Responda a pergunta para atacar! 📚");
+        }
         proximaPergunta();
     }
 
@@ -273,6 +275,7 @@ public class TelaBatalhaController {
     private void exibirAlternativas() {
         painelAlternativas.getChildren().clear();
         painelLacuna.setVisible(false);
+        painelLacuna.setManaged(false);
         txtRespostaLacuna.clear();
 
         if (perguntaAtual instanceof PerguntaMultiplaEscolha) {
@@ -290,21 +293,21 @@ public class TelaBatalhaController {
             }
 
         } else if (perguntaAtual instanceof PerguntaVerdadeiroFalso) {
-            // ⭐ USANDO HBox PARA DEIXAR V/F LADO A LADO
-            HBox hboxVF = new HBox(10.0); // Espaçamento de 10 entre os botões
+            // V/F lado a lado
+            HBox hboxVF = new HBox(10.0);
             hboxVF.setAlignment(javafx.geometry.Pos.CENTER);
 
             Button btnV = new Button("✅ VERDADEIRO");
             Button btnF = new Button("❌ FALSO");
 
-            btnV.setStyle("-fx-background-color: #306830; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10px 20px; -fx-background-radius: 8;");
-            btnF.setStyle("-fx-background-color: #306830; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10px 20px; -fx-background-radius: 8;");
+            String estilo = "-fx-background-color: #306830; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10px 20px; -fx-background-radius: 8;";
+            btnV.setStyle(estilo);
+            btnF.setStyle(estilo);
 
-            // Efeito hover
             btnV.setOnMouseEntered(e -> btnV.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10px 20px; -fx-background-radius: 8;"));
-            btnV.setOnMouseExited(e -> btnV.setStyle("-fx-background-color: #306830; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10px 20px; -fx-background-radius: 8;"));
+            btnV.setOnMouseExited(e -> btnV.setStyle(estilo));
             btnF.setOnMouseEntered(e -> btnF.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10px 20px; -fx-background-radius: 8;"));
-            btnF.setOnMouseExited(e -> btnF.setStyle("-fx-background-color: #306830; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10px 20px; -fx-background-radius: 8;"));
+            btnF.setOnMouseExited(e -> btnF.setStyle(estilo));
 
             btnV.setOnAction(e -> avaliarResposta("V"));
             btnF.setOnAction(e -> avaliarResposta("F"));
@@ -313,7 +316,6 @@ public class TelaBatalhaController {
             painelAlternativas.getChildren().add(hboxVF);
 
         } else if (perguntaAtual instanceof PerguntaCompletarLacuna) {
-            painelAlternativas.setVisible(false);
             painelLacuna.setVisible(true);
             painelLacuna.setManaged(true);
             txtRespostaLacuna.requestFocus();
@@ -367,7 +369,7 @@ public class TelaBatalhaController {
             jogador.tomarDano(dano);
             danoTotalRecebido += dano;
             adicionarDialogo("❌ ERRADO! " + inimigoAtual.getNome() + " causou " + dano + " de dano!");
-            adicionarDialogo("📖 Resposta: " + AvaliadorRespostas.getRespostaCorretaFormatada(perguntaAtual));
+            adicionarDialogo("📖 Resposta correta: " + AvaliadorRespostas.getRespostaCorretaFormatada(perguntaAtual));
             atualizarStatusJogador();
 
             if (!jogador.vivo()) {
@@ -384,12 +386,13 @@ public class TelaBatalhaController {
         Personagem p = jogador.getPersonagem();
         int danoBase = p.getAtaque();
 
-        int multiplicador = switch (diff) {
-            case FACIL -> 1;
-            case MEDIO -> 2;
-            case DIFICIL -> 3;
-            default -> 1;
-        };
+        int multiplicador;
+        switch (diff) {
+            case FACIL: multiplicador = 1; break;
+            case MEDIO: multiplicador = 2; break;
+            case DIFICIL: multiplicador = 3; break;
+            default: multiplicador = 1;
+        }
 
         int multiplicadorEstagio = Math.max(1, estagioAtual / 2);
         int dano = danoBase * multiplicador * multiplicadorEstagio;
@@ -417,8 +420,13 @@ public class TelaBatalhaController {
         Personagem p = jogador.getPersonagem();
         HabilidadeEspecial hab = p.getHabilidade();
 
-        if (hab == null || !hab.estaPronta()) {
-            adicionarDialogo("⏳ Habilidade em cooldown ou indisponível!");
+        if (hab == null) {
+            adicionarDialogo("❌ Seu personagem não possui habilidade especial!");
+            return;
+        }
+
+        if (!hab.estaPronta()) {
+            adicionarDialogo("⏳ Habilidade em cooldown! Aguarde " + hab.getCooldownAtual() + " rodada(s).");
             return;
         }
 
@@ -457,7 +465,7 @@ public class TelaBatalhaController {
     private void adicionarDialogo(String msg) {
         Platform.runLater(() -> {
             String atual = txtDialogo.getText();
-            txtDialogo.setText(msg + "\n" + (atual.length() > 300 ? atual.substring(0, 300) : atual));
+            txtDialogo.setText(msg + "\n" + (atual.length() > 500 ? atual.substring(0, 500) : atual));
         });
     }
 

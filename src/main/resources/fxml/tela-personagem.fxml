@@ -7,16 +7,16 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <ScrollPane fitToWidth="true" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.baquara.gui.controllers.TelaPersonagemController">
     <content>
         <VBox spacing="20.0" style="-fx-background-color: linear-gradient(to bottom, #1a1a2e, #0a0a1a); -fx-padding: 30;">
 
             <Label alignment="CENTER" style="-fx-font-size: 36px; -fx-font-weight: bold;" text="ESCOLHA SEU DESTINO" textFill="#FFD700" />
-            <Label alignment="CENTER" style="-fx-font-size: 16px;" text="Cada porta leva a uma rota diferente..." textFill="WHITE" />
+            <Label fx:id="lblSubtitulo" alignment="CENTER" style="-fx-font-size: 16px;" text="Cada porta leva a uma rota diferente..." textFill="WHITE" />
 
-            <GridPane alignment="CENTER" hgap="30.0" vgap="30.0">
+            <!-- ========== PORTAS DOS PERSONAGENS NORMAIS ========== -->
+            <GridPane fx:id="gridNormais" alignment="CENTER" hgap="30.0" vgap="30.0" visible="true" managed="true">
 
                 <!-- Porta Paladino -->
                 <VBox alignment="CENTER" spacing="10.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
@@ -103,25 +103,29 @@
                     </Button>
                 </VBox>
 
-                <!-- PORTA SECRETA (Rudá) -->
-                <VBox alignment="CENTER" spacing="10.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                    <Button fx:id="btnRotaSecreta" style="-fx-background-color: transparent; -fx-padding: 0;" visible="false" managed="false">
-                        <graphic>
-                            <VBox alignment="CENTER" spacing="5.0">
-                                <Label style="-fx-font-size: 80px;" text="🚪🔮" />
-                                <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #9C27B0; -fx-padding: 5 15; -fx-background-radius: 20;" text="??? ROTA SECRETA ???" textFill="#FFD700" />
-                                <VBox style="-fx-background-color: rgba(156,39,176,0.3); -fx-background-radius: 10; -fx-padding: 8;" spacing="3.0">
-                                    <Label style="-fx-font-size: 11px;" text="⚔️ Modo Lendário" textFill="#E1BEE7" />
-                                    <Label style="-fx-font-size: 11px;" text="🐉 Desafio Especial" textFill="#E1BEE7" />
-                                </VBox>
-                            </VBox>
-                        </graphic>
-                    </Button>
-                </VBox>
-
             </GridPane>
 
-            <Button fx:id="btnVoltar" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10px 30px;" text="◀️ VOLTAR" />
+            <!-- ========== PORTA SECRETA (SÓ APARECE PARA Rudá) ========== -->
+            <VBox fx:id="painelSecreto" alignment="CENTER" spacing="20.0" visible="false" managed="false">
+                <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="🔮 UMA PORTA MISTERIOSA APARECEU! 🔮" textFill="#9C27B0" />
+
+                <Button fx:id="btnRotaSecreta" style="-fx-background-color: transparent; -fx-padding: 0;">
+                    <graphic>
+                        <VBox alignment="CENTER" spacing="10.0">
+                            <Label style="-fx-font-size: 100px;" text="🚪🔮" />
+                            <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-background-color: #9C27B0; -fx-padding: 8 25; -fx-background-radius: 25;" text="🥋 RODA DE CAPOEIRA 🥋" textFill="#FFD700" />
+                            <VBox style="-fx-background-color: rgba(156,39,176,0.3); -fx-background-radius: 15; -fx-padding: 12;" spacing="5.0" alignment="CENTER">
+                                <Label style="-fx-font-size: 12px;" text="⚔️ Modo Especial: Capoeira" textFill="#E1BEE7" />
+                                <Label style="-fx-font-size: 12px;" text="🎵 Enfrente os 9 Mestres" textFill="#E1BEE7" />
+                                <Label style="-fx-font-size: 12px;" text="🦗 Derrote o Besouro Mangangá" textFill="#E1BEE7" />
+                                <Label style="-fx-font-size: 12px;" text="👑 Torne-se uma lenda!" textFill="#FFD700" />
+                            </VBox>
+                        </VBox>
+                    </graphic>
+                </Button>
+            </VBox>
+
+            <Button fx:id="btnVoltar" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10px 30px; -fx-background-radius: 8;" text="◀️ VOLTAR" />
 
         </VBox>
     </content>
