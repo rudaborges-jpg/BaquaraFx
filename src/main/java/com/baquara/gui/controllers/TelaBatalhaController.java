@@ -1,35 +1,27 @@
 package com.baquara.gui.controllers;
 
-import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.util.Duration;
 import com.baquara.modelo.*;
+import com.baquara.modelo.Pergunta.Dificuldade;
 import com.baquara.controle.AvaliadorRespostas;
 import com.baquara.dados.BancoPerguntas;
-import com.baquara.modelo.Pergunta.Dificuldade;
-import java.util.List;
+import com.baquara.habilidades.HabilidadeEspecial;
 import java.util.Random;
 
 public class TelaBatalhaController {
 
-    // Componentes da UI
     @FXML private Label lblJogadorNome;
     @FXML private Label lblJogadorVida;
     @FXML private ProgressBar barraJogadorVida;
     @FXML private Label lblJogadorAtributo;
-    @FXML private ImageView imgJogador;
 
     @FXML private Label lblInimigoNome;
     @FXML private Label lblInimigoVida;
     @FXML private ProgressBar barraInimigoVida;
-    @FXML private ImageView imgInimigo;
-    @FXML private Label lblInimigoInfo;
 
     @FXML private Label lblDificuldade;
     @FXML private TextArea txtPergunta;
@@ -44,7 +36,6 @@ public class TelaBatalhaController {
     @FXML private Label lblCooldown;
     @FXML private Label lblTurno;
 
-    // Dados do jogo
     private Jogador jogador;
     private Inimigo inimigoAtual;
     private BancoPerguntas bancoPerguntas;
@@ -52,128 +43,104 @@ public class TelaBatalhaController {
     private int estagioAtual = 1;
     private int pontuacao = 0;
     private Random random = new Random();
-    private boolean aguardandoResposta = false;
-    private Timeline temporizador;
-    private int tempoRestante = 20;
+
+    // ⭐ ESTATÍSTICAS PARA TELA FINAL
+    private int perguntasCertas = 0;
+    private int perguntasErradas = 0;
+    private int habilidadesUsadas = 0;
+    private int danoTotalCausado = 0;
+    private int danoTotalRecebido = 0;
+    private int rodadaAtual = 0;
 
     public void setJogador(Jogador jogador) {
         this.jogador = jogador;
-        carregarSpriteJogador();
         atualizarStatusJogador();
+        adicionarDialogo("✨ " + jogador.getPersonagem().getNome() + " entrou na batalha!");
+
+        // ⭐ Mostrar informação da habilidade
+        Personagem p = jogador.getPersonagem();
+        if (p.getHabilidade() != null) {
+            adicionarDialogo("🌟 Habilidade: " + p.getHabilidade().getNome());
+            adicionarDialogo("   " + p.getHabilidade().getDescricao());
+            adicionarDialogo("   ⏱️ Cooldown: " + p.getHabilidade().getCooldown() + " rodadas");
+        }
+
+        atualizarInterfaceHabilidade();
     }
 
-    private void carregarSpriteJogador() {
-        String tipo = jogador.getPersonagem().getTipo().getNome().toLowerCase();
-        String caminho = "/images/pokemons/" + tipo + ".png";
+    /**
+     * ⭐ Atualiza a interface baseado no cooldown REAL do personagem
+     */
+    private void atualizarInterfaceHabilidade() {
+        Platform.runLater(() -> {
+            Personagem p = jogador.getPersonagem();
+            HabilidadeEspecial hab = p.getHabilidade();
 
-        try {
-            Image img = new Image(getClass().getResourceAsStream(caminho));
-            if (img != null && !img.isError()) {
-                imgJogador.setImage(img);
-            } else {
-                imgJogador.setImage(criarSpritePlaceholder(tipo));
+            if (hab == null) {
+                btnHabilidade.setDisable(true);
+                lblCooldown.setText("❌ Sem habilidade");
+                return;
             }
-        } catch (Exception e) {
-            imgJogador.setImage(criarSpritePlaceholder(tipo));
+
+            boolean pronta = hab.estaPronta();
+            int cdAtual = hab.getCooldownAtual();
+
+            if (pronta) {
+                btnHabilidade.setDisable(false);
+                lblCooldown.setText("✨ PRONTA!");
+                lblCooldown.setStyle("-fx-text-fill: #4CAF50;");
+            } else {
+                btnHabilidade.setDisable(true);
+                lblCooldown.setText("⏳ Cooldown: " + cdAtual + " rodada(s)");
+                lblCooldown.setStyle("-fx-text-fill: #FF9800;");
+            }
+        });
+    }
+
+    /**
+     * ⭐ REDUZ COOLDOWN - Chamado ao final de cada rodada
+     */
+    private void reduzirCooldownHabilidade() {
+        Personagem p = jogador.getPersonagem();
+        if (p != null) {
+            p.reduzirCooldownHabilidade();
+            atualizarInterfaceHabilidade();
         }
     }
 
-    private Image criarSpritePlaceholder(String tipo) {
-        // Placeholder colorido caso não tenha imagem
-        javafx.scene.canvas.Canvas canvas = new javafx.scene.canvas.Canvas(100, 100);
-        javafx.scene.canvas.GraphicsContext gc = canvas.getGraphicsContext2D();
-
-        switch (tipo) {
-            case "paladino": gc.setFill(javafx.scene.paint.Color.GOLD); break;
-            case "guerreiro": gc.setFill(javafx.scene.paint.Color.RED); break;
-            case "cacadora": gc.setFill(javafx.scene.paint.Color.GREEN); break;
-            case "sabio": gc.setFill(javafx.scene.paint.Color.BLUE); break;
-            default: gc.setFill(javafx.scene.paint.Color.PURPLE);
+    /**
+     * ⭐ RESETA COOLDOWN (usado entre estágios/chefões)
+     */
+    private void resetarCooldownHabilidade() {
+        Personagem p = jogador.getPersonagem();
+        if (p != null) {
+            p.resetarCooldownHabilidade();
+            atualizarInterfaceHabilidade();
+            adicionarDialogo("✨ Cooldown da habilidade resetado!");
         }
-        gc.fillOval(20, 20, 60, 60);
-        gc.setFill(javafx.scene.paint.Color.BLACK);
-        gc.fillOval(40, 40, 8, 8);
-        gc.fillOval(55, 40, 8, 8);
-
-        javafx.scene.image.WritableImage image = canvas.snapshot(null, null);
-        return image;
     }
 
     @FXML
     public void initialize() {
         bancoPerguntas = new BancoPerguntas();
         btnHabilidade.setOnAction(e -> usarHabilidade());
-
-        // Estilo dos botões de resposta
-        painelAlternativas.setStyle("-fx-background-color: transparent;");
     }
 
     public void iniciarBatalha() {
-        animarEntrada();
         criarProximoInimigo();
         proximaPergunta();
     }
 
-    private void animarEntrada() {
-        // Animação fade-in do jogador
-        FadeTransition fade = new FadeTransition(Duration.seconds(0.5), imgJogador);
-        fade.setFromValue(0);
-        fade.setToValue(1);
-        fade.play();
-
-        adicionarDialogo("✨ " + jogador.getPersonagem().getNome() + " entrou na arena!");
-        adicionarDialogo("⚔️ Prepare-se para a batalha do saber!");
-    }
-
     private void criarProximoInimigo() {
-        int vidaBase = 80 + (estagioAtual * 25);
-        int ataqueBase = 20 + (estagioAtual * 6);
-        String[] nomesInimigos = {
-                "Guardião da Floresta", "Guardião das Chamas", "Guardião dos Mares",
-                "Guardião dos Ventos", "Guardião das Trevas", "Guardião da Luz"
-        };
-        String nome = nomesInimigos[random.nextInt(nomesInimigos.length)] + " Nv." + estagioAtual;
-
-        inimigoAtual = new Inimigo(nome, vidaBase, ataqueBase, estagioAtual);
-        carregarSpriteInimigo();
+        int vidaBase = 80 + (estagioAtual * 20);
+        inimigoAtual = new Inimigo("Guardião Nv." + estagioAtual, vidaBase, 20 + estagioAtual * 3, estagioAtual);
         atualizarStatusInimigo();
-
-        // Animação de entrada do inimigo
-        TranslateTransition entrada = new TranslateTransition(Duration.seconds(0.5), imgInimigo);
-        entrada.setFromX(200);
-        entrada.setToX(0);
-        entrada.play();
-
         adicionarDialogo("⚠️ " + inimigoAtual.getNome() + " apareceu!");
     }
 
-    private void carregarSpriteInimigo() {
-        try {
-            Image img = new Image(getClass().getResourceAsStream("/images/pokemons/inimigo" + (estagioAtual % 5 + 1) + ".png"));
-            if (img != null && !img.isError()) {
-                imgInimigo.setImage(img);
-            } else {
-                criarSpriteInimigoPlaceholder();
-            }
-        } catch (Exception e) {
-            criarSpriteInimigoPlaceholder();
-        }
-    }
-
-    private void criarSpriteInimigoPlaceholder() {
-        javafx.scene.canvas.Canvas canvas = new javafx.scene.canvas.Canvas(120, 120);
-        javafx.scene.canvas.GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.setFill(javafx.scene.paint.Color.rgb(100, 50, 50));
-        gc.fillOval(20, 20, 80, 80);
-        gc.setFill(javafx.scene.paint.Color.RED);
-        gc.fillOval(45, 45, 10, 10);
-        gc.fillOval(65, 45, 10, 10);
-        imgInimigo.setImage(canvas.snapshot(null, null));
-    }
-
     private void proximaPergunta() {
-        aguardandoResposta = true;
-        lblTurno.setText("⚔️ SEU TURNO ⚔️");
+        rodadaAtual++;
+        lblTurno.setText("⚔️ RODADA " + rodadaAtual + " ⚔️");
 
         Dificuldade dificuldade;
         if (estagioAtual <= 3) {
@@ -198,7 +165,6 @@ public class TelaBatalhaController {
 
         txtPergunta.setText(perguntaAtual.getTexto());
         exibirAlternativas();
-        iniciarTemporizador();
     }
 
     private void exibirAlternativas() {
@@ -207,18 +173,27 @@ public class TelaBatalhaController {
 
         if (perguntaAtual instanceof PerguntaMultiplaEscolha) {
             PerguntaMultiplaEscolha p = (PerguntaMultiplaEscolha) perguntaAtual;
-            List<String> opcoes = p.getOpcoes();
+            var opcoes = p.getOpcoes();
 
             for (int i = 0; i < opcoes.size(); i++) {
                 char letra = (char) ('A' + i);
-                Button btn = criarBotaoAlternativa(letra + ") " + opcoes.get(i), String.valueOf(letra));
+                Button btn = new Button(letra + ") " + opcoes.get(i));
+                btn.setStyle("-fx-background-color: #2a2a4a; -fx-text-fill: white; -fx-font-size: 13px; -fx-padding: 8px;");
+                btn.setMaxWidth(Double.MAX_VALUE);
+                final String resposta = String.valueOf(letra);
+                btn.setOnAction(e -> avaliarResposta(resposta));
                 painelAlternativas.getChildren().add(btn);
             }
             painelAlternativas.setVisible(true);
 
         } else if (perguntaAtual instanceof PerguntaVerdadeiroFalso) {
-            painelAlternativas.getChildren().add(criarBotaoAlternativa("V) VERDADEIRO", "V"));
-            painelAlternativas.getChildren().add(criarBotaoAlternativa("F) FALSO", "F"));
+            Button btnV = new Button("V) VERDADEIRO");
+            Button btnF = new Button("F) FALSO");
+            btnV.setStyle("-fx-background-color: #2a2a4a; -fx-text-fill: white; -fx-font-size: 13px; -fx-padding: 8px;");
+            btnF.setStyle("-fx-background-color: #2a2a4a; -fx-text-fill: white; -fx-font-size: 13px; -fx-padding: 8px;");
+            btnV.setOnAction(e -> avaliarResposta("V"));
+            btnF.setOnAction(e -> avaliarResposta("F"));
+            painelAlternativas.getChildren().addAll(btnV, btnF);
             painelAlternativas.setVisible(true);
 
         } else if (perguntaAtual instanceof PerguntaCompletarLacuna) {
@@ -227,252 +202,183 @@ public class TelaBatalhaController {
             txtRespostaLacuna.clear();
             btnEnviarLacuna.setOnAction(e -> {
                 String resposta = txtRespostaLacuna.getText().trim();
-                if (!resposta.isEmpty() && aguardandoResposta) {
-                    avaliarResposta(resposta);
-                }
+                if (!resposta.isEmpty()) avaliarResposta(resposta);
             });
-        }
-    }
-
-    private Button criarBotaoAlternativa(String texto, String valorResposta) {
-        Button btn = new Button(texto);
-        btn.setStyle("-fx-background-color: #2a2a4a; -fx-text-fill: white; -fx-font-size: 13px; -fx-padding: 8; -fx-background-radius: 8;");
-        btn.setMaxWidth(Double.MAX_VALUE);
-        btn.setOnAction(e -> {
-            if (aguardandoResposta) {
-                if (temporizador != null) temporizador.stop();
-                avaliarResposta(valorResposta);
-            }
-        });
-
-        // Hover effect
-        btn.setOnMouseEntered(e -> btn.setStyle("-fx-background-color: #4a4a6a; -fx-text-fill: white; -fx-font-size: 13px; -fx-padding: 8; -fx-background-radius: 8;"));
-        btn.setOnMouseExited(e -> btn.setStyle("-fx-background-color: #2a2a4a; -fx-text-fill: white; -fx-font-size: 13px; -fx-padding: 8; -fx-background-radius: 8;"));
-
-        return btn;
-    }
-
-    private void iniciarTemporizador() {
-        tempoRestante = 20;
-        if (temporizador != null) temporizador.stop();
-
-        temporizador = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
-            tempoRestante--;
-            lblTurno.setText("⏱️ " + tempoRestante + "s restantes");
-
-            if (tempoRestante <= 0) {
-                temporizador.stop();
-                if (aguardandoResposta) {
-                    aguardandoResposta = false;
-                    adicionarDialogo("⏰ TEMPO ESGOTADO!");
-                    adicionarDialogo("📖 Resposta: " + perguntaAtual.getRespostaCorreta());
-                    aplicarPenalidadeTempo();
-                    proximaPergunta();
-                }
-            }
-        }));
-        temporizador.setCycleCount(20);
-        temporizador.play();
-    }
-
-    private void aplicarPenalidadeTempo() {
-        int dano = 10 + (estagioAtual * 2);
-        animarDanoJogador();
-        jogador.tomarDano(dano);
-        atualizarStatusJogador();
-        adicionarDialogo("💔 " + inimigoAtual.getNome() + " causou " + dano + " de dano!");
-
-        if (!jogador.vivo()) {
-            finalizarJogo(false);
         }
     }
 
     private void avaliarResposta(String resposta) {
-        aguardandoResposta = false;
-        if (temporizador != null) temporizador.stop();
-
         boolean correta = AvaliadorRespostas.avaliar(perguntaAtual, resposta);
 
         if (correta) {
-            processarAcerto();
-        } else {
-            processarErro();
-        }
-    }
+            perguntasCertas++;
+            int dano = calcularDano(perguntaAtual.getDificuldade());
+            inimigoAtual.tomarDano(dano);
+            danoTotalCausado += dano;
+            adicionarDialogo("✅ CORRETO! Causou " + dano + " de dano!");
+            pontuacao += 100;
 
-    private void processarAcerto() {
-        int dano = calcularDano();
-        adicionarDialogo("✅ CORRETO!");
-        adicionarDialogo("💥 Causou " + dano + " de dano em " + inimigoAtual.getNome() + "!");
+            // ⭐ GANHA EXPERIÊNCIA
+            int exp = perguntaAtual.getDificuldade().getDanoBase() * 5;
+            jogador.getPersonagem().addExperiencia(exp);
+            adicionarDialogo("📚 +" + exp + " de experiência!");
 
-        animarAtaque();
+            if (!inimigoAtual.vivo()) {
+                adicionarDialogo("🎉 VITÓRIA! Estágio " + estagioAtual + " concluído!");
 
-        new Thread(() -> {
-            try { Thread.sleep(500); } catch (InterruptedException e) {}
-            Platform.runLater(() -> {
-                inimigoAtual.tomarDano(dano);
-                atualizarStatusInimigo();
-                pontuacao += 100;
+                // ⭐ Bônus de estágio
+                int bonus = estagioAtual * 50;
+                pontuacao += bonus;
+                adicionarDialogo("🏆 Bônus de estágio: +" + bonus + " pontos!");
 
-                if (!inimigoAtual.vivo()) {
-                    processarVitoria();
-                } else {
-                    proximaPergunta();
-                }
-            });
-        }).start();
-    }
-
-    private void processarErro() {
-        int dano = 15 + (estagioAtual * 2);
-        adicionarDialogo("❌ ERRADO!");
-        adicionarDialogo("📖 Resposta correta: " + perguntaAtual.getRespostaCorreta());
-        adicionarDialogo("💔 " + inimigoAtual.getNome() + " contra-ataca causando " + dano + " de dano!");
-
-        animarDanoJogador();
-
-        new Thread(() -> {
-            try { Thread.sleep(500); } catch (InterruptedException e) {}
-            Platform.runLater(() -> {
-                jogador.tomarDano(dano);
-                atualizarStatusJogador();
-
-                if (!jogador.vivo()) {
-                    finalizarJogo(false);
-                } else {
-                    proximaPergunta();
-                }
-            });
-        }).start();
-    }
-
-    private void processarVitoria() {
-        adicionarDialogo("🎉 " + inimigoAtual.getNome() + " foi derrotado! 🎉");
-
-        // Animação de explosão/vitória
-        ScaleTransition explosao = new ScaleTransition(Duration.seconds(0.3), imgInimigo);
-        explosao.setToX(0);
-        explosao.setToY(0);
-        explosao.play();
-
-        new Thread(() -> {
-            try { Thread.sleep(1500); } catch (InterruptedException e) {}
-            Platform.runLater(() -> {
                 estagioAtual++;
+
+                // ⭐ Resetar cooldown e curar entre estágios
+                jogador.getPersonagem().curar(30);
+                resetarCooldownHabilidade();
+                adicionarDialogo("✨ +30 de vida recuperada!");
 
                 if (estagioAtual > 10) {
                     finalizarJogo(true);
-                } else {
-                    adicionarDialogo("✨ Avançando para o Estágio " + estagioAtual + "!");
-                    criarProximoInimigo();
-                    proximaPergunta();
+                    return;
                 }
-            });
-        }).start();
+                criarProximoInimigo();
+            }
+            atualizarStatusJogador();
+            atualizarStatusInimigo();
+
+            // ⭐ REDUZ COOLDOWN APÓS RODADA
+            reduzirCooldownHabilidade();
+
+            proximaPergunta();
+
+        } else {
+            perguntasErradas++;
+            int dano = calcularDanoInimigo();
+            jogador.tomarDano(dano);
+            danoTotalRecebido += dano;
+            adicionarDialogo("❌ ERRADO! " + inimigoAtual.getNome() + " causou " + dano + " de dano!");
+            adicionarDialogo("📖 Resposta correta: " +
+                    AvaliadorRespostas.getRespostaCorretaFormatada(perguntaAtual));
+            atualizarStatusJogador();
+
+            if (!jogador.vivo()) {
+                finalizarJogo(false);
+                return;
+            }
+
+            // ⭐ REDUZ COOLDOWN APÓS RODADA (mesmo errando)
+            reduzirCooldownHabilidade();
+
+            proximaPergunta();
+        }
     }
 
-    private int calcularDano() {
-        int base = jogador.getPersonagem().getAtaque();
-        int multiplicador = perguntaAtual.getDificuldade().getDanoBase();
-        return base * multiplicador + 15 + random.nextInt(20);
+    /**
+     * ⭐ CÁLCULO DE DANO (mesmo do console)
+     */
+    private int calcularDano(Dificuldade diff) {
+        Personagem p = jogador.getPersonagem();
+        int danoBase = p.getAtaque();
+
+        int multiplicador;
+        switch (diff) {
+            case FACIL: multiplicador = 1; break;
+            case MEDIO: multiplicador = 2; break;
+            case DIFICIL: multiplicador = 3; break;
+            default: multiplicador = 1;
+        }
+
+        int multiplicadorEstagio = estagioAtual / 2;
+        if (multiplicadorEstagio < 1) multiplicadorEstagio = 1;
+
+        int dano = danoBase * multiplicador * multiplicadorEstagio;
+
+        double variacao = 0.85 + (random.nextDouble() * 0.3);
+        dano = (int)(dano * variacao);
+
+        dano = Math.max(10, Math.min(60, dano));
+
+        return dano;
     }
 
+    /**
+     * ⭐ CÁLCULO DE DANO DO INIMIGO
+     */
+    private int calcularDanoInimigo() {
+        int danoBase = inimigoAtual.getAtaque();
+        int multiplicador = estagioAtual;
+
+        if (estagioAtual % 5 == 0) { // Chefões a cada 5 estágios
+            multiplicador *= 2;
+        }
+
+        int dano = danoBase + (multiplicador * 3);
+
+        double variacao = 0.85 + (random.nextDouble() * 0.3);
+        dano = (int)(dano * variacao);
+
+        return Math.max(8, dano);
+    }
+
+    /**
+     * ⭐ USAR HABILIDADE - Usa o sistema do console
+     */
     private void usarHabilidade() {
-        if (!aguardandoResposta) {
-            adicionarDialogo("⏳ Aguarde sua vez para usar habilidade!");
+        Personagem p = jogador.getPersonagem();
+        HabilidadeEspecial hab = p.getHabilidade();
+
+        if (hab == null) {
+            adicionarDialogo("❌ Seu personagem não possui habilidade especial!");
             return;
         }
 
-        Personagem p = jogador.getPersonagem();
-        adicionarDialogo("🌟 " + p.getNomeHabilidade() + "!");
+        if (!hab.estaPronta()) {
+            adicionarDialogo("⏳ Habilidade em cooldown! Aguarde " +
+                    hab.getCooldownAtual() + " rodada(s).");
+            return;
+        }
 
-        int dano = 60 + (estagioAtual * 8) + random.nextInt(30);
+        adicionarDialogo("🌟 " + p.getNome() + " usa " + hab.getNome() + "!");
+        adicionarDialogo("📖 " + hab.getDescricao());
+
+        habilidadesUsadas++;
+        int dano = hab.executar(inimigoAtual);
+        danoTotalCausado += dano;
+
         adicionarDialogo("💥 Causou " + dano + " de dano devastador!");
+        atualizarStatusInimigo();
 
-        btnHabilidade.setDisable(true);
-        lblCooldown.setText("⏳ Cooldown: 5");
+        // ⭐ Atualiza interface do cooldown
+        atualizarInterfaceHabilidade();
 
-        animarAtaqueEspecial();
+        if (!inimigoAtual.vivo()) {
+            adicionarDialogo("🎉 VITÓRIA! Estágio " + estagioAtual + " concluído!");
 
-        new Thread(() -> {
-            try { Thread.sleep(500); } catch (InterruptedException e) {}
-            Platform.runLater(() -> {
-                inimigoAtual.tomarDano(dano);
-                atualizarStatusInimigo();
+            int bonus = estagioAtual * 50;
+            pontuacao += bonus;
+            adicionarDialogo("🏆 Bônus de estágio: +" + bonus + " pontos!");
 
-                if (!inimigoAtual.vivo()) {
-                    processarVitoria();
-                } else {
-                    // Cooldown
-                    new Thread(() -> {
-                        for (int i = 5; i > 0; i--) {
-                            final int cd = i;
-                            Platform.runLater(() -> lblCooldown.setText("⏳ Cooldown: " + cd));
-                            try { Thread.sleep(1000); } catch (InterruptedException e) {}
-                        }
-                        Platform.runLater(() -> {
-                            btnHabilidade.setDisable(false);
-                            lblCooldown.setText("✨ PRONTA!");
-                        });
-                    }).start();
-                    proximaPergunta();
-                }
-            });
-        }).start();
-    }
+            estagioAtual++;
 
-    private void animarAtaque() {
-        // Jogador balança para frente
-        TranslateTransition ataque = new TranslateTransition(Duration.seconds(0.2), imgJogador);
-        ataque.setByX(-30);
-        ataque.setAutoReverse(true);
-        ataque.setCycleCount(2);
-        ataque.play();
+            jogador.getPersonagem().curar(30);
+            resetarCooldownHabilidade();
+            adicionarDialogo("✨ +30 de vida recuperada!");
 
-        // Inimigo treme ao levar dano
-        TranslateTransition tremer = new TranslateTransition(Duration.millis(50), imgInimigo);
-        tremer.setByX(10);
-        tremer.setAutoReverse(true);
-        tremer.setCycleCount(6);
-        tremer.play();
-    }
+            if (estagioAtual > 10) {
+                finalizarJogo(true);
+                return;
+            }
+            criarProximoInimigo();
+        }
 
-    private void animarAtaqueEspecial() {
-        // Efeito especial - inimigo pisca vermelho
-        Timeline pisca = new Timeline(
-                new KeyFrame(Duration.millis(100), e -> imgInimigo.setStyle("-fx-effect: dropshadow(gaussian, red, 20, 0.8, 0, 0);")),
-                new KeyFrame(Duration.millis(200), e -> imgInimigo.setStyle("-fx-effect: null;")),
-                new KeyFrame(Duration.millis(300), e -> imgInimigo.setStyle("-fx-effect: dropshadow(gaussian, red, 20, 0.8, 0, 0);")),
-                new KeyFrame(Duration.millis(400), e -> imgInimigo.setStyle("-fx-effect: null;"))
-        );
-        pisca.play();
-
-        ScaleTransition explosao = new ScaleTransition(Duration.seconds(0.3), imgInimigo);
-        explosao.setToX(1.3);
-        explosao.setToY(1.3);
-        explosao.setAutoReverse(true);
-        explosao.setCycleCount(2);
-        explosao.play();
-    }
-
-    private void animarDanoJogador() {
-        Timeline pisca = new Timeline(
-                new KeyFrame(Duration.millis(100), e -> imgJogador.setStyle("-fx-effect: dropshadow(gaussian, red, 20, 0.8, 0, 0);")),
-                new KeyFrame(Duration.millis(300), e -> imgJogador.setStyle("-fx-effect: null;"))
-        );
-        pisca.play();
-
-        TranslateTransition tremer = new TranslateTransition(Duration.millis(50), imgJogador);
-        tremer.setByX(10);
-        tremer.setAutoReverse(true);
-        tremer.setCycleCount(6);
-        tremer.play();
+        proximaPergunta();
     }
 
     private void adicionarDialogo(String msg) {
         Platform.runLater(() -> {
             String atual = txtDialogo.getText();
-            txtDialogo.setText(msg + "\n" + (atual.length() > 500 ? "" : atual));
+            txtDialogo.setText(msg + "\n" + (atual.length() > 300 ? "" : atual));
         });
     }
 
@@ -480,21 +386,12 @@ public class TelaBatalhaController {
         Platform.runLater(() -> {
             Personagem p = jogador.getPersonagem();
             lblJogadorNome.setText(p.getNome());
-            int percentual = (p.getVida() * 100) / p.getVidaMax();
-            lblJogadorVida.setText("HP " + p.getVida() + "/" + p.getVidaMax());
+            lblJogadorVida.setText("HP: " + p.getVida() + "/" + p.getVidaMax());
             barraJogadorVida.setProgress((double) p.getVida() / p.getVidaMax());
 
             if (p instanceof AtributoEspecial) {
                 AtributoEspecial attr = (AtributoEspecial) p;
                 lblJogadorAtributo.setText(attr.getNomeAtributo() + ": " + attr.getValorAtual() + "/" + attr.getValorMaximo());
-            }
-
-            if (p.getVida() < p.getVidaMax() / 3) {
-                barraJogadorVida.setStyle("-fx-accent: #ff6600;");
-            } else if (p.getVida() < p.getVidaMax() / 2) {
-                barraJogadorVida.setStyle("-fx-accent: #ffaa00;");
-            } else {
-                barraJogadorVida.setStyle("-fx-accent: #44ff44;");
             }
         });
     }
@@ -502,31 +399,50 @@ public class TelaBatalhaController {
     private void atualizarStatusInimigo() {
         Platform.runLater(() -> {
             lblInimigoNome.setText(inimigoAtual.getNome());
-            lblInimigoVida.setText("HP " + inimigoAtual.getVida() + "/" + inimigoAtual.getVidaMax());
+            lblInimigoVida.setText("HP: " + inimigoAtual.getVida() + "/" + inimigoAtual.getVidaMax());
             barraInimigoVida.setProgress((double) inimigoAtual.getVida() / inimigoAtual.getVidaMax());
-
-            if (inimigoAtual.getVida() < inimigoAtual.getVidaMax() / 3) {
-                barraInimigoVida.setStyle("-fx-accent: #ff6600;");
-            } else if (inimigoAtual.getVida() < inimigoAtual.getVidaMax() / 2) {
-                barraInimigoVida.setStyle("-fx-accent: #ffaa00;");
-            } else {
-                barraInimigoVida.setStyle("-fx-accent: #ff4444;");
-            }
         });
     }
 
     private void finalizarJogo(boolean vitoria) {
-        aguardandoResposta = false;
-        if (temporizador != null) temporizador.stop();
+        Platform.runLater(() -> {
+            try {
+                // ⭐ Coleta estatísticas para a tela de resultado
+                java.util.Map<String, Object> stats = new java.util.HashMap<>();
+                stats.put("pontuacao", pontuacao);
+                stats.put("rodadas", rodadaAtual);
+                stats.put("acertos", perguntasCertas);
+                stats.put("erros", perguntasErradas);
+                stats.put("danoCausado", danoTotalCausado);
+                stats.put("danoRecebido", danoTotalRecebido);
+                stats.put("habilidadesUsadas", habilidadesUsadas);
+                stats.put("estagiosCompletados", estagioAtual - 1);
+                stats.put("modoJogo", "Batalha Normal");
 
-        if (vitoria) {
-            adicionarDialogo("\n🏆🏆🏆 PARABÉNS! VOCÊ VENCEU O JOGO! 🏆🏆🏆");
-            adicionarDialogo("🎉 Pontuação final: " + pontuacao);
-            btnHabilidade.setDisable(true);
-        } else {
-            adicionarDialogo("\n💀 GAME OVER! " + jogador.getPersonagem().getNome() + " foi derrotado! 💀");
-            adicionarDialogo("📊 Pontuação final: " + pontuacao);
-            btnHabilidade.setDisable(true);
-        }
+                // Carrega tela de resultado
+                javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                        getClass().getResource("/fxml/tela-resultado.fxml")
+                );
+                javafx.scene.Parent root = loader.load();
+
+                TelaResultadoController controller = loader.getController();
+                controller.setDados(jogador, stats, vitoria);
+
+                javafx.stage.Stage stage = (javafx.stage.Stage) btnHabilidade.getScene().getWindow();
+                stage.setScene(new javafx.scene.Scene(root));
+                stage.setTitle("Baquara - Resultado");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                // Fallback caso a tela de resultado não exista
+                if (vitoria) {
+                    adicionarDialogo("\n🏆 PARABÉNS! VOCÊ VENCEU O JOGO! 🏆");
+                } else {
+                    adicionarDialogo("\n💀 GAME OVER! 💀");
+                }
+                adicionarDialogo("🎉 Pontuação final: " + pontuacao);
+                btnHabilidade.setDisable(true);
+            }
+        });
     }
 }

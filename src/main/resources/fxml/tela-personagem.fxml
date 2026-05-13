@@ -1,132 +1,128 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: linear-gradient(to bottom, #1a1a2e, #16213e);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.baquara.gui.controllers.TelaPersonagemController">
-    <children>
-        <VBox alignment="CENTER" layoutX="8.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="-8.0" AnchorPane.topAnchor="0.0">
-            <children>
+<ScrollPane fitToWidth="true" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.baquara.gui.controllers.TelaPersonagemController">
+    <content>
+        <VBox spacing="20.0" style="-fx-background-color: linear-gradient(to bottom, #1a1a2e, #0a0a1a); -fx-padding: 30;">
 
-                <!-- TÍTULO -->
-                <Label alignment="CENTER" text="ESCOLHA SEU PERSONAGEM" textFill="YELLOW">
-                    <font>
-                        <Font name="System Bold" size="32.0" />
-                    </font>
-                </Label>
+            <Label alignment="CENTER" style="-fx-font-size: 36px; -fx-font-weight: bold;" text="ESCOLHA SEU DESTINO" textFill="#FFD700" />
+            <Label alignment="CENTER" style="-fx-font-size: 16px;" text="Cada porta leva a uma rota diferente..." textFill="WHITE" />
 
-                <!-- SUBTÍTULO -->
-                <Label alignment="CENTER" text="Cada personagem tem habilidades únicas e uma rota especial!" textFill="WHITE">
-                    <font>
-                        <Font size="14.0" />
-                    </font>
-                </Label>
+            <GridPane alignment="CENTER" hgap="30.0" vgap="30.0">
 
-                <!-- SCROLLPANE PARA ROLAR A TELA (caso muitos personagens) -->
-                <ScrollPane fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent;" VBox.vgrow="ALWAYS">
-                    <content>
-                        <VBox spacing="15.0" style="-fx-background: transparent;">
-                            <children>
+                <!-- Porta Paladino -->
+                <VBox alignment="CENTER" spacing="10.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                    <Button fx:id="btnPaladino" style="-fx-background-color: transparent; -fx-padding: 0;">
+                        <graphic>
+                            <VBox alignment="CENTER" spacing="5.0" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0.5, 0, 0);">
+                                <Label style="-fx-font-size: 80px;" text="🚪" />
+                                <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #2a2a4a; -fx-padding: 5 15; -fx-background-radius: 20;" text="PALADINO" textFill="#FFD700" />
+                                <VBox style="-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 10; -fx-padding: 8;" spacing="3.0">
+                                    <Label style="-fx-font-size: 11px;" text="❤️ 150 vida" textFill="#ccc" />
+                                    <Label style="-fx-font-size: 11px;" text="🛡️ Defesa 25" textFill="#ccc" />
+                                    <Label style="-fx-font-size: 11px;" text="🙏 Poder Divino" textFill="#ccc" />
+                                </VBox>
+                            </VBox>
+                        </graphic>
+                    </Button>
+                </VBox>
 
-                                <!-- LINHA 1: Paladino e Guerreiro -->
-                                <HBox alignment="CENTER" spacing="30.0">
-                                    <children>
+                <!-- Porta Guerreiro -->
+                <VBox alignment="CENTER" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <Button fx:id="btnGuerreiro" style="-fx-background-color: transparent; -fx-padding: 0;">
+                        <graphic>
+                            <VBox alignment="CENTER" spacing="5.0" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0.5, 0, 0);">
+                                <Label style="-fx-font-size: 80px;" text="🚪" />
+                                <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #2a2a4a; -fx-padding: 5 15; -fx-background-radius: 20;" text="GUERREIRO" textFill="#FFD700" />
+                                <VBox style="-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 10; -fx-padding: 8;" spacing="3.0">
+                                    <Label style="-fx-font-size: 11px;" text="❤️ 140 vida" textFill="#ccc" />
+                                    <Label style="-fx-font-size: 11px;" text="🛡️ Defesa 18" textFill="#ccc" />
+                                    <Label style="-fx-font-size: 11px;" text="💪 Espírito de Luta" textFill="#ccc" />
+                                </VBox>
+                            </VBox>
+                        </graphic>
+                    </Button>
+                </VBox>
 
-                                        <!-- CARD PALADINO -->
-                                        <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 15; -fx-padding: 20; -fx-min-width: 180;">
-                                            <children>
-                                                <Label style="-fx-font-size: 48px;" text="🛡️" />
-                                                <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="PALADINO" textFill="#FFD700" />
-                                                <Label style="-fx-font-size: 12px; -fx-text-fill: #ccc;" text="❤️ 150 vida" />
-                                                <Label style="-fx-font-size: 12px; -fx-text-fill: #ccc;" text="🛡️ Defesa 25" />
-                                                <Label style="-fx-font-size: 12px; -fx-text-fill: #ccc;" text="🙏 Poder Divino" />
-                                                <Button fx:id="btnPaladino" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 25;" text="ESCOLHER" />
-                                            </children>
-                                        </VBox>
+                <!-- Porta Caçadora -->
+                <VBox alignment="CENTER" spacing="10.0" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                    <Button fx:id="btnCacadora" style="-fx-background-color: transparent; -fx-padding: 0;">
+                        <graphic>
+                            <VBox alignment="CENTER" spacing="5.0" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0.5, 0, 0);">
+                                <Label style="-fx-font-size: 80px;" text="🚪" />
+                                <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #2a2a4a; -fx-padding: 5 15; -fx-background-radius: 20;" text="CAÇADORA" textFill="#FFD700" />
+                                <VBox style="-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 10; -fx-padding: 8;" spacing="3.0">
+                                    <Label style="-fx-font-size: 11px;" text="❤️ 110 vida" textFill="#ccc" />
+                                    <Label style="-fx-font-size: 11px;" text="⚔️ Ataque 30" textFill="#ccc" />
+                                    <Label style="-fx-font-size: 11px;" text="🏹 Penetração" textFill="#ccc" />
+                                </VBox>
+                            </VBox>
+                        </graphic>
+                    </Button>
+                </VBox>
 
-                                        <!-- CARD GUERREIRO -->
-                                        <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 15; -fx-padding: 20; -fx-min-width: 180;">
-                                            <children>
-                                                <Label style="-fx-font-size: 48px;" text="⚔️" />
-                                                <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="GUERREIRO" textFill="#FFD700" />
-                                                <Label style="-fx-font-size: 12px; -fx-text-fill: #ccc;" text="❤️ 140 vida" />
-                                                <Label style="-fx-font-size: 12px; -fx-text-fill: #ccc;" text="🛡️ Defesa 18" />
-                                                <Label style="-fx-font-size: 12px; -fx-text-fill: #ccc;" text="💪 Espírito de Luta" />
-                                                <Button fx:id="btnGuerreiro" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 25;" text="ESCOLHER" />
-                                            </children>
-                                        </VBox>
+                <!-- Porta Sábio -->
+                <VBox alignment="CENTER" spacing="10.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                    <Button fx:id="btnSabio" style="-fx-background-color: transparent; -fx-padding: 0;">
+                        <graphic>
+                            <VBox alignment="CENTER" spacing="5.0" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0.5, 0, 0);">
+                                <Label style="-fx-font-size: 80px;" text="🚪" />
+                                <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #2a2a4a; -fx-padding: 5 15; -fx-background-radius: 20;" text="SÁBIO" textFill="#FFD700" />
+                                <VBox style="-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 10; -fx-padding: 8;" spacing="3.0">
+                                    <Label style="-fx-font-size: 11px;" text="❤️ 100 vida" textFill="#ccc" />
+                                    <Label style="-fx-font-size: 11px;" text="🛡️ Defesa 14" textFill="#ccc" />
+                                    <Label style="-fx-font-size: 11px;" text="💙 Mana 100" textFill="#ccc" />
+                                </VBox>
+                            </VBox>
+                        </graphic>
+                    </Button>
+                </VBox>
 
-                                    </children>
-                                </HBox>
+                <!-- Porta Arcanista -->
+                <VBox alignment="CENTER" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <Button fx:id="btnArcanista" style="-fx-background-color: transparent; -fx-padding: 0;">
+                        <graphic>
+                            <VBox alignment="CENTER" spacing="5.0" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0.5, 0, 0);">
+                                <Label style="-fx-font-size: 80px;" text="🚪" />
+                                <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #2a2a4a; -fx-padding: 5 15; -fx-background-radius: 20;" text="ARCANISTA" textFill="#FFD700" />
+                                <VBox style="-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 10; -fx-padding: 8;" spacing="3.0">
+                                    <Label style="-fx-font-size: 11px;" text="❤️ 95 vida" textFill="#ccc" />
+                                    <Label style="-fx-font-size: 11px;" text="🛡️ Defesa 8" textFill="#ccc" />
+                                    <Label style="-fx-font-size: 11px;" text="✨ Poder Arcano" textFill="#ccc" />
+                                </VBox>
+                            </VBox>
+                        </graphic>
+                    </Button>
+                </VBox>
 
-                                <!-- LINHA 2: Caçadora e Sábio -->
-                                <HBox alignment="CENTER" spacing="30.0">
-                                    <children>
+                <!-- PORTA SECRETA (Rudá) -->
+                <VBox alignment="CENTER" spacing="10.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                    <Button fx:id="btnRotaSecreta" style="-fx-background-color: transparent; -fx-padding: 0;" visible="false" managed="false">
+                        <graphic>
+                            <VBox alignment="CENTER" spacing="5.0">
+                                <Label style="-fx-font-size: 80px;" text="🚪🔮" />
+                                <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-color: #9C27B0; -fx-padding: 5 15; -fx-background-radius: 20;" text="??? ROTA SECRETA ???" textFill="#FFD700" />
+                                <VBox style="-fx-background-color: rgba(156,39,176,0.3); -fx-background-radius: 10; -fx-padding: 8;" spacing="3.0">
+                                    <Label style="-fx-font-size: 11px;" text="⚔️ Modo Lendário" textFill="#E1BEE7" />
+                                    <Label style="-fx-font-size: 11px;" text="🐉 Desafio Especial" textFill="#E1BEE7" />
+                                </VBox>
+                            </VBox>
+                        </graphic>
+                    </Button>
+                </VBox>
 
-                                        <!-- CARD CAÇADORA -->
-                                        <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 15; -fx-padding: 20; -fx-min-width: 180;">
-                                            <children>
-                                                <Label style="-fx-font-size: 48px;" text="🌿" />
-                                                <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="CAÇADORA" textFill="#FFD700" />
-                                                <Label style="-fx-font-size: 12px; -fx-text-fill: #ccc;" text="❤️ 110 vida" />
-                                                <Label style="-fx-font-size: 12px; -fx-text-fill: #ccc;" text="⚔️ Ataque 30" />
-                                                <Label style="-fx-font-size: 12px; -fx-text-fill: #ccc;" text="🏹 Penetração" />
-                                                <Button fx:id="btnCacadora" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 25;" text="ESCOLHER" />
-                                            </children>
-                                        </VBox>
+            </GridPane>
 
-                                        <!-- CARD SÁBIO -->
-                                        <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 15; -fx-padding: 20; -fx-min-width: 180;">
-                                            <children>
-                                                <Label style="-fx-font-size: 48px;" text="📚" />
-                                                <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="SÁBIO" textFill="#FFD700" />
-                                                <Label style="-fx-font-size: 12px; -fx-text-fill: #ccc;" text="❤️ 100 vida" />
-                                                <Label style="-fx-font-size: 12px; -fx-text-fill: #ccc;" text="🛡️ Defesa 14" />
-                                                <Label style="-fx-font-size: 12px; -fx-text-fill: #ccc;" text="💙 Mana 100" />
-                                                <Button fx:id="btnSabio" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 25;" text="ESCOLHER" />
-                                            </children>
-                                        </VBox>
+            <Button fx:id="btnVoltar" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10px 30px;" text="◀️ VOLTAR" />
 
-                                    </children>
-                                </HBox>
-
-                                <!-- LINHA 3: Arcanista (sozinho centralizado) -->
-                                <HBox alignment="CENTER" spacing="30.0">
-                                    <children>
-
-                                        <!-- CARD ARCANISTA -->
-                                        <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 15; -fx-padding: 20; -fx-min-width: 180;">
-                                            <children>
-                                                <Label style="-fx-font-size: 48px;" text="🔮" />
-                                                <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="ARCANISTA" textFill="#FFD700" />
-                                                <Label style="-fx-font-size: 12px; -fx-text-fill: #ccc;" text="❤️ 95 vida" />
-                                                <Label style="-fx-font-size: 12px; -fx-text-fill: #ccc;" text="🛡️ Defesa 8" />
-                                                <Label style="-fx-font-size: 12px; -fx-text-fill: #ccc;" text="✨ Poder Arcano 100" />
-                                                <Button fx:id="btnArcanista" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 25;" text="ESCOLHER" />
-                                            </children>
-                                        </VBox>
-
-                                    </children>
-                                </HBox>
-
-                            </children>
-                        </VBox>
-                    </content>
-                </ScrollPane>
-
-                <!-- BOTÃO VOLTAR -->
-                <Button fx:id="btnVoltar" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10px 30px;" text="◀️ VOLTAR">
-                    <VBox.margin>
-                        <Insets bottom="20.0" />
-                    </VBox.margin>
-                </Button>
-
-            </children>
-            <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-            </padding>
         </VBox>
-    </children>
-</AnchorPane>
+    </content>
+</ScrollPane>

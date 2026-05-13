@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane fitToWidth="true" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.baquara.gui.controllers.TelaResultadoController">
+    <content>
+        <VBox spacing="20.0" style="-fx-background-color: linear-gradient(to bottom, #1a1a2e, #0a0a1a); -fx-padding: 30;">
+
+            <!-- TÍTULO PRINCIPAL -->
+            <Label fx:id="lblTitulo" alignment="CENTER" style="-fx-font-size: 36px; -fx-font-weight: bold;" text="RESULTADO" textFill="#FFD700" VBox.vgrow="NEVER">
+                <VBox.margin>
+                    <Insets bottom="20.0" />
+                </VBox.margin>
+            </Label>
+
+            <!-- STATUS DA PARTIDA -->
+            <VBox spacing="10.0" style="-fx-background-color: rgba(0,0,0,0.5); -fx-background-radius: 15; -fx-padding: 20;">
+                <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="📊 ESTATÍSTICAS DA PARTIDA" textFill="WHITE" />
+                <Separator style="-fx-background-color: #FFD700;" />
+
+                <HBox spacing="20.0">
+                    <VBox spacing="8.0" HBox.hgrow="ALWAYS">
+                        <Label fx:id="lblPontuacao" style="-fx-font-size: 18px;" text="🏆 Pontuação: 0" textFill="#FFD700" />
+                        <Label fx:id="lblRodadas" style="-fx-font-size: 14px;" text="📊 Rodadas: 0" textFill="WHITE" />
+                        <Label fx:id="lblAcertos" style="-fx-font-size: 14px;" text="✅ Acertos: 0" textFill="#4CAF50" />
+                        <Label fx:id="lblErros" style="-fx-font-size: 14px;" text="❌ Erros: 0" textFill="#f44336" />
+                        <Label fx:id="lblAproveitamento" style="-fx-font-size: 14px;" text="📈 Aproveitamento: 0%" textFill="#2196F3" />
+                    </VBox>
+
+                    <VBox spacing="8.0" HBox.hgrow="ALWAYS">
+                        <Label fx:id="lblDanoCausado" style="-fx-font-size: 14px;" text="⚔️ Dano Causado: 0" textFill="#FF9800" />
+                        <Label fx:id="lblDanoRecebido" style="-fx-font-size: 14px;" text="💔 Dano Recebido: 0" textFill="#f44336" />
+                        <Label fx:id="lblHabilidadesUsadas" style="-fx-font-size: 14px;" text="🌟 Habilidades Usadas: 0" textFill="#9C27B0" />
+                        <Label fx:id="lblEstagios" style="-fx-font-size: 14px;" text="📌 Estágios Completados: 0/10" textFill="#00BCD4" />
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <!-- STATUS DO PERSONAGEM -->
+            <VBox spacing="10.0" style="-fx-background-color: rgba(0,0,0,0.5); -fx-background-radius: 15; -fx-padding: 20;">
+                <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="👤 STATUS DO PERSONAGEM" textFill="WHITE" />
+                <Separator style="-fx-background-color: #FFD700;" />
+
+                <HBox spacing="20.0">
+                    <VBox spacing="8.0" HBox.hgrow="ALWAYS">
+                        <Label fx:id="lblPersonagemNome" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Personagem: " textFill="#FFD700" />
+                        <Label fx:id="lblPersonagemNivel" style="-fx-font-size: 14px;" text="⭐ Nível: 1" textFill="WHITE" />
+                        <Label fx:id="lblPersonagemVida" style="-fx-font-size: 14px;" text="❤️ Vida: 0/0" textFill="#4CAF50" />
+                    </VBox>
+
+                    <VBox spacing="8.0" HBox.hgrow="ALWAYS">
+                        <Label fx:id="lblPersonagemAtaque" style="-fx-font-size: 14px;" text="⚔️ Ataque: 0" textFill="#FF9800" />
+                        <Label fx:id="lblPersonagemDefesa" style="-fx-font-size: 14px;" text="🛡️ Defesa: 0" textFill="#00BCD4" />
+                        <Label fx:id="lblPersonagemAtributo" style="-fx-font-size: 14px;" text="✨ Atributo: 0/0" textFill="#9C27B0" />
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <!-- BOTÕES DE AÇÃO -->
+            <HBox alignment="CENTER" spacing="20.0">
+                <Button fx:id="btnJogarNovamente" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 12px 25px;" text="🔄 JOGAR NOVAMENTE" />
+                <Button fx:id="btnVerRanking" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 12px 25px;" text="🏆 VER RANKING" />
+                <Button fx:id="btnSair" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 12px 25px;" text="❌ SAIR" />
+            </HBox>
+
+        </VBox>
+    </content>
+</ScrollPane>
