@@ -34,7 +34,8 @@ public class TelaBatalhaController {
     @FXML private TextArea txtDialogo;
     @FXML private TextArea txtDialogoPergunta;
     @FXML private VBox painelAlternativas;
-    @FXML private VBox painelLacuna;  // Mudado para VBox
+    @FXML private VBox painelLacuna;
+    @FXML private VBox painelDialogo;
     @FXML private TextField txtRespostaLacuna;
     @FXML private Button btnEnviarLacuna;
     @FXML private Label lblTurno;
@@ -46,6 +47,7 @@ public class TelaBatalhaController {
 
     @FXML private VBox painelMenu;
     @FXML private VBox painelPergunta;
+    @FXML private VBox painelAcoes;  // <-- NOVO: painel dos botões de ação
     @FXML private Button btnVoltarMenu;
 
     private Jogador jogador;
@@ -171,10 +173,15 @@ public class TelaBatalhaController {
     }
 
     private void mostrarMenuPrincipal() {
+        painelDialogo.setVisible(true);
+        painelDialogo.setManaged(true);
+        painelAcoes.setVisible(true);
+        painelAcoes.setManaged(true);
+
+        // Esconde painel de pergunta
         painelPergunta.setVisible(false);
         painelPergunta.setManaged(false);
-        painelMenu.setVisible(true);
-        painelMenu.setManaged(true);
+
         lblTurnoMsg.setText("⚔️ Escolha sua ação! ⚔️");
         aguardandoResposta = false;
     }
@@ -185,8 +192,12 @@ public class TelaBatalhaController {
     }
 
     private void mostrarPainelPergunta() {
-        painelMenu.setVisible(false);
-        painelMenu.setManaged(false);
+        painelDialogo.setVisible(false);
+        painelDialogo.setManaged(false);
+        painelAcoes.setVisible(false);
+        painelAcoes.setManaged(false);
+
+        // Mostra painel de pergunta
         painelPergunta.setVisible(true);
         painelPergunta.setManaged(true);
 
@@ -260,7 +271,6 @@ public class TelaBatalhaController {
             painelAlternativas.getChildren().add(hboxVF);
 
         } else if (perguntaAtual instanceof PerguntaCompletarLacuna) {
-            // Exibe o campo de resposta abaixo da pergunta
             painelLacuna.setVisible(true);
             painelLacuna.setManaged(true);
             txtRespostaLacuna.requestFocus();
