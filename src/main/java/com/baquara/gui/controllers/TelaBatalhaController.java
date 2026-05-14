@@ -523,7 +523,7 @@ public class TelaBatalhaController {
                 } else {
                     adicionarDialogo("\n💀 GAME OVER! 💀");
                 }
-                adicionarDialogo("🎉 Pontuação final: " + pontuacaoTotal);
+                adicionarDialogo("🎉 Pontuação final: " + pontuacaoTotal );
             }
         });
     }
