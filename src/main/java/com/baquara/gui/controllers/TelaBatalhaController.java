@@ -15,17 +15,7 @@ import java.util.*;
 
 public class TelaBatalhaController {
 
-    // Componentes do menu principal (APENAS os que existem no FXML)
-    @FXML private Button btnAtacar;
-    @FXML private Button btnHabilidade;
-    // @FXML private Button btnItem;  // REMOVIDO - não existe no FXML
-    // @FXML private Button btnFugir;  // REMOVIDO - não existe no FXML
-
-    // Componentes do painel de pergunta
-    @FXML private VBox painelPergunta;
-    @FXML private Button btnVoltarMenu;
-
-    // Status dos personagens
+    // Componentes
     @FXML private Label lblJogadorNome;
     @FXML private Label lblJogadorNivel;
     @FXML private Label lblJogadorVida;
@@ -42,13 +32,21 @@ public class TelaBatalhaController {
     @FXML private Label lblDificuldade;
     @FXML private TextArea txtPergunta;
     @FXML private TextArea txtDialogo;
+    @FXML private TextArea txtDialogoPergunta;
     @FXML private VBox painelAlternativas;
-    @FXML private HBox painelLacuna;
+    @FXML private VBox painelLacuna;  // Mudado para VBox
     @FXML private TextField txtRespostaLacuna;
     @FXML private Button btnEnviarLacuna;
-    @FXML private Label lblCooldown;
     @FXML private Label lblTurno;
     @FXML private Label lblTurnoMsg;
+
+    @FXML private Button btnAtacar;
+    @FXML private Button btnHabilidade;
+    @FXML private Label lblCooldown;
+
+    @FXML private VBox painelMenu;
+    @FXML private VBox painelPergunta;
+    @FXML private Button btnVoltarMenu;
 
     private Jogador jogador;
     private Inimigo inimigoAtual;
@@ -57,6 +55,7 @@ public class TelaBatalhaController {
     private int estagioAtual = 1;
     private int pontuacaoTotal = 0;
     private Random random = new Random();
+    private boolean aguardandoResposta = false;
 
     // Estatísticas
     private int perguntasCertas = 0;
@@ -149,17 +148,8 @@ public class TelaBatalhaController {
         }
     }
 
-    private void resetarCooldown() {
-        Personagem p = jogador.getPersonagem();
-        if (p != null && p.getHabilidade() != null) {
-            p.resetarCooldownHabilidade();
-            atualizarInterfaceHabilidade();
-        }
-    }
-
     @FXML
     public void initialize() {
-        // Configura menu principal
         btnAtacar.setOnAction(e -> mostrarPainelPergunta());
         btnHabilidade.setOnAction(e -> usarHabilidade());
         btnVoltarMenu.setOnAction(e -> voltarAoMenu());
@@ -183,54 +173,41 @@ public class TelaBatalhaController {
     private void mostrarMenuPrincipal() {
         painelPergunta.setVisible(false);
         painelPergunta.setManaged(false);
-        if (lblTurnoMsg != null) {
-            lblTurnoMsg.setText("⚔️ Escolha sua ação! ⚔️");
-        }
-    }
-
-    private void mostrarPainelPergunta() {
-        painelPergunta.setVisible(true);
-        painelPergunta.setManaged(true);
-        if (lblTurnoMsg != null) {
-            lblTurnoMsg.setText("📚 Responda a pergunta para atacar! 📚");
-        }
-        proximaPergunta();
+        painelMenu.setVisible(true);
+        painelMenu.setManaged(true);
+        lblTurnoMsg.setText("⚔️ Escolha sua ação! ⚔️");
+        aguardandoResposta = false;
     }
 
     private void voltarAoMenu() {
-        painelPergunta.setVisible(false);
-        painelPergunta.setManaged(false);
+        aguardandoResposta = false;
         mostrarMenuPrincipal();
     }
 
-    private void criarProximoInimigo() {
-        int vidaBase = 80 + (estagioAtual * 20);
-        int ataqueBase = 20 + estagioAtual * 3;
-        inimigoAtual = new Inimigo("Guardião Nv." + estagioAtual, vidaBase, ataqueBase, estagioAtual);
-        lblInimigoSprite.setText(getInimigoSprite(estagioAtual));
-        atualizarStatusInimigo();
-        adicionarDialogo("⚠️ " + inimigoAtual.getNome() + " apareceu!");
-    }
+    private void mostrarPainelPergunta() {
+        painelMenu.setVisible(false);
+        painelMenu.setManaged(false);
+        painelPergunta.setVisible(true);
+        painelPergunta.setManaged(true);
 
-    private String getInimigoSprite(int estagio) {
-        String[] sprites = {"👾", "🐉", "👹", "🧙", "🦇", "🐺", "🧟", "👑"};
-        return sprites[Math.min(estagio - 1, sprites.length - 1)];
-    }
-
-    private void proximaPergunta() {
         rodadaAtual++;
+        lblTurno.setText("⚔️ RODADA " + rodadaAtual + " ⚔️");
 
         Dificuldade dificuldade;
+        String nomeDificuldade;
+
         if (estagioAtual <= 3) {
             dificuldade = Dificuldade.FACIL;
-            lblDificuldade.setText("⭐ Dificuldade: FÁCIL");
+            nomeDificuldade = "⭐ FÁCIL";
         } else if (estagioAtual <= 7) {
             dificuldade = Dificuldade.MEDIO;
-            lblDificuldade.setText("⭐⭐ Dificuldade: MÉDIO");
+            nomeDificuldade = "⭐⭐ MÉDIO";
         } else {
             dificuldade = Dificuldade.DIFICIL;
-            lblDificuldade.setText("⭐⭐⭐ Dificuldade: DIFÍCIL");
+            nomeDificuldade = "⭐⭐⭐ DIFÍCIL";
         }
+
+        lblDificuldade.setText(nomeDificuldade);
 
         perguntaAtual = getPerguntaSemRepeticao(dificuldade);
 
@@ -239,37 +216,9 @@ public class TelaBatalhaController {
             return;
         }
 
+        txtDialogoPergunta.setText("📚 " + jogador.getPersonagem().getNome() + " prepara o ataque!");
         txtPergunta.setText(perguntaAtual.getTexto());
         exibirAlternativas();
-    }
-
-    private Pergunta getPerguntaSemRepeticao(Dificuldade dificuldade) {
-        PerTipo tipo = jogador.getPersonagem().getTipo();
-
-        if (!perguntasDisponiveis.containsKey(dificuldade)) {
-            List<Pergunta> todas = bancoPerguntas.getPerguntasPorDificuldade(tipo, dificuldade, estagioAtual);
-            if (todas == null || todas.isEmpty()) return null;
-            perguntasDisponiveis.put(dificuldade, new ArrayList<>(todas));
-        }
-
-        List<Pergunta> disponiveis = perguntasDisponiveis.get(dificuldade);
-        List<Pergunta> naoUsadas = new ArrayList<>();
-
-        for (Pergunta p : disponiveis) {
-            if (!perguntasUsadas.contains(p.getId())) {
-                naoUsadas.add(p);
-            }
-        }
-
-        if (naoUsadas.isEmpty()) {
-            perguntasUsadas.clear();
-            naoUsadas = new ArrayList<>(disponiveis);
-        }
-
-        Pergunta escolhida = naoUsadas.get(random.nextInt(naoUsadas.size()));
-        perguntasUsadas.add(escolhida.getId());
-
-        return escolhida;
     }
 
     private void exibirAlternativas() {
@@ -277,6 +226,7 @@ public class TelaBatalhaController {
         painelLacuna.setVisible(false);
         painelLacuna.setManaged(false);
         txtRespostaLacuna.clear();
+        aguardandoResposta = true;
 
         if (perguntaAtual instanceof PerguntaMultiplaEscolha) {
             PerguntaMultiplaEscolha p = (PerguntaMultiplaEscolha) perguntaAtual;
@@ -293,7 +243,6 @@ public class TelaBatalhaController {
             }
 
         } else if (perguntaAtual instanceof PerguntaVerdadeiroFalso) {
-            // V/F lado a lado
             HBox hboxVF = new HBox(10.0);
             hboxVF.setAlignment(javafx.geometry.Pos.CENTER);
 
@@ -304,11 +253,6 @@ public class TelaBatalhaController {
             btnV.setStyle(estilo);
             btnF.setStyle(estilo);
 
-            btnV.setOnMouseEntered(e -> btnV.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10px 20px; -fx-background-radius: 8;"));
-            btnV.setOnMouseExited(e -> btnV.setStyle(estilo));
-            btnF.setOnMouseEntered(e -> btnF.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10px 20px; -fx-background-radius: 8;"));
-            btnF.setOnMouseExited(e -> btnF.setStyle(estilo));
-
             btnV.setOnAction(e -> avaliarResposta("V"));
             btnF.setOnAction(e -> avaliarResposta("F"));
 
@@ -316,26 +260,17 @@ public class TelaBatalhaController {
             painelAlternativas.getChildren().add(hboxVF);
 
         } else if (perguntaAtual instanceof PerguntaCompletarLacuna) {
-            painelAlternativas.setVisible(false);
+            // Exibe o campo de resposta abaixo da pergunta
             painelLacuna.setVisible(true);
             painelLacuna.setManaged(true);
-            txtRespostaLacuna.clear();
             txtRespostaLacuna.requestFocus();
-
-            // ⭐ ADICIONA SUPORTE À TECLA ENTER
-            txtRespostaLacuna.setOnKeyPressed(event -> {
-                if (event.getCode() == javafx.scene.input.KeyCode.ENTER) {
-                    String resposta = txtRespostaLacuna.getText().trim();
-                    if (!resposta.isEmpty()) {
-                        avaliarResposta(resposta);
-                    }
-                }
-            });
-
         }
     }
 
     private void avaliarResposta(String resposta) {
+        if (!aguardandoResposta) return;
+        aguardandoResposta = false;
+
         boolean correta = AvaliadorRespostas.avaliar(perguntaAtual, resposta);
 
         if (correta) {
@@ -356,12 +291,10 @@ public class TelaBatalhaController {
                 int bonus = estagioAtual * 50;
                 pontuacaoTotal += bonus;
                 jogador.addPontuacao(bonus);
-                adicionarDialogo("🏆 Bônus de estágio: +" + bonus + " pontos!");
 
                 estagioAtual++;
 
                 jogador.getPersonagem().curar(30);
-                resetarCooldown();
                 adicionarDialogo("✨ +30 de vida recuperada!");
 
                 if (estagioAtual > 10) {
@@ -393,6 +326,49 @@ public class TelaBatalhaController {
             reduzirCooldown();
             voltarAoMenu();
         }
+    }
+
+    private void criarProximoInimigo() {
+        int vidaBase = 80 + (estagioAtual * 20);
+        int ataqueBase = 20 + estagioAtual * 3;
+        inimigoAtual = new Inimigo("Guardião Nv." + estagioAtual, vidaBase, ataqueBase, estagioAtual);
+        lblInimigoSprite.setText(getInimigoSprite(estagioAtual));
+        atualizarStatusInimigo();
+        adicionarDialogo("⚠️ " + inimigoAtual.getNome() + " apareceu!");
+    }
+
+    private String getInimigoSprite(int estagio) {
+        String[] sprites = {"👾", "🐉", "👹", "🧙", "🦇", "🐺", "🧟", "👑"};
+        return sprites[Math.min(estagio - 1, sprites.length - 1)];
+    }
+
+    private Pergunta getPerguntaSemRepeticao(Dificuldade dificuldade) {
+        PerTipo tipo = jogador.getPersonagem().getTipo();
+
+        if (!perguntasDisponiveis.containsKey(dificuldade)) {
+            List<Pergunta> todas = bancoPerguntas.getPerguntasPorDificuldade(tipo, dificuldade, estagioAtual);
+            if (todas == null || todas.isEmpty()) return null;
+            perguntasDisponiveis.put(dificuldade, new ArrayList<>(todas));
+        }
+
+        List<Pergunta> disponiveis = perguntasDisponiveis.get(dificuldade);
+        List<Pergunta> naoUsadas = new ArrayList<>();
+
+        for (Pergunta p : disponiveis) {
+            if (!perguntasUsadas.contains(p.getId())) {
+                naoUsadas.add(p);
+            }
+        }
+
+        if (naoUsadas.isEmpty()) {
+            perguntasUsadas.clear();
+            naoUsadas = new ArrayList<>(disponiveis);
+        }
+
+        Pergunta escolhida = naoUsadas.get(random.nextInt(naoUsadas.size()));
+        perguntasUsadas.add(escolhida.getId());
+
+        return escolhida;
     }
 
     private int calcularDano(Dificuldade diff) {
@@ -462,7 +438,6 @@ public class TelaBatalhaController {
 
             estagioAtual++;
             jogador.getPersonagem().curar(30);
-            resetarCooldown();
 
             if (estagioAtual > 10) {
                 finalizarJogo(true);

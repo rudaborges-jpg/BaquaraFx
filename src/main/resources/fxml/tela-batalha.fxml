@@ -7,13 +7,14 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #1a3a2a;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.baquara.gui.controllers.TelaBatalhaController">
 
     <children>
 
-        <!-- ==================== TOPO CENTRALIZADO ==================== -->
+        <!-- TÍTULO -->
         <VBox alignment="CENTER" layoutX="0.0" layoutY="10.0" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <children>
                 <Label style="-fx-font-size: 28px; -fx-font-weight: bold;" text="⚔️ BAQUARA ⚔️" textFill="#FFD700" />
@@ -21,7 +22,7 @@
             </children>
         </VBox>
 
-        <!-- ==================== INIMIGO (EXTREMO DIREITO) ==================== -->
+        <!-- INIMIGO -->
         <VBox alignment="CENTER" spacing="10.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="120.0">
             <children>
                 <VBox alignment="CENTER" prefHeight="110.0" prefWidth="110.0" style="-fx-background-color: #2a2a4a; -fx-background-radius: 15; -fx-border-color: #ff4444; -fx-border-radius: 15; -fx-border-width: 3;">
@@ -33,14 +34,14 @@
                     <children>
                         <Label fx:id="lblInimigoNome" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="INIMIGO" textFill="WHITE" />
                         <Label fx:id="lblInimigoNivel" style="-fx-font-size: 10px;" text="Nv. 1" textFill="#ccc" />
-                        <ProgressBar fx:id="barraInimigoVida" prefWidth="160.0" progress="1.0" style="-fx-accent: #ff4444; -fx-pref-height: 12;" />
+                        <ProgressBar fx:id="barraInimigoVida" prefWidth="160.0" progress="1.0" style="-fx-accent: #ff4444;" />
                         <Label fx:id="lblInimigoVida" style="-fx-font-size: 10px;" text="HP: 100/100" textFill="WHITE" />
                     </children>
                 </VBox>
             </children>
         </VBox>
 
-        <!-- ==================== JOGADOR (EXTREMO ESQUERDO) ==================== -->
+        <!-- JOGADOR -->
         <VBox alignment="CENTER" spacing="10.0" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="120.0">
             <children>
                 <VBox alignment="CENTER" prefHeight="110.0" prefWidth="110.0" style="-fx-background-color: #2a2a4a; -fx-background-radius: 15; -fx-border-color: #44ff44; -fx-border-radius: 15; -fx-border-width: 3;">
@@ -52,7 +53,7 @@
                     <children>
                         <Label fx:id="lblJogadorNome" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="JOGADOR" textFill="WHITE" />
                         <Label fx:id="lblJogadorNivel" style="-fx-font-size: 10px;" text="Nv. 1" textFill="#ccc" />
-                        <ProgressBar fx:id="barraJogadorVida" prefWidth="160.0" progress="1.0" style="-fx-accent: #44ff44; -fx-pref-height: 12;" />
+                        <ProgressBar fx:id="barraJogadorVida" prefWidth="160.0" progress="1.0" style="-fx-accent: #44ff44;" />
                         <Label fx:id="lblJogadorVida" style="-fx-font-size: 10px;" text="HP: 100/100" textFill="WHITE" />
                         <Label fx:id="lblJogadorAtributo" style="-fx-font-size: 10px;" text="✨ Poder: 100" textFill="#aaa" />
                     </children>
@@ -60,17 +61,30 @@
             </children>
         </VBox>
 
-        <!-- ==================== PAINEL INFERIOR ==================== -->
-        <VBox layoutX="20.0" layoutY="460.0" spacing="8.0" prefWidth="550.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0">
+        <!-- PAINEL INFERIOR (MENU PRINCIPAL) -->
+        <VBox fx:id="painelMenu" layoutX="20.0" layoutY="460.0" spacing="8.0" prefWidth="550.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0">
             <children>
-                <TextArea fx:id="txtDialogo" prefHeight="60.0" style="-fx-font-size: 11px; -fx-background-color: #000; -fx-text-fill: #0f0; -fx-border-color: #FFD700; -fx-border-width: 2; -fx-border-radius: 5;" wrapText="true" editable="false" />
+                <TextArea fx:id="txtDialogo" prefHeight="80.0" style="-fx-font-size: 11px; -fx-background-color: #000; -fx-text-fill: #0f0; -fx-border-color: #FFD700; -fx-border-width: 2; -fx-border-radius: 5;" wrapText="true" editable="false" />
+                <Label fx:id="lblTurnoMsg" style="-fx-font-size: 12px; -fx-text-fill: #FFD700;" text="⚔️ Escolha sua ação! ⚔️" />
+            </children>
+        </VBox>
 
-                <Label fx:id="lblDificuldade" style="-fx-font-size: 11px; -fx-font-weight: bold;" text="⭐ Dificuldade" textFill="#FFD700" />
+        <!-- PAINEL DE PERGUNTA (aparece ao atacar) -->
+        <VBox fx:id="painelPergunta" layoutX="20.0" layoutY="460.0" spacing="8.0" prefWidth="550.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" visible="false" managed="false">
+            <children>
+                <!-- DIÁLOGO DA PERGUNTA -->
+                <TextArea fx:id="txtDialogoPergunta" prefHeight="40.0" style="-fx-font-size: 11px; -fx-background-color: #000; -fx-text-fill: #0f0; -fx-border-color: #FFD700; -fx-border-width: 2; -fx-border-radius: 5;" wrapText="true" editable="false" />
 
-                <TextArea fx:id="txtPergunta" prefHeight="50.0" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-background-color: #FFF8DC; -fx-text-fill: #000; -fx-border-color: #FFD700; -fx-border-width: 2; -fx-border-radius: 5;" wrapText="true" editable="false" />
+                <!-- DIFICULDADE -->
+                <Label fx:id="lblDificuldade" style="-fx-font-size: 12px; -fx-font-weight: bold;" text="⭐ Dificuldade" textFill="#FFD700" />
 
+                <!-- PERGUNTA -->
+                <TextArea fx:id="txtPergunta" prefHeight="60.0" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-background-color: #FFF8DC; -fx-text-fill: #000; -fx-border-color: #FFD700; -fx-border-width: 2; -fx-border-radius: 5;" wrapText="true" editable="false" />
+
+                <!-- ALTERNATIVAS (para múltipla escolha) -->
                 <VBox fx:id="painelAlternativas" spacing="5.0" />
 
+                <!-- LACUNA - Campo de resposta EMBaIXO DA PERGUNTA -->
                 <VBox fx:id="painelLacuna" spacing="8.0" visible="false" managed="false">
                     <children>
                         <Label text="✏️ DIGITE SUA RESPOSTA:" textFill="#FFD700" style="-fx-font-size: 12px; -fx-font-weight: bold;" />
@@ -79,16 +93,17 @@
                     </children>
                 </VBox>
 
-                <Label fx:id="lblTurnoMsg" style="-fx-font-size: 10px; -fx-text-fill: #aaa;" text="⚔️ Escolha sua ação ao lado! ⚔️" />
+                <!-- BOTÃO VOLTAR -->
+                <Button fx:id="btnVoltarMenu" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-size: 11px; -fx-padding: 5px 15px; -fx-background-radius: 8;" text="◀️ VOLTAR" />
             </children>
         </VBox>
 
-        <!-- ==================== MENU DE AÇÕES ==================== -->
+        <!-- MENU DE AÇÕES -->
         <VBox layoutX="590.0" layoutY="460.0" spacing="10.0" prefWidth="190.0" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0">
             <children>
                 <Button fx:id="btnAtacar" style="-fx-background-color: #306830; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 10px 15px; -fx-background-radius: 8;" text="⚔️ ATACAR" maxWidth="Infinity" />
                 <Button fx:id="btnHabilidade" style="-fx-background-color: #8B4513; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 10px 15px; -fx-background-radius: 8;" text="🌟 HABILIDADE" maxWidth="Infinity" />
-                <Label fx:id="lblCooldown" style="-fx-font-size: 10px; -fx-text-fill: #FF9800; -fx-padding: 5 0 0 0;" text="✨ Disponível" />
+                <Label fx:id="lblCooldown" style="-fx-font-size: 10px; -fx-text-fill: #FF9800;" text="✨ Disponível" />
             </children>
         </VBox>
 

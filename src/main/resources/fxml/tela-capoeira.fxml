@@ -14,7 +14,7 @@
 
     <children>
 
-        <!-- ==================== TOPO CENTRALIZADO ==================== -->
+        <!-- TÍTULO -->
         <VBox alignment="CENTER" layoutX="0.0" layoutY="10.0" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <children>
                 <Label style="-fx-font-size: 28px; -fx-font-weight: bold;" text="🥋 RODA DE CAPOEIRA 🥋" textFill="#FFD700" />
@@ -22,7 +22,7 @@
             </children>
         </VBox>
 
-        <!-- ==================== INIMIGO (EXTREMO DIREITO) ==================== -->
+        <!-- INIMIGO -->
         <VBox alignment="CENTER" spacing="10.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="120.0">
             <children>
                 <VBox alignment="CENTER" prefHeight="110.0" prefWidth="110.0" style="-fx-background-color: #2a2a4a; -fx-background-radius: 15; -fx-border-color: #ff4444; -fx-border-radius: 15; -fx-border-width: 3;">
@@ -34,14 +34,14 @@
                     <children>
                         <Label fx:id="lblInimigoNome" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="MESTRE" textFill="WHITE" />
                         <Label fx:id="lblInimigoNivel" style="-fx-font-size: 10px;" text="Estágio 1" textFill="#ccc" />
-                        <ProgressBar fx:id="barraInimigoVida" prefWidth="160.0" progress="1.0" style="-fx-accent: #ff4444; -fx-pref-height: 12;" />
+                        <ProgressBar fx:id="barraInimigoVida" prefWidth="160.0" progress="1.0" style="-fx-accent: #ff4444;" />
                         <Label fx:id="lblInimigoVida" style="-fx-font-size: 10px;" text="Vida: 100/100" textFill="WHITE" />
                     </children>
                 </VBox>
             </children>
         </VBox>
 
-        <!-- ==================== JOGADOR (EXTREMO ESQUERDO) ==================== -->
+        <!-- JOGADOR -->
         <VBox alignment="CENTER" spacing="10.0" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="120.0">
             <children>
                 <VBox alignment="CENTER" prefHeight="110.0" prefWidth="110.0" style="-fx-background-color: #2a2a4a; -fx-background-radius: 15; -fx-border-color: #44ff44; -fx-border-radius: 15; -fx-border-width: 3;">
@@ -53,7 +53,7 @@
                     <children>
                         <Label fx:id="lblJogadorNome" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="CAPOEIRISTA" textFill="WHITE" />
                         <Label fx:id="lblJogadorNivel" style="-fx-font-size: 10px;" text="Título" textFill="#ccc" />
-                        <ProgressBar fx:id="barraJogadorVida" prefWidth="160.0" progress="1.0" style="-fx-accent: #44ff44; -fx-pref-height: 12;" />
+                        <ProgressBar fx:id="barraJogadorVida" prefWidth="160.0" progress="1.0" style="-fx-accent: #44ff44;" />
                         <Label fx:id="lblJogadorVida" style="-fx-font-size: 10px;" text="Vida: 120/120" textFill="WHITE" />
                         <Label fx:id="lblJogadorGinga" style="-fx-font-size: 10px;" text="🌀 Ginga: 100/100" textFill="#aaa" />
                     </children>
@@ -61,17 +61,27 @@
             </children>
         </VBox>
 
-        <!-- ==================== PAINEL INFERIOR (DIÁLOGO E PERGUNTAS) ==================== -->
+        <!-- PAINEL INFERIOR -->
         <VBox layoutX="20.0" layoutY="460.0" spacing="8.0" prefWidth="550.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0">
             <children>
+                <!-- DIÁLOGO -->
                 <TextArea fx:id="txtDialogo" prefHeight="60.0" style="-fx-font-size: 11px; -fx-background-color: #000; -fx-text-fill: #0f0; -fx-border-color: #FFD700; -fx-border-width: 2; -fx-border-radius: 5;" wrapText="true" editable="false" />
 
-                <Label fx:id="lblDificuldade" style="-fx-font-size: 11px; -fx-font-weight: bold;" text="⭐ Aguardando ação..." textFill="#FFD700" />
+                <!-- STATUS: DIFICULDADE + TEMPORIZADOR (lado a lado) -->
+                <HBox spacing="10.0" alignment="CENTER_LEFT">
+                    <children>
+                        <Label fx:id="lblDificuldade" style="-fx-font-size: 12px; -fx-font-weight: bold;" text="⭐ Aguardando ação..." textFill="#FFD700" />
+                        <Label fx:id="lblTemporizador" style="-fx-font-size: 12px; -fx-font-weight: bold;" text="" textFill="#FF6347" HBox.hgrow="ALWAYS" />
+                    </children>
+                </HBox>
 
+                <!-- PERGUNTA -->
                 <TextArea fx:id="txtPergunta" prefHeight="50.0" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-background-color: #FFF8DC; -fx-text-fill: #000; -fx-border-color: #FFD700; -fx-border-width: 2; -fx-border-radius: 5;" wrapText="true" editable="false" />
 
+                <!-- ALTERNATIVAS -->
                 <VBox fx:id="painelAlternativas" spacing="5.0" />
 
+                <!-- LACUNA -->
                 <VBox fx:id="painelLacuna" spacing="8.0" visible="false" managed="false">
                     <children>
                         <Label text="✏️ DIGITE SUA RESPOSTA:" textFill="#FFD700" style="-fx-font-size: 12px; -fx-font-weight: bold;" />
@@ -84,7 +94,7 @@
             </children>
         </VBox>
 
-        <!-- ==================== MENU DE AÇÕES (LADO DIREITO) ==================== -->
+        <!-- MENU DE AÇÕES -->
         <VBox layoutX="590.0" layoutY="460.0" spacing="10.0" prefWidth="190.0" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0">
             <children>
                 <Button fx:id="btnBasico" style="-fx-background-color: #306830; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 10px 15px; -fx-background-radius: 8;" text="🔄 GINGA BÁSICA" maxWidth="Infinity" />

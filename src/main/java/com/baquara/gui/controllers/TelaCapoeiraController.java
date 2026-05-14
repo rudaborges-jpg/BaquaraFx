@@ -1,15 +1,20 @@
 package com.baquara.gui.controllers;
 
 import com.baquara.controle.AvaliadorRespostas;
+import com.baquara.controle.TemporizadorResposta;
 import com.baquara.dados.BancoPerguntasCapoeira;
 import com.baquara.modelo.*;
 import com.baquara.modelo.Pergunta.Dificuldade;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
+
 import java.util.Random;
 
 public class TelaCapoeiraController {
@@ -42,6 +47,14 @@ public class TelaCapoeiraController {
     @FXML private Button btnDificil;
     @FXML private Button btnCombinado;
     @FXML private Button btnEsquiva;
+    @FXML private Label lblTemporizador;
+
+
+    private TemporizadorResposta temporizador;
+    private int tempoRestante = 0;
+    private Timeline timelineTemporizador;
+
+
 
     private Jogador jogador;
     private Capoeirista capoeirista;
@@ -110,6 +123,62 @@ public class TelaCapoeiraController {
         limparPergunta();
     }
 
+    private void iniciarTemporizador(int segundos) {
+        tempoRestante = segundos;
+        atualizarLabelTemporizador();
+
+        if (timelineTemporizador != null) {
+            timelineTemporizador.stop();
+        }
+
+        timelineTemporizador = new Timeline(
+                new KeyFrame(Duration.seconds(1), e -> {
+                    tempoRestante--;
+                    atualizarLabelTemporizador();
+
+                    if (tempoRestante <= 0) {
+                        timelineTemporizador.stop();
+                        tempoEsgotado();
+                    }
+                })
+        );
+        timelineTemporizador.setCycleCount(segundos);
+        timelineTemporizador.play();
+    }
+
+    private void atualizarLabelTemporizador() {
+        Platform.runLater(() -> {
+            if (tempoRestante > 0) {
+                lblTemporizador.setText("⏱️ Tempo: " + tempoRestante + "s");
+                if (tempoRestante <= 3) {
+                    lblTemporizador.setStyle("-fx-text-fill: #ff4444; -fx-font-size: 14px; -fx-font-weight: bold;");
+                } else {
+                    lblTemporizador.setStyle("-fx-text-fill: #FFD700; -fx-font-size: 12px; -fx-font-weight: bold;");
+                }
+            } else {
+                lblTemporizador.setText("");
+            }
+        });
+    }
+
+    private void tempoEsgotado() {
+        aguardandoResposta = false;
+        adicionarDialogo("⏰ TEMPO ESGOTADO! Você perdeu a chance de atacar!");
+
+        // Inimigo contra-ataca
+        int danoInimigo = calcularDanoInimigo();
+        jogador.tomarDano(danoInimigo);
+        adicionarDialogo("💢 " + inimigoAtual.getNome() + " aproveita sua hesitação e causa " + danoInimigo + " de dano!");
+        atualizarStatusJogador();
+
+        if (!jogador.vivo()) {
+            finalizarJogo(false);
+            return;
+        }
+
+        limparPergunta();
+    }
+
     private void limparPergunta() {
         Platform.runLater(() -> {
             txtPergunta.setText("⚡ Clique em um ataque para começar!");
@@ -122,6 +191,11 @@ public class TelaCapoeiraController {
             aguardandoResposta = false;
             tipoAtaqueSelecionado = 0;
             lblTurnoMsg.setText("🥋 Escolha seu movimento ao lado! 🥋");
+            if (timelineTemporizador != null) {
+                timelineTemporizador.stop();
+            }
+            lblTemporizador.setText("");
+            tempoRestante = 0;
         });
     }
 
@@ -154,6 +228,14 @@ public class TelaCapoeiraController {
             adicionarDialogo("❌ Erro ao carregar pergunta!");
             return;
         }
+        int tempoSegundos;
+        switch (tipoAtaque) {
+            case 1: tempoSegundos = 15; break;  // Fácil
+            case 2: tempoSegundos = 12; break;  // Médio
+            default: tempoSegundos = 10; break;  // Difícil
+        }
+
+        iniciarTemporizador(tempoSegundos);
 
         tipoAtaqueSelecionado = tipoAtaque;
         aguardandoResposta = true;
@@ -232,6 +314,12 @@ public class TelaCapoeiraController {
 
     private void avaliarResposta(String resposta) {
         if (!aguardandoResposta) return;
+
+        // ⭐ PARA O TEMPORIZADOR
+        if (timelineTemporizador != null) {
+            timelineTemporizador.stop();
+        }
+        lblTemporizador.setText("");
 
         boolean correta = AvaliadorRespostas.avaliar(perguntaAtual, resposta);
         aguardandoResposta = false;
