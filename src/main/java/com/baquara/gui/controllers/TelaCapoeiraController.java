@@ -1,16 +1,15 @@
 package com.baquara.gui.controllers;
 
 import com.baquara.controle.AvaliadorRespostas;
-import com.baquara.controle.TemporizadorResposta;
 import com.baquara.dados.BancoPerguntasCapoeira;
 import com.baquara.modelo.*;
 import com.baquara.modelo.Pergunta.Dificuldade;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -24,7 +23,6 @@ public class TelaCapoeiraController {
     @FXML private Label lblJogadorVida;
     @FXML private ProgressBar barraJogadorVida;
     @FXML private Label lblJogadorGinga;
-    @FXML private Label lblEsquivas;
     @FXML private Label lblJogadorSprite;
 
     @FXML private Label lblInimigoNome;
@@ -37,24 +35,22 @@ public class TelaCapoeiraController {
     @FXML private TextArea txtPergunta;
     @FXML private TextArea txtDialogo;
     @FXML private VBox painelAlternativas;
-    @FXML private VBox painelLacuna;  // ⭐ AGORA É VBox (corrigido)
+    @FXML private VBox painelLacuna;
     @FXML private TextField txtRespostaLacuna;
     @FXML private Button btnEnviarLacuna;
     @FXML private Label lblTurno;
     @FXML private Label lblTurnoMsg;
+    @FXML private Label lblTemporizador;
 
     @FXML private Button btnBasico;
     @FXML private Button btnDificil;
     @FXML private Button btnCombinado;
     @FXML private Button btnEsquiva;
-    @FXML private Label lblTemporizador;
 
-
-    private TemporizadorResposta temporizador;
-    private int tempoRestante = 0;
-    private Timeline timelineTemporizador;
-
-
+    @FXML private VBox painelDialogo;
+    @FXML private VBox painelAcoes;
+    @FXML private VBox painelPergunta;
+    @FXML private Button btnVoltarMenu;
 
     private Jogador jogador;
     private Capoeirista capoeirista;
@@ -67,6 +63,10 @@ public class TelaCapoeiraController {
     private int contadorAtaquesBasicos = 0;
     private int tipoAtaqueSelecionado = 0;
     private boolean aguardandoResposta = false;
+
+    // Timer
+    private Thread timerThread;
+    private int tempoMaximoAtual = 0;
 
     private String[] nomesMestres = {
             "MESTRE BIMBA", "MESTRE PASTINHA", "MESTRE JOÃO GRANDE",
@@ -84,8 +84,8 @@ public class TelaCapoeiraController {
         this.random = new Random();
 
         atualizarStatusJogador();
-        adicionarDialogo("🥋 " + capoeirista.getNome() + " entrou na RODA DE CAPOEIRA!");
-        adicionarDialogo("🎵 O berimbau toca... a roda vai começar!");
+        adicionarDialogo("🥋 " + capoeirista.getNome() + " entrou na RODA DE CAPOEIRA!", false);
+        adicionarDialogo("🎵 O berimbau toca... a roda vai começar!", false);
     }
 
     public void iniciarRoda() {
@@ -94,8 +94,8 @@ public class TelaCapoeiraController {
 
     private void proximoMestre() {
         if (estagioAtual >= nomesMestres.length) {
-            adicionarDialogo("🏆 PARABÉNS! Você derrotou todos os mestres!");
-            adicionarDialogo("🦗 Agora enfrente o lendário BESOURO MANGANGÁ!");
+            adicionarDialogo("🏆 PARABÉNS! Você derrotou todos os mestres!", false);
+            adicionarDialogo("🦗 Agora enfrente o lendário BESOURO MANGANGÁ!", false);
             enfrentarBesouro();
             return;
         }
@@ -107,9 +107,9 @@ public class TelaCapoeiraController {
         inimigoAtual = new Inimigo(nome, vida, ataque, estagioAtual + 1);
 
         atualizarStatusInimigo();
-        adicionarDialogo("\n📜 ESTÁGIO " + (estagioAtual + 1) + "/9");
-        adicionarDialogo("👥 " + nome + " entra na roda!");
-        adicionarDialogo("⚔️ Prepare-se para o jogo!");
+        adicionarDialogo("\n📜 ESTÁGIO " + (estagioAtual + 1) + "/9", false);
+        adicionarDialogo("👥 " + nome + " entra na roda!", false);
+        adicionarDialogo("⚔️ Prepare-se para o jogo!", false);
 
         contadorAtaquesBasicos = 0;
         limparPergunta();
@@ -118,132 +118,112 @@ public class TelaCapoeiraController {
     private void enfrentarBesouro() {
         inimigoAtual = new BesouroManganga();
         atualizarStatusInimigo();
-        adicionarDialogo("\n🦗 BESOURO MANGANGÁ APARECEU!");
-        adicionarDialogo("'FECHADO! NINGUÉM ME SEGURA!'");
-        limparPergunta();
-    }
-
-    private void iniciarTemporizador(int segundos) {
-        tempoRestante = segundos;
-        atualizarLabelTemporizador();
-
-        if (timelineTemporizador != null) {
-            timelineTemporizador.stop();
-        }
-
-        timelineTemporizador = new Timeline(
-                new KeyFrame(Duration.seconds(1), e -> {
-                    tempoRestante--;
-                    atualizarLabelTemporizador();
-
-                    if (tempoRestante <= 0) {
-                        timelineTemporizador.stop();
-                        tempoEsgotado();
-                    }
-                })
-        );
-        timelineTemporizador.setCycleCount(segundos);
-        timelineTemporizador.play();
-    }
-
-    private void atualizarLabelTemporizador() {
-        Platform.runLater(() -> {
-            if (tempoRestante > 0) {
-                lblTemporizador.setText("⏱️ Tempo: " + tempoRestante + "s");
-                if (tempoRestante <= 3) {
-                    lblTemporizador.setStyle("-fx-text-fill: #ff4444; -fx-font-size: 14px; -fx-font-weight: bold;");
-                } else {
-                    lblTemporizador.setStyle("-fx-text-fill: #FFD700; -fx-font-size: 12px; -fx-font-weight: bold;");
-                }
-            } else {
-                lblTemporizador.setText("");
-            }
-        });
-    }
-
-    private void tempoEsgotado() {
-        aguardandoResposta = false;
-        adicionarDialogo("⏰ TEMPO ESGOTADO! Você perdeu a chance de atacar!");
-
-        // Inimigo contra-ataca
-        int danoInimigo = calcularDanoInimigo();
-        jogador.tomarDano(danoInimigo);
-        adicionarDialogo("💢 " + inimigoAtual.getNome() + " aproveita sua hesitação e causa " + danoInimigo + " de dano!");
-        atualizarStatusJogador();
-
-        if (!jogador.vivo()) {
-            finalizarJogo(false);
-            return;
-        }
-
+        adicionarDialogo("\n🦗 BESOURO MANGANGÁ APARECEU!", false);
+        adicionarDialogo("'FECHADO! NINGUÉM ME SEGURA!'", false);
         limparPergunta();
     }
 
     private void limparPergunta() {
+        pararTimer();
+
         Platform.runLater(() -> {
+            painelDialogo.setVisible(true);
+            painelDialogo.setManaged(true);
+            painelAcoes.setVisible(true);
+            painelAcoes.setManaged(true);
+
+            painelPergunta.setVisible(false);
+            painelPergunta.setManaged(false);
+
             txtPergunta.setText("⚡ Clique em um ataque para começar!");
+            txtPergunta.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-background-color: #FFF8DC; -fx-text-fill: #000; -fx-border-color: #FFD700; -fx-border-width: 3; -fx-border-radius: 8;");
+
             painelAlternativas.getChildren().clear();
             if (painelLacuna != null) {
                 painelLacuna.setVisible(false);
                 painelLacuna.setManaged(false);
             }
             lblDificuldade.setText("⭐ Aguardando ação...");
+            lblTurnoMsg.setText("🥋 Escolha seu movimento ao lado! 🥋");
+            if (lblTemporizador != null) {
+                lblTemporizador.setText("");
+            }
+
             aguardandoResposta = false;
             tipoAtaqueSelecionado = 0;
-            lblTurnoMsg.setText("🥋 Escolha seu movimento ao lado! 🥋");
-            if (timelineTemporizador != null) {
-                timelineTemporizador.stop();
-            }
-            lblTemporizador.setText("");
-            tempoRestante = 0;
         });
+    }
+
+    private void pararTimer() {
+        if (timerThread != null && timerThread.isAlive()) {
+            timerThread.interrupt();
+            timerThread = null;
+        }
     }
 
     private void carregarPergunta(int tipoAtaque) {
         Dificuldade dificuldade;
-        String nomeDificuldade;
-        String nomeAtaque;
+        String nomeDificuldade = "";
+        String nomeAtaque = "";
 
         switch (tipoAtaque) {
             case 1:
                 dificuldade = Dificuldade.FACIL;
                 nomeDificuldade = "⭐ FÁCIL";
                 nomeAtaque = "GINGA BÁSICA";
+                tempoMaximoAtual = 15;
                 break;
             case 2:
                 dificuldade = Dificuldade.MEDIO;
                 nomeDificuldade = "⭐⭐ MÉDIO";
                 nomeAtaque = "ATAQUE DIFÍCIL";
+                tempoMaximoAtual = 12;
                 break;
             default:
                 dificuldade = Dificuldade.DIFICIL;
                 nomeDificuldade = "⭐⭐⭐ DIFÍCIL";
                 nomeAtaque = "COMBINAÇÃO MORTAL";
+                tempoMaximoAtual = 10;
                 break;
+        }
+
+        if (inimigoAtual instanceof BesouroManganga) {
+            tempoMaximoAtual = 8;
+            nomeDificuldade += " 🔥 CHEFÃO! 🔥";
         }
 
         perguntaAtual = bancoPerguntas.getPerguntaAleatoria(dificuldade);
 
         if (perguntaAtual == null) {
-            adicionarDialogo("❌ Erro ao carregar pergunta!");
+            adicionarDialogo("❌ Erro ao carregar pergunta!", false);
             return;
         }
-        int tempoSegundos;
-        switch (tipoAtaque) {
-            case 1: tempoSegundos = 15; break;  // Fácil
-            case 2: tempoSegundos = 12; break;  // Médio
-            default: tempoSegundos = 10; break;  // Difícil
-        }
-
-        iniciarTemporizador(tempoSegundos);
 
         tipoAtaqueSelecionado = tipoAtaque;
         aguardandoResposta = true;
 
+        final String nomeDificuldadeFinal = nomeDificuldade;
+        final String nomeAtaqueFinal = nomeAtaque;
+        final int tempoFinal = tempoMaximoAtual;
+
         Platform.runLater(() -> {
-            lblDificuldade.setText(nomeDificuldade + " - " + nomeAtaque);
+            painelPergunta.setVisible(true);
+            painelPergunta.setManaged(true);
+            painelDialogo.setVisible(false);
+            painelDialogo.setManaged(false);
+            painelAcoes.setVisible(false);
+            painelAcoes.setManaged(false);
+
+            lblDificuldade.setText(nomeDificuldadeFinal + " - " + nomeAtaqueFinal);
             txtPergunta.setText(perguntaAtual.getTexto());
-            txtPergunta.setStyle("-fx-background-color: #FFF8DC; -fx-text-fill: #000; -fx-font-size: 14px; -fx-font-weight: bold; -fx-border-color: #FFD700; -fx-border-width: 3; -fx-border-radius: 8;");
+            txtPergunta.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-background-color: #FFF8DC; -fx-text-fill: #000; -fx-border-color: #FFD700; -fx-border-width: 3; -fx-border-radius: 8;");
+
+            if (lblTemporizador != null) {
+                lblTemporizador.setText("⏱️ " + tempoFinal + " segundos");
+                lblTemporizador.setStyle("-fx-text-fill: #FFD700; -fx-font-size: 14px; -fx-font-weight: bold;");
+                lblTemporizador.setVisible(true);
+            }
+
             painelAlternativas.getChildren().clear();
 
             if (painelLacuna != null) {
@@ -251,75 +231,159 @@ public class TelaCapoeiraController {
                 painelLacuna.setManaged(false);
             }
 
+            lblTurnoMsg.setText("📚 Responda a pergunta para executar o golpe!");
+
             if (perguntaAtual instanceof PerguntaMultiplaEscolha) {
-                PerguntaMultiplaEscolha p = (PerguntaMultiplaEscolha) perguntaAtual;
-                var opcoes = p.getOpcoes();
-
-                for (int i = 0; i < opcoes.size(); i++) {
-                    char letra = (char) ('A' + i);
-                    Button btn = new Button(letra + ") " + opcoes.get(i));
-                    btn.setStyle("-fx-background-color: #306830; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 10px; -fx-background-radius: 8;");
-                    btn.setMaxWidth(Double.MAX_VALUE);
-                    final String resposta = String.valueOf(letra);
-                    btn.setOnAction(e -> avaliarResposta(resposta));
-                    painelAlternativas.getChildren().add(btn);
-                }
-
+                configurarMultiplaEscolha((PerguntaMultiplaEscolha) perguntaAtual);
             } else if (perguntaAtual instanceof PerguntaVerdadeiroFalso) {
-                HBox hboxVF = new HBox(15.0);
-                hboxVF.setAlignment(javafx.geometry.Pos.CENTER);
-
-                Button btnV = new Button("✅ VERDADEIRO");
-                Button btnF = new Button("❌ FALSO");
-
-                String estilo = "-fx-background-color: #306830; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10px 25px; -fx-background-radius: 8;";
-                btnV.setStyle(estilo);
-                btnF.setStyle(estilo);
-
-                btnV.setOnAction(e -> avaliarResposta("V"));
-                btnF.setOnAction(e -> avaliarResposta("F"));
-
-                hboxVF.getChildren().addAll(btnV, btnF);
-                painelAlternativas.getChildren().add(hboxVF);
-
+                configurarVerdadeiroFalso();
             } else if (perguntaAtual instanceof PerguntaCompletarLacuna) {
-                if (painelLacuna != null) {
-                    painelLacuna.setVisible(true);
-                    painelLacuna.setManaged(true);
-                    txtRespostaLacuna.clear();
-                    txtRespostaLacuna.requestFocus();
+                configurarLacuna();
+            }
 
-                    // ⭐ ENTER PARA RESPONDER
-                    txtRespostaLacuna.setOnKeyPressed(event -> {
-                        if (event.getCode() == KeyCode.ENTER) {
-                            String resposta = txtRespostaLacuna.getText().trim();
-                            if (!resposta.isEmpty()) {
-                                avaliarResposta(resposta);
+            iniciarTimer(tempoFinal);
+        });
+    }
+
+    private void iniciarTimer(int segundos) {
+        pararTimer();
+
+        timerThread = new Thread(() -> {
+            try {
+                for (int i = segundos; i >= 0; i--) {
+                    if (Thread.currentThread().isInterrupted()) {
+                        return;
+                    }
+
+                    final int segundosRestantes = i;
+                    Platform.runLater(() -> {
+                        if (lblTemporizador != null) {
+                            if (segundosRestantes > 0) {
+                                lblTemporizador.setText("⏱️ " + segundosRestantes + " segundos");
+                                if (segundosRestantes <= 3) {
+                                    lblTemporizador.setStyle("-fx-text-fill: #ff4444; -fx-font-size: 16px; -fx-font-weight: bold;");
+                                } else {
+                                    lblTemporizador.setStyle("-fx-text-fill: #FFD700; -fx-font-size: 14px; -fx-font-weight: bold;");
+                                }
+                            } else {
+                                lblTemporizador.setText("⏰ TEMPO ESGOTADO!");
+                                lblTemporizador.setStyle("-fx-text-fill: #ff4444; -fx-font-size: 16px; -fx-font-weight: bold;");
                             }
                         }
                     });
 
-                    btnEnviarLacuna.setOnAction(e -> {
-                        String resposta = txtRespostaLacuna.getText().trim();
-                        if (!resposta.isEmpty()) {
-                            avaliarResposta(resposta);
+                    if (i == 0) {
+                        if (aguardandoResposta) {
+                            Platform.runLater(() -> {
+                                if (aguardandoResposta) {
+                                    avaliarResposta("TEMPO_ESGOTADO");
+                                }
+                            });
                         }
-                    });
+                        return;
+                    }
+
+                    Thread.sleep(1000);
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        timerThread.setDaemon(true);
+        timerThread.start();
+    }
+
+    private void configurarMultiplaEscolha(PerguntaMultiplaEscolha pergunta) {
+        var opcoes = pergunta.getOpcoes();
+
+        for (int i = 0; i < opcoes.size(); i++) {
+            char letra = (char) ('A' + i);
+            Button btn = new Button(letra + ") " + opcoes.get(i));
+            btn.setStyle("-fx-background-color: #306830; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 8px; -fx-background-radius: 8;");
+            btn.setMaxWidth(Double.MAX_VALUE);
+            final String resposta = String.valueOf(letra);
+            btn.setOnAction(e -> avaliarResposta(resposta));
+            painelAlternativas.getChildren().add(btn);
+        }
+    }
+
+    private void configurarVerdadeiroFalso() {
+        HBox hboxVF = new HBox(15.0);
+        hboxVF.setAlignment(javafx.geometry.Pos.CENTER);
+
+        Button btnV = new Button("✅ VERDADEIRO");
+        Button btnF = new Button("❌ FALSO");
+
+        String estilo = "-fx-background-color: #306830; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 8px 20px; -fx-background-radius: 8;";
+        btnV.setStyle(estilo);
+        btnF.setStyle(estilo);
+
+        btnV.setOnAction(e -> avaliarResposta("V"));
+        btnF.setOnAction(e -> avaliarResposta("F"));
+
+        hboxVF.getChildren().addAll(btnV, btnF);
+        painelAlternativas.getChildren().add(hboxVF);
+    }
+
+    private void configurarLacuna() {
+        if (painelLacuna == null) return;
+
+        painelLacuna.setVisible(true);
+        painelLacuna.setManaged(true);
+        txtRespostaLacuna.clear();
+        txtRespostaLacuna.requestFocus();
+
+        txtRespostaLacuna.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                String resposta = txtRespostaLacuna.getText().trim();
+                if (!resposta.isEmpty()) {
+                    avaliarResposta(resposta);
                 }
             }
+        });
 
-            lblTurnoMsg.setText("📚 Responda a pergunta para executar o golpe!");
+        btnEnviarLacuna.setOnAction(e -> {
+            String resposta = txtRespostaLacuna.getText().trim();
+            if (!resposta.isEmpty()) {
+                avaliarResposta(resposta);
+            }
         });
     }
 
     private void avaliarResposta(String resposta) {
         if (!aguardandoResposta) return;
 
-        // ⭐ PARA O TEMPORIZADOR
-        if (timelineTemporizador != null) {
-            timelineTemporizador.stop();
+        pararTimer();
+
+        boolean tempoEsgotado = resposta.equals("TEMPO_ESGOTADO");
+
+        if (tempoEsgotado) {
+            adicionarDialogo("\n⏰ TEMPO ESGOTADO! Você perdeu a chance de atacar!", true);
+            adicionarDialogo("📖 Resposta correta: " +
+                    AvaliadorRespostas.getRespostaCorretaFormatada(perguntaAtual), true);
+
+            int danoInimigo = (int)(calcularDanoInimigo() * 0.7);
+
+            if (capoeirista.getEsquivasRestantes() > 0) {
+                adicionarDialogo("🌀 VOCÊ USA UMA ESQUIVA PARA DESVIAR DO CONTRA-ATAQUE!", false);
+                capoeirista.executarEsquiva(inimigoAtual, danoInimigo);
+                atualizarStatusJogador();
+            } else {
+                adicionarDialogo("💢 " + inimigoAtual.getNome() + " aproveita sua hesitação e causa " + danoInimigo + " de dano!", true);
+                jogador.tomarDano(danoInimigo);
+                atualizarStatusJogador();
+            }
+
+            if (!jogador.vivo()) {
+                finalizarJogo(false);
+                return;
+            }
+
+            contadorAtaquesBasicos = 0;
+            limparPergunta();
+            return;
         }
-        lblTemporizador.setText("");
 
         boolean correta = AvaliadorRespostas.avaliar(perguntaAtual, resposta);
         aguardandoResposta = false;
@@ -327,7 +391,7 @@ public class TelaCapoeiraController {
         if (correta) {
             int dano = calcularDano(tipoAtaqueSelecionado);
             inimigoAtual.tomarDano(dano);
-            adicionarDialogo("✅ CORRETO! Causou " + dano + " de dano!");
+            adicionarDialogo("✅ CORRETO! Causou " + dano + " de dano!", false); // Verde
 
             int recuperacao = tipoAtaqueSelecionado == 1 ? 15 : (tipoAtaqueSelecionado == 2 ? 10 : 5);
             capoeirista.recarregar(recuperacao);
@@ -335,12 +399,12 @@ public class TelaCapoeiraController {
 
             if (!inimigoAtual.vivo()) {
                 if (inimigoAtual instanceof BesouroManganga) {
-                    adicionarDialogo("\n🏆🏆🏆 VOCÊ DERROTOU O BESOURO MANGANGÁ!");
-                    adicionarDialogo("👑 Você se tornou uma LENDA DA CAPOEIRA!");
+                    adicionarDialogo("\n🏆🏆🏆 VOCÊ DERROTOU O BESOURO MANGANGÁ!", false);
+                    adicionarDialogo("👑 Você se tornou uma LENDA DA CAPOEIRA!", false);
                     finalizarJogo(true);
                     return;
                 } else {
-                    adicionarDialogo("\n🎉 VITÓRIA! " + inimigoAtual.getNome() + " foi derrotado!");
+                    adicionarDialogo("\n🎉 VITÓRIA! " + inimigoAtual.getNome() + " foi derrotado!", false);
                     estagioAtual++;
                     capoeirista.evoluirTitulo(estagioAtual + 1);
                     capoeirista.recarregarCompletamente();
@@ -361,14 +425,21 @@ public class TelaCapoeiraController {
             }
 
         } else {
-            adicionarDialogo("❌ ERRADO!");
+            adicionarDialogo("❌ ERRADO!", true); // Vermelho
             adicionarDialogo("📖 Resposta correta: " +
-                    AvaliadorRespostas.getRespostaCorretaFormatada(perguntaAtual));
+                    AvaliadorRespostas.getRespostaCorretaFormatada(perguntaAtual), true); // Vermelho
 
             int danoInimigo = calcularDanoInimigo();
-            jogador.tomarDano(danoInimigo);
-            adicionarDialogo("💢 " + inimigoAtual.getNome() + " contra-ataca causando " + danoInimigo + " de dano!");
-            atualizarStatusJogador();
+
+            if (capoeirista.getEsquivasRestantes() > 0) {
+                adicionarDialogo("🌀 VOCÊ USA UMA ESQUIVA PARA DESVIAR DO CONTRA-ATAQUE!", false);
+                capoeirista.executarEsquiva(inimigoAtual, danoInimigo);
+                atualizarStatusJogador();
+            } else {
+                adicionarDialogo("💢 " + inimigoAtual.getNome() + " contra-ataca causando " + danoInimigo + " de dano!", true);
+                jogador.tomarDano(danoInimigo);
+                atualizarStatusJogador();
+            }
 
             if (!jogador.vivo()) {
                 finalizarJogo(false);
@@ -405,7 +476,7 @@ public class TelaCapoeiraController {
         int dano = danoBase * multiplicador;
 
         double variacao = 0.85 + (random.nextDouble() * 0.3);
-        dano = (int)(dano * variacao);
+        dano = (int) (dano * variacao);
 
         return Math.max(10, Math.min(350, dano));
     }
@@ -421,15 +492,34 @@ public class TelaCapoeiraController {
         }
 
         double variacao = 0.85 + (random.nextDouble() * 0.3);
-        int dano = (int)(danoBase * variacao);
+        int dano = (int) (danoBase * variacao);
 
         return Math.max(5, dano);
     }
 
-    private void adicionarDialogo(String msg) {
+    /**
+     * Adiciona mensagem ao diálogo com cor específica
+     * @param msg A mensagem
+     * @param isErro true = vermelho, false = verde
+     */
+    private void adicionarDialogo(String msg, boolean isErro) {
         Platform.runLater(() -> {
             String atual = txtDialogo.getText();
-            txtDialogo.setText(msg + "\n" + (atual.length() > 500 ? atual.substring(0, 500) : atual));
+            String cor = isErro ? "#ff6666" : "#88ff88";
+
+            // Adiciona a mensagem com a cor correspondente
+            String textoAtual = txtDialogo.getText();
+            String novaLinha = msg + "\n";
+
+            // Aplica estilo com a cor correta
+            txtDialogo.setStyle("-fx-font-size: 11px; -fx-background-color: #000000; -fx-text-fill: " + cor + "; -fx-border-color: #FFD700; -fx-border-width: 2; -fx-border-radius: 5;");
+            txtDialogo.setText(novaLinha + textoAtual);
+
+            // Limita o tamanho
+            if (txtDialogo.getText().length() > 800) {
+                String texto = txtDialogo.getText();
+                txtDialogo.setText(texto.substring(0, 600));
+            }
         });
     }
 
@@ -441,15 +531,14 @@ public class TelaCapoeiraController {
             barraJogadorVida.setProgress((double) capoeirista.getVida() / capoeirista.getVidaMax());
             lblJogadorGinga.setText("🌀 Ginga: " + capoeirista.getEnergiaGinga() + "/" + capoeirista.getEnergiaMaxima());
 
-            // Atualiza botão esquiva
             int esquivasRestantes = capoeirista.getEsquivasRestantes();
             btnEsquiva.setText("🌀 ESQUIVA (" + esquivasRestantes + " restante" + (esquivasRestantes != 1 ? "s" : "") + ")");
 
             if (esquivasRestantes <= 0) {
-                btnEsquiva.setStyle("-fx-background-color: #555; -fx-text-fill: #aaa; -fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 8px 15px; -fx-background-radius: 8;");
+                btnEsquiva.setStyle("-fx-background-color: #555; -fx-text-fill: #aaa; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 8px 15px; -fx-background-radius: 8;");
                 btnEsquiva.setDisable(true);
             } else {
-                btnEsquiva.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold; -fx-padding: 8px 15px; -fx-background-radius: 8;");
+                btnEsquiva.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 8px 15px; -fx-background-radius: 8;");
                 btnEsquiva.setDisable(false);
             }
         });
@@ -473,11 +562,14 @@ public class TelaCapoeiraController {
     }
 
     private void finalizarJogo(boolean vitoria) {
+        pararTimer();
         Platform.runLater(() -> {
             if (vitoria) {
                 txtDialogo.setText("\n🏆🏆🏆 VOCÊ É UMA LENDA VIVA! 🏆🏆🏆\n👑 O BERIMBAU CANTA SEU NOME!");
+                txtDialogo.setStyle("-fx-font-size: 11px; -fx-background-color: #000000; -fx-text-fill: #88ff88; -fx-border-color: #FFD700; -fx-border-width: 2; -fx-border-radius: 5;");
             } else {
                 txtDialogo.setText("\n💀 VOCÊ CAIU NA RODA...\n🎵 A capoeira continua viva!");
+                txtDialogo.setStyle("-fx-font-size: 11px; -fx-background-color: #000000; -fx-text-fill: #ff6666; -fx-border-color: #FFD700; -fx-border-width: 2; -fx-border-radius: 5;");
             }
             btnBasico.setDisable(true);
             btnDificil.setDisable(true);
@@ -490,10 +582,10 @@ public class TelaCapoeiraController {
     public void initialize() {
         btnBasico.setOnAction(e -> {
             if (inimigoAtual != null && inimigoAtual.vivo() && !aguardandoResposta) {
-                adicionarDialogo("🔄 GINGA BÁSICA!");
+                adicionarDialogo("🔄 GINGA BÁSICA!", false);
                 contadorAtaquesBasicos++;
                 if (contadorAtaquesBasicos >= 3) {
-                    adicionarDialogo("⚠️ Inimigo aprendeu seu padrão! Esquiva automática!");
+                    adicionarDialogo("⚠️ Inimigo aprendeu seu padrão! Esquiva automática!", true);
                     contadorAtaquesBasicos = 0;
                 } else {
                     carregarPergunta(1);
@@ -505,11 +597,11 @@ public class TelaCapoeiraController {
             if (inimigoAtual != null && inimigoAtual.vivo() && !aguardandoResposta) {
                 if (capoeirista.getEnergiaGinga() >= 20) {
                     capoeirista.consumir(20);
-                    adicionarDialogo("💫 ATAQUE DIFÍCIL!");
+                    adicionarDialogo("💫 ATAQUE DIFÍCIL!", false);
                     carregarPergunta(2);
                     atualizarStatusJogador();
                 } else {
-                    adicionarDialogo("❌ Ginga insuficiente! Precisa de 20 de Ginga.");
+                    adicionarDialogo("❌ Ginga insuficiente! Precisa de 20 de Ginga.", true);
                 }
             }
         });
@@ -518,11 +610,11 @@ public class TelaCapoeiraController {
             if (inimigoAtual != null && inimigoAtual.vivo() && !aguardandoResposta) {
                 if (capoeirista.getEnergiaGinga() >= 40) {
                     capoeirista.consumir(40);
-                    adicionarDialogo("🔥 COMBINAÇÃO MORTAL!");
+                    adicionarDialogo("🔥 COMBINAÇÃO MORTAL!", false);
                     carregarPergunta(3);
                     atualizarStatusJogador();
                 } else {
-                    adicionarDialogo("❌ Ginga insuficiente! Precisa de 40 de Ginga.");
+                    adicionarDialogo("❌ Ginga insuficiente! Precisa de 40 de Ginga.", true);
                 }
             }
         });
@@ -530,13 +622,15 @@ public class TelaCapoeiraController {
         btnEsquiva.setOnAction(e -> {
             if (inimigoAtual != null && inimigoAtual.vivo() && !aguardandoResposta) {
                 if (capoeirista.getEsquivasRestantes() > 0) {
-                    adicionarDialogo("🌀 ESQUIVA! Você desvia do próximo ataque!");
+                    adicionarDialogo("🌀 ESQUIVA! Você desvia do próximo ataque!", false);
                     capoeirista.usarEsquiva();
                     atualizarStatusJogador();
                 } else {
-                    adicionarDialogo("❌ Sem esquivas disponíveis!");
+                    adicionarDialogo("❌ Sem esquivas disponíveis!", true);
                 }
             }
         });
+
+        btnVoltarMenu.setOnAction(e -> limparPergunta());
     }
 }
