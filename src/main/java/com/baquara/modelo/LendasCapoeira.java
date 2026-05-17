@@ -1,3 +1,5 @@
+// 📁 modelo/LendasCapoeira.java
+
 package com.baquara.modelo;
 
 import java.util.Random;
@@ -15,9 +17,9 @@ public class LendasCapoeira {
                 "🌀 GINGA CONTEMPORÂNEA - Mistura de estilos"
         };
 
-        public MestreCapoeira(String nome, String titulo, int vida, int ataque,
-                              int nivel, String historia, String fraseDerrota) {
-            super(nome, vida, ataque, nivel);
+        public MestreCapoeira(String nome, String titulo, int nivel, int vida, int ataque,
+                              String historia, String fraseDerrota) {
+            super(nome, nivel, vida, ataque, 5 + (nivel * 3));
             this.titulo = titulo;
             this.historia = historia;
             this.fraseDerrota = fraseDerrota;
@@ -36,9 +38,6 @@ public class LendasCapoeira {
         }
     }
 
-    /**
-     * Cria a lista de todos os mestres lendários por estágio
-     */
     public static MestreCapoeira[] criarTodosMestres() {
         return new MestreCapoeira[] {
                 criarEstagio1(),
@@ -53,14 +52,11 @@ public class LendasCapoeira {
         };
     }
 
-    // ========== ESTÁGIO 1: MESTRE BIMBA ==========
     public static MestreCapoeira criarEstagio1() {
         return new MestreCapoeira(
                 "MESTRE BIMBA",
                 "O Pai da Capoeira Regional",
-                100,
-                15,
-                1,
+                1, 100, 15,
                 "Manoel dos Reis Machado (1900-1974), conhecido como Mestre Bimba,\n" +
                         "criou a Capoeira Regional em 1928. Foi o primeiro a tirar a capoeira\n" +
                         "da marginalidade e transformá-la em arte marcial respeitada.",
@@ -68,14 +64,11 @@ public class LendasCapoeira {
         );
     }
 
-    // ========== ESTÁGIO 2: MESTRE PASTINHA ==========
     public static MestreCapoeira criarEstagio2() {
         return new MestreCapoeira(
                 "MESTRE PASTINHA",
                 "O Guardião da Capoeira Angola",
-                130,
-                18,
-                2,
+                2, 130, 18,
                 "Vicente Ferreira Pastinha (1889-1981) foi o grande defensor da\n" +
                         "Capoeira Angola, a forma mais tradicional. Ensinou que capoeira\n" +
                         "é dança, luta, filosofia e resistência cultural.",
@@ -83,14 +76,11 @@ public class LendasCapoeira {
         );
     }
 
-    // ========== ESTÁGIO 3: MESTRE JOÃO GRANDE ==========
     public static MestreCapoeira criarEstagio3() {
         return new MestreCapoeira(
                 "MESTRE JOÃO GRANDE",
                 "O Discípulo de Pastinha",
-                160,
-                22,
-                3,
+                3, 160, 22,
                 "João Oliveira dos Santos (1933-2022), discípulo de Mestre Pastinha,\n" +
                         "levou a Capoeira Angola para o mundo. Ensinou nos EUA e formou\n" +
                         "gerações de capoeiristas. Foi doutor honoris causa.",
@@ -98,14 +88,11 @@ public class LendasCapoeira {
         );
     }
 
-    // ========== ESTÁGIO 4: MESTRE JOÃO PEQUENO ==========
     public static MestreCapoeira criarEstagio4() {
         return new MestreCapoeira(
                 "MESTRE JOÃO PEQUENO",
                 "O Filósofo da Capoeira",
-                190,
-                26,
-                4,
+                4, 190, 26,
                 "João Pereira dos Santos (1917-2011), também discípulo de Pastinha,\n" +
                         "era conhecido por sua técnica impecável e movimentos precisos.\n" +
                         "Ensinou que capoeira é humildade e respeito.",
@@ -113,14 +100,11 @@ public class LendasCapoeira {
         );
     }
 
-    // ========== ESTÁGIO 5: MESTRE CANJIQUINHA ==========
     public static MestreCapoeira criarEstagio5() {
         return new MestreCapoeira(
                 "MESTRE CANJIQUINHA",
                 "O Gênio da Malícia",
-                220,
-                30,
-                5,
+                5, 220, 30,
                 "José Anastácio dos Santos (1937-2003), discípulo de Bimba,\n" +
                         "era mestre da malícia e da mandinga. Suas rodas eram famosas\n" +
                         "pela imprevisibilidade e criatividade dos movimentos.",
@@ -128,14 +112,11 @@ public class LendasCapoeira {
         );
     }
 
-    // ========== ESTÁGIO 6: MESTRE CAIÇARA ==========
     public static MestreCapoeira criarEstagio6() {
         return new MestreCapoeira(
                 "MESTRE CAIÇARA",
                 "O Guardião da Tradição Oral",
-                250,
-                34,
-                6,
+                6, 250, 34,
                 "Antônio Carlos Moraes (1938-2008) foi guardião das tradições orais\n" +
                         "da capoeira. Preservou ladainhas, corridos e histórias ancestrais.\n" +
                         "Sua memória guardava séculos de sabedoria.",
@@ -143,14 +124,11 @@ public class LendasCapoeira {
         );
     }
 
-    // ========== ESTÁGIO 7: MESTRE SUASSUNA ==========
     public static MestreCapoeira criarEstagio7() {
         return new MestreCapoeira(
                 "MESTRE SUASSUNA",
                 "O Inovador da Capoeira",
-                280,
-                38,
-                7,
+                7, 280, 38,
                 "Reinaldo Ramos Suassuna (1938-) fundou o Grupo Cordão de Ouro,\n" +
                         "criando um estilo próprio que mistura tradição e inovação.\n" +
                         "Suas rodas são espetáculos de técnica e beleza.",
@@ -158,14 +136,11 @@ public class LendasCapoeira {
         );
     }
 
-    // ========== ESTÁGIO 8: MESTRE NENEL ==========
     public static MestreCapoeira criarEstagio8() {
         return new MestreCapoeira(
                 "MESTRE NENEL",
                 "O Herdeiro de Bimba",
-                320,
-                42,
-                8,
+                8, 320, 42,
                 "Manoel Nascimento Machado (1956-), filho de Mestre Bimba,\n" +
                         "é o guardião do legado da Capoeira Regional. Mantém viva\n" +
                         "a sequência de ensino criada por seu pai.",
@@ -173,14 +148,11 @@ public class LendasCapoeira {
         );
     }
 
-    // ========== ESTÁGIO 9: MESTRE MORAES ==========
     public static MestreCapoeira criarEstagio9() {
         return new MestreCapoeira(
                 "MESTRE MORAES",
                 "O Filósofo da Capoeira Angola",
-                380,
-                46,
-                9,
+                9, 380, 46,
                 "Pedro Moraes Trindade (1950-), fundador do GCAP, é um dos maiores\n" +
                         "pensadores da capoeira. Sua filosofia une ancestralidade africana,\n" +
                         "resistência cultural e transformação social.",

@@ -6,6 +6,7 @@ import com.baquara.dados.BancoPerguntas;
 import com.baquara.modelo.*;
 import com.baquara.modelo.Pergunta.Dificuldade;
 import com.baquara.habilidades.HabilidadeEspecial;
+import com.baquara.modelo.efeitos.DebuffAtaqueEfeito;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -67,7 +68,7 @@ public class TelaBatalhaController {
     // Novos atributos para o sistema de rotas
     private GerenciadorRotas gerenciadorRotas;
     private Rota rotaAtual;
-    private int estagioIndex = 0;  // 0-based
+    private int estagioIndex = 0;
     private List<Estagio> estagios;
 
     // Estatísticas
@@ -104,7 +105,7 @@ public class TelaBatalhaController {
         this.estagioIndex = 0;
         this.estagioAtualNumero = 1;
 
-        inicializarHabilidadeDoPersonagem();  // ⭐ MODIFICAR este método
+        inicializarHabilidadeDoPersonagem();
         atualizarStatusJogador();
         atualizarStatusDetalhadoJogador();
 
@@ -115,19 +116,18 @@ public class TelaBatalhaController {
         adicionarDialogoNormal("🗺️ Rota: " + rotaAtual.getNomeRota());
 
         Personagem p = jogador.getPersonagem();
-        HabilidadeEspecial hab = p.getHabilidade();  // ✅ Pega a habilidade
+        HabilidadeEspecial hab = p.getHabilidade();
 
         if (hab != null) {
-            adicionarDialogoNormal("🌟 Habilidade: " + p.getHabilidade().getNome());
-            adicionarDialogoNormal("   " + p.getHabilidade().getDescricao());
+            adicionarDialogoNormal("🌟 Habilidade: " + hab.getNome());
+            adicionarDialogoNormal("   " + hab.getDescricao());
 
-            // Mostra o custo da habilidade
             AtributoEspecial attr = (AtributoEspecial) p;
             adicionarDialogoNormal("   💫 Custo: " + getCustoHabilidade(p) + " de " + attr.getNomeAtributo());
             adicionarDialogoNormal("   ✨ Recupera " + getRecuperacaoHabilidade(p) + " de " + attr.getNomeAtributo() + " por acerto!");
         }
 
-        atualizarBotaoHabilidade();  // NOVO método
+        atualizarBotaoHabilidade();
     }
 
     private void inicializarHabilidadeDoPersonagem() {
@@ -145,11 +145,11 @@ public class TelaBatalhaController {
             p.setHabilidade(new com.baquara.habilidades.HabilidadeDestruicaoTotal(p));
         }
     }
+
     private void atualizarBotaoHabilidade() {
         Platform.runLater(() -> {
             Personagem p = jogador.getPersonagem();
             HabilidadeEspecial hab = p.getHabilidade();
-
 
             if (hab == null) {
                 btnHabilidade.setDisable(true);
@@ -221,6 +221,9 @@ public class TelaBatalhaController {
         painelPergunta.setVisible(false);
         painelPergunta.setManaged(false);
 
+        btnVoltarMenu.setVisible(true);
+        btnVoltarMenu.setManaged(true);
+
         lblTurnoMsg.setText("⚔️ Escolha sua ação! ⚔️");
         aguardandoResposta = false;
 
@@ -233,9 +236,6 @@ public class TelaBatalhaController {
         mostrarMenuPrincipal();
     }
 
-    /**
-     * Carrega o inimigo baseado no estágio atual da rota
-     */
     private void carregarProximoInimigo() {
         if (estagioIndex >= estagios.size()) {
             finalizarJogo(true);
@@ -243,44 +243,29 @@ public class TelaBatalhaController {
         }
 
         Estagio estagio = estagios.get(estagioIndex);
-        int numeroEstagio = estagio.getNumero();
-        estagioAtualNumero = numeroEstagio;
+        int nivel = estagio.getNumero();
+        estagioAtualNumero = nivel;
 
-        // Mostra informações do estágio
         adicionarDialogoNormal("\n" + "=".repeat(50));
-        adicionarDialogoNormal("🏰 ESTÁGIO " + numeroEstagio + ": " + estagio.getNome());
+        adicionarDialogoNormal("🏰 ESTÁGIO " + nivel + ": " + estagio.getNome());
         adicionarDialogoNormal("📊 Dificuldade: " + estagio.getDificuldade() + "/10");
         adicionarDialogoNormal("=".repeat(50));
 
-        // Verifica se é chefão
         if (estagio.ehChefao()) {
-            // USA O CHEFÃO DEFINIDO NA ROTA
-            Inimigo chefao = estagio.getChefao();
-            this.inimigoAtual = chefao;
-
+            this.inimigoAtual = estagio.getChefao();
             adicionarDialogoNormal("\n👑" + "=".repeat(48) + "👑");
             adicionarDialogoNormal("👑         CHEFÃO APARECEU!          👑");
-            adicionarDialogoNormal("👑    " + chefao.getNome() + "    👑");
+            adicionarDialogoNormal("👑    " + inimigoAtual.getNome() + "    👑");
             adicionarDialogoNormal("👑" + "=".repeat(48) + "👑");
         } else {
-            // CRIA INIMIGO NORMAL COM NOME PERSONALIZADO
             String nomeInimigo = "🛡️ Guardião do " + estagio.getNome() + " 🛡️";
-
-            // CÁLCULO DE VIDA E ATAQUE PROGRESSIVOS (mais desafiador)
-            int vidaBase = 60 + (numeroEstagio * 100);
-            int ataqueBase = 20 + (numeroEstagio * 4);
-            int defesaBase = 5 + (numeroEstagio * 3);
-
-            this.inimigoAtual = new Inimigo(nomeInimigo, vidaBase, ataqueBase, defesaBase, numeroEstagio);
-
+            this.inimigoAtual = new Inimigo(nomeInimigo, nivel);
             adicionarDialogoNormal("\n⚠️ " + inimigoAtual.getNome() + " apareceu!");
             adicionarDialogoNormal("   📖 " + estagio.getNome());
         }
 
-        // Define o sprite baseado no estágio
-        lblInimigoSprite.setText(getInimigoSprite(numeroEstagio));
+        lblInimigoSprite.setText(getInimigoSprite(nivel));
 
-        // Mostra informações de defesa
         double reducao = (double) inimigoAtual.getDefesa() / (inimigoAtual.getDefesa() + 50);
         int percentualReducao = (int)(reducao * 100);
         adicionarDialogoNormal("   🛡️ Defesa: " + inimigoAtual.getDefesa() +
@@ -290,9 +275,6 @@ public class TelaBatalhaController {
         atualizarStatusDetalhadoInimigo();
     }
 
-    /**
-     * Avança para o próximo estágio após vitória
-     */
     private void avancarEstagio() {
         estagioIndex++;
         estagioAtualNumero = estagioIndex + 1;
@@ -302,33 +284,21 @@ public class TelaBatalhaController {
             return;
         }
 
-        // Recupera vida
         jogador.getPersonagem().curar(30);
         adicionarDialogoNormal("\n✨ +30 de vida recuperada pelo avanço de estágio!");
-
-
         adicionarDialogoNormal("\n🎵 Prepare-se para o próximo desafio...\n");
 
-        // Carrega próximo inimigo
         carregarProximoInimigo();
         atualizarBotaoHabilidade();
     }
 
     private String getInimigoSprite(int estagio) {
-        // Sprites variados baseados no estágio
-        if (estagio == 10) {
-            return "👑"; // Chefão
-        } else if (estagio >= 8) {
-            return "🐉";
-        } else if (estagio >= 6) {
-            return "👹";
-        } else if (estagio >= 4) {
-            return "🧙";
-        } else if (estagio >= 2) {
-            return "🐺";
-        } else {
-            return "👾";
-        }
+        if (estagio == 10) return "👑";
+        else if (estagio >= 8) return "🐉";
+        else if (estagio >= 6) return "👹";
+        else if (estagio >= 4) return "🧙";
+        else if (estagio >= 2) return "🐺";
+        else return "👾";
     }
 
     private void mostrarPainelPergunta() {
@@ -420,6 +390,35 @@ public class TelaBatalhaController {
             txtRespostaLacuna.requestFocus();
         }
     }
+    /**
+     * Reduz a duração dos debuffs do inimigo (chamar após cada pergunta respondida)
+     */
+    private void reduzirDebuffsInimigo() {
+        if (inimigoAtual == null) return;
+
+        // Pega o debuff de ataque
+        DebuffAtaqueEfeito debuff = inimigoAtual.getEfeito(DebuffAtaqueEfeito.class);
+
+        if (debuff != null && debuff.estaAtivo()) {
+            int duracaoAntes = debuff.getDuracaoRestante();
+            System.out.println("🔍 DEBUG: Debuff ativo. Duração antes: " + duracaoAntes);
+
+            debuff.reduzirDuracao();
+
+            System.out.println("🔍 DEBUG: Duração depois: " + debuff.getDuracaoRestante());
+
+            if (!debuff.estaAtivo()) {
+                // Debuff expirou
+                adicionarDialogoNormal("🛡️ O debuff de ataque do " + inimigoAtual.getNome() + " expirou! Ataque voltou ao normal.");
+                inimigoAtual.removerEfeito(DebuffAtaqueEfeito.class);
+                atualizarStatusDetalhadoInimigo();
+                atualizarStatusInimigo();
+            }
+        } else {
+            System.out.println("🔍 DEBUG: Nenhum debuff ativo encontrado.");
+        }
+    }
+
 
     private void avaliarResposta(String resposta) {
         if (!aguardandoResposta) return;
@@ -431,18 +430,16 @@ public class TelaBatalhaController {
             perguntasCertas++;
             Personagem p = jogador.getPersonagem();
             HabilidadeEspecial hab = p.getHabilidade();
+
             if (hab != null) {
-                hab.recarregarAposAcerto();  // ✅ Chama na habilidade
+                hab.recarregarAposAcerto();
                 adicionarDialogoNormal("✨ +" + getRecuperacaoHabilidade(p) + " de " +
                         ((AtributoEspecial) p).getNomeAtributo() + " recuperado!");
-
                 atualizarStatusJogador();
                 atualizarBotaoHabilidade();
             }
 
-
             int danoBruto = calcularDano(perguntaAtual.getDificuldade());
-
             int defesaInimigo = inimigoAtual.getDefesa();
             double reducao = (double) defesaInimigo / (defesaInimigo + 50);
             int danoMitigado = (int) (danoBruto * reducao);
@@ -472,7 +469,6 @@ public class TelaBatalhaController {
 
             if (jogador.getPersonagem().getNivel() > nivelAntes) {
                 adicionarDialogoAcerto("🎉 " + jogador.getPersonagem().getNome() + " subiu para o NÍVEL " + jogador.getPersonagem().getNivel() + "!");
-                p = jogador.getPersonagem();
                 adicionarDialogoNormal("   ❤️ Vida +40 | ⚔️ Ataque +5 | 🛡️ Defesa +3");
             }
 
@@ -494,10 +490,8 @@ public class TelaBatalhaController {
                 jogador.addPontuacao(bonus);
                 adicionarDialogoNormal("🏆 Bônus de estágio: +" + bonus + " pontos!");
 
-                // AVANÇA PARA O PRÓXIMO ESTÁGIO
                 avancarEstagio();
 
-                // Se o jogo acabou, não continua
                 if (estagioIndex >= estagios.size()) {
                     return;
                 }
@@ -507,6 +501,8 @@ public class TelaBatalhaController {
             atualizarStatusDetalhadoJogador();
             atualizarStatusInimigo();
             atualizarStatusDetalhadoInimigo();
+
+            reduzirDebuffsInimigo();
 
             voltarAoMenu();
 
@@ -540,6 +536,7 @@ public class TelaBatalhaController {
                 finalizarJogo(false);
                 return;
             }
+            reduzirDebuffsInimigo();
 
             voltarAoMenu();
         }
@@ -634,8 +631,8 @@ public class TelaBatalhaController {
         adicionarDialogoAcerto("💥 Causou " + dano + " de dano devastador!");
         atualizarStatusInimigo();
         atualizarStatusDetalhadoInimigo();
-        atualizarBotaoHabilidade();  // Atualiza o botão após usar
-        atualizarStatusJogador();     // Atualiza a barra do atributo
+        atualizarBotaoHabilidade();
+        atualizarStatusJogador();
 
         if (!inimigoAtual.vivo()) {
             Estagio estagioAtualObj = estagios.get(estagioIndex);
@@ -652,13 +649,13 @@ public class TelaBatalhaController {
             jogador.addPontuacao(bonus);
             adicionarDialogoNormal("🏆 Bônus de estágio: +" + bonus + " pontos!");
 
-
             avancarEstagio();
 
             if (estagioIndex >= estagios.size()) {
                 return;
             }
         }
+        reduzirDebuffsInimigo();
 
         voltarAoMenu();
     }
@@ -692,6 +689,20 @@ public class TelaBatalhaController {
                 lblInimigoDefesa.setText("🛡️ Defesa: " + inimigoAtual.getDefesa() + " (-" + percentualReducao + "% dano)");
             }
         });
+    }
+
+    private void atualizarDebuffsInimigo() {
+        if (inimigoAtual != null) {
+            int ataqueAntes = inimigoAtual.getAtaque();
+            inimigoAtual.atualizarEfeitos();
+            int ataqueDepois = inimigoAtual.getAtaque();
+
+            if (ataqueAntes != ataqueDepois) {
+                adicionarDialogoNormal("🛡️ O debuff do " + inimigoAtual.getNome() + " expirou! Ataque voltou ao normal.");
+                atualizarStatusDetalhadoInimigo();
+                atualizarStatusInimigo();
+            }
+        }
     }
 
     private void adicionarDialogoNormal(String msg) {
@@ -757,7 +768,7 @@ public class TelaBatalhaController {
     private void atualizarStatusInimigo() {
         Platform.runLater(() -> {
             lblInimigoNome.setText(inimigoAtual.getNome());
-            lblInimigoNivel.setText("Nv. " + inimigoAtual.getNivel());
+            lblInimigoNivel.setText("Nv. " + estagioAtualNumero);
             lblInimigoVida.setText("HP: " + inimigoAtual.getVida() + "/" + inimigoAtual.getVidaMax());
             barraInimigoVida.setProgress((double) inimigoAtual.getVida() / inimigoAtual.getVidaMax());
         });

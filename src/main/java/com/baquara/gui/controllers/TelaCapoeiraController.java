@@ -8,7 +8,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -101,10 +100,13 @@ public class TelaCapoeiraController {
         }
 
         String nome = nomesMestres[estagioAtual];
+        int nivel = estagioAtual + 1;
         int vida = vidasMestres[estagioAtual];
         int ataque = ataquesMestres[estagioAtual];
+        int defesa = 5 + (nivel * 3);
 
-        inimigoAtual = new Inimigo(nome, vida, ataque, estagioAtual + 1);
+        // ⭐ CONSTRUTOR ATUALIZADO: nome, nivel, vida, ataque, defesa
+        inimigoAtual = new Inimigo(nome, nivel, vida, ataque, defesa);
 
         atualizarStatusInimigo();
         adicionarDialogoNormal("\n📜 ESTÁGIO " + (estagioAtual + 1) + "/9");
@@ -497,9 +499,6 @@ public class TelaCapoeiraController {
         return Math.max(5, dano);
     }
 
-    /**
-     * Mensagem normal - texto preto
-     */
     private void adicionarDialogoNormal(String msg) {
         Platform.runLater(() -> {
             String atual = txtDialogo.getText();
@@ -508,9 +507,6 @@ public class TelaCapoeiraController {
         });
     }
 
-    /**
-     * Mensagem de acerto - texto verde
-     */
     private void adicionarDialogoAcerto(String msg) {
         Platform.runLater(() -> {
             String atual = txtDialogo.getText();
@@ -530,9 +526,6 @@ public class TelaCapoeiraController {
         });
     }
 
-    /**
-     * Mensagem de erro - texto vermelho
-     */
     private void adicionarDialogoErro(String msg) {
         Platform.runLater(() -> {
             String atual = txtDialogo.getText();

@@ -1279,126 +1279,63 @@ public class BancoPerguntas {
 
     private void carregarCacadoraFacilLacuna() {
         // ANIMAIS (15 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.FACIL,
                 "O maior felino do mundo é o __________.",
-                "tigre", "Animais", 1);
+                Arrays.asList("tigre", "tigre-siberiano"), "Animais", 1);
 
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.FACIL,
                 "O animal símbolo da Austrália que come eucalipto é o __________.",
-                "coala", "Animais", 1);
+                Arrays.asList("coala", "coalas"), "Animais", 1);
 
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
-                "A fêmea do leão é chamada de __________.",
-                "leoa", "Animais", 1);
+                "A fêmea do leão é chamada de __________.", "leoa", "Animais", 1);
 
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.FACIL,
                 "O animal que hiberna durante o inverno é o __________.",
-                "urso", "Animais", 1);
+                Arrays.asList("urso", "ursa", "ursos"), "Animais", 1);
 
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.FACIL,
                 "O maior réptil do mundo é o __________ marinho.",
-                "crocodilo", "Animais", 1);
+                Arrays.asList("crocodilo", "crocodilo-marinho", "jacaré"), "Animais", 1);
 
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
-                "A ave que é símbolo dos Estados Unidos é a __________.",
-                "águia", "Animais", 1);
+                "A ave que é símbolo dos Estados Unidos é a __________.", "águia", "Animais", 1);
 
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.FACIL,
                 "O animal noturno que usa ecolocalização para se guiar é o __________.",
-                "morcego", "Animais", 1);
+                Arrays.asList("morcego", "morcegos"), "Animais", 1);
 
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.FACIL,
                 "O peixe mais temido dos oceanos, com dentes afiados, é o __________.",
-                "tubarão", "Animais", 1);
+                Arrays.asList("tubarão", "tubarões", "tubarão-branco"), "Animais", 1);
 
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.FACIL,
                 "O animal que carrega sua casa nas costas é o __________.",
-                "caracol", "Animais", 1);
+                Arrays.asList("caracol", "tartaruga"), "Animais", 1);
 
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.FACIL,
                 "A baleia mais famosa por seu canto é a __________.",
-                "jubarte", "Animais", 1);
+                Arrays.asList("jubarte", "baleia-jubarte"), "Animais", 1);
 
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.FACIL,
                 "O animal que se defende soltando tinta é o __________.",
-                "polvo", "Animais", 1);
+                Arrays.asList("polvo", "lula", "sépia"), "Animais", 1);
 
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.FACIL,
                 "O primata que é o parente mais próximo do ser humano é o __________.",
-                "chimpanzé", "Animais", 1);
+                Arrays.asList("chimpanzé", "bonobo", "chipanzé"), "Animais", 1);
 
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.FACIL,
                 "O réptil que consegue regenerar sua cauda é a __________.",
-                "lagartixa", "Animais", 1);
+                Arrays.asList("lagartixa", "lagarto", "osga"), "Animais", 1);
 
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.FACIL,
                 "O animal mais alto do mundo é a __________.",
-                "girafa", "Animais", 1);
+                Arrays.asList("girafa", "girafas"), "Animais", 1);
 
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.FACIL,
                 "O animal que constrói diques e represas é o __________.",
-                "castor", "Animais", 1);
-
-        // NATUREZA (15 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
-                "O gás mais abundante na atmosfera terrestre é o __________.",
-                "nitrogênio", "Natureza", 1);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
-                "O ponto mais alto do Brasil é o Pico da __________.",
-                "Neblina", "Natureza", 1);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
-                "O fenômeno de mudança de água líquida para vapor é a __________.",
-                "evaporação", "Natureza", 1);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
-                "O bioma brasileiro conhecido por suas plantas espinhosas é a __________.",
-                "Caatinga", "Natureza", 1);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
-                "A flor que gira acompanhando o movimento do sol é o __________.",
-                "girassol", "Natureza", 1);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
-                "A maior ilha de água doce do mundo é a Ilha do __________.",
-                "Bananal", "Natureza", 1);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
-                "O metal líquido à temperatura ambiente é o __________.",
-                "mercúrio", "Natureza", 1);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
-                "A lua cheia que aparece mais próxima da Terra é chamada de __________.",
-                "superlua", "Natureza", 1);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
-                "O fenômeno de luzes coloridas nos polos é chamado de __________.",
-                "aurora", "Natureza", 1);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
-                "O tipo de chuva que contém ácidos poluentes é a chuva __________.",
-                "ácida", "Natureza", 1);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
-                "A rocha derretida no interior da Terra é chamada de __________.",
-                "magma", "Natureza", 1);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
-                "O bioma alagado no centro-oeste brasileiro é o __________.",
-                "Pantanal", "Natureza", 1);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
-                "A maior árvore do mundo (em volume) é a __________ gigante.",
-                "sequoia", "Natureza", 1);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
-                "O oceano que banha o litoral brasileiro é o __________.",
-                "Atlântico", "Natureza", 1);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
-                "A galáxia onde fica o Sistema Solar é a __________ Láctea.",
-                "Via", "Natureza", 1);
+                Arrays.asList("castor", "castores"), "Animais", 1);
 
         // SOBREVIVÊNCIA (10 perguntas NOVAS)
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
@@ -1620,108 +1557,79 @@ public class BancoPerguntas {
 
     private void carregarCacadoraMedioLacuna() {
         // ANIMAIS (7 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.MEDIO,
                 "O maior roedor do mundo, encontrado no Brasil, é a __________.",
-                "capivara", "Animais", 4);
+                Arrays.asList("capivara", "capivaras", "carpincho"), "Animais", 4);
 
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.MEDIO,
                 "O felino brasileiro que é o terceiro maior do mundo é a __________.",
-                "onça-pintada", "Animais", 4);
+                Arrays.asList("onça-pintada", "onça pintada", "onça", "jaguar"), "Animais", 4);
 
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.MEDIO,
                 "O lobo brasileiro de pernas longas que vive no Cerrado é o __________.",
-                "lobo-guará", "Animais", 4);
+                Arrays.asList("lobo-guará", "lobo guará", "guará"), "Animais", 4);
 
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.MEDIO,
                 "A ave brasileira de plumagem azul, ameaçada de extinção, é a __________.",
-                "arara-azul", "Animais", 4);
+                Arrays.asList("arara-azul", "arara azul", "arara-azul-grande"), "Animais", 4);
 
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.MEDIO,
                 "O primata brasileiro de pelagem dourada que vive na Mata Atlântica é o __________.",
-                "mico-leão-dourado", "Animais", 4);
+                Arrays.asList("mico-leão-dourado", "mico leão dourado", "micoleão"), "Animais", 4);
 
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.MEDIO,
                 "A maior tartaruga marinha, que pode pesar 700 kg, é a tartaruga-de-__________.",
-                "couro", "Animais", 4);
+                Arrays.asList("couro", "leatherback", "tartaruga-de-couro"), "Animais", 4);
 
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.MEDIO,
                 "O mamífero brasileiro que se alimenta exclusivamente de formigas e cupins é o __________.",
-                "tamanduá", "Animais", 4);
+                Arrays.asList("tamanduá", "tamandua", "tamanduá-bandeira"), "Animais", 4);
 
-        // NATUREZA (7 perguntas NOVAS)
+        // NATUREZA (7 perguntas NOVAS) - manter originais
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "O bioma brasileiro com vegetação adaptada ao fogo é o __________.",
-                "Cerrado", "Natureza", 4);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "O bioma brasileiro com vegetação adaptada ao fogo é o __________.", "Cerrado", "Natureza", 4);
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.MEDIO,
                 "O fenômeno de resfriamento das águas do Pacífico, oposto ao El Niño, é chamado de __________.",
-                "La Niña", "Natureza", 4);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
+                Arrays.asList("La Niña", "La Nina"), "Natureza", 4);
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.MEDIO,
                 "O tipo de floresta caracterizada por pinheiros em regiões frias é a floresta de __________.",
-                "coníferas", "Natureza", 4);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
+                Arrays.asList("coníferas", "coniferas", "coníferas"), "Natureza", 4);
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.MEDIO,
                 "O fenômeno em que o solo fértil se transforma em deserto é chamado de __________.",
-                "desertificação", "Natureza", 4);
-
+                Arrays.asList("desertificação", "desertificacao", "desertification"), "Natureza", 4);
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "O aquífero que abrange Brasil, Argentina, Paraguai e Uruguai é o Aquífero __________.",
-                "Guarani", "Natureza", 4);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "O aquífero que abrange Brasil, Argentina, Paraguai e Uruguai é o Aquífero __________.", "Guarani", "Natureza", 4);
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.MEDIO,
                 "O ecossistema brasileiro de transição entre Cerrado e Caatinga é a __________.",
-                "Mata Seca", "Natureza", 4);
-
+                Arrays.asList("Mata Seca", "mata seca", "Mata Seca"), "Natureza", 4);
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "A camada da atmosfera onde se concentra o ozônio é a __________.",
-                "estratosfera", "Natureza", 4);
+                "A camada da atmosfera onde se concentra o ozônio é a __________.", "estratosfera", "Natureza", 4);
 
-        // SOBREVIVÊNCIA (6 perguntas NOVAS)
+        // SOBREVIVÊNCIA (6 perguntas NOVAS) - manter originais
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "O tipo de abrigo construído com galhos inclinados contra um tronco é chamado de abrigo __________.",
-                "inclinado", "Sobrevivência", 4);
+                "O tipo de abrigo construído com galhos inclinados contra um tronco é chamado de abrigo __________.", "inclinado", "Sobrevivência", 4);
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "A planta aquática que pode fornecer água potável no pantanal é o __________.", "aguapé", "Sobrevivência", 4);
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "O sinal de socorro com três fogueiras deve ser disposto em formato de __________.", "triângulo", "Sobrevivência", 4);
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "A técnica de respiração para acalmar em situação de pânico é a respiração __________.", "diafragmática", "Sobrevivência", 4);
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "O melhor nó para unir duas cordas de mesma espessura é o nó __________.", "direito", "Sobrevivência", 4);
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "A técnica de cozinhar alimentos embrulhados em folhas sobre brasas é chamada de __________.", "papillote", "Sobrevivência", 4);
 
+        // RASTREAMENTO (5 perguntas NOVAS) - manter originais
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "A planta aquática que pode fornecer água potável no pantanal é o __________.",
-                "aguapé", "Sobrevivência", 4);
-
+                "O conjunto de marcas que um animal deixa ao se alimentar é chamado de rastro de __________.", "alimentação", "Rastreamento", 4);
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "O sinal de socorro com três fogueiras deve ser disposto em formato de __________.",
-                "triângulo", "Sobrevivência", 4);
-
+                "O padrão de desgaste dos dentes de um animal pode indicar sua __________.", "idade", "Rastreamento", 4);
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "A técnica de respiração para acalmar em situação de pânico é a respiração __________.",
-                "diafragmática", "Sobrevivência", 4);
-
+                "A presença de ossos roídos em uma trilha indica atividade de __________.", "roedores", "Rastreamento", 4);
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "O melhor nó para unir duas cordas de mesma espessura é o nó __________.",
-                "direito", "Sobrevivência", 4);
-
+                "Pegadas sobrepostas exatamente indicam que o animal estava __________.", "caminhando", "Rastreamento", 4);
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "A técnica de cozinhar alimentos embrulhados em folhas sobre brasas é chamada de __________.",
-                "papillote", "Sobrevivência", 4);
-
-        // RASTREAMENTO (5 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "O conjunto de marcas que um animal deixa ao se alimentar é chamado de rastro de __________.",
-                "alimentação", "Rastreamento", 4);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "O padrão de desgaste dos dentes de um animal pode indicar sua __________.",
-                "idade", "Rastreamento", 4);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "A presença de ossos roídos em uma trilha indica atividade de __________.",
-                "roedores", "Rastreamento", 4);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "Pegadas sobrepostas exatamente indicam que o animal estava __________.",
-                "caminhando", "Rastreamento", 4);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "A distância entre as pegadas dianteiras e traseiras do mesmo animal é chamada de __________.",
-                "intervalo", "Rastreamento", 4);
+                "A distância entre as pegadas dianteiras e traseiras do mesmo animal é chamada de __________.", "intervalo", "Rastreamento", 4);
     }
 
 
@@ -1869,108 +1777,76 @@ public class BancoPerguntas {
 
     private void carregarCacadoraDificilLacuna() {
         // ANIMAIS (7 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.DIFICIL,
                 "O fenômeno em que um animal inofensivo imita as cores de um animal perigoso é chamado de mimetismo __________.",
-                "batesiano", "Animais", 8);
+                Arrays.asList("batesiano", "batesian", "Batesian"), "Animais", 8);
 
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.DIFICIL,
                 "O mamífero australiano que bota ovos e tem esporão venenoso é o __________.",
-                "ornitorrinco", "Animais", 8);
+                Arrays.asList("ornitorrinco", "ornitorrinco", "platypus"), "Animais", 8);
 
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.DIFICIL,
                 "O peixe mais venenoso do mundo, que se camufla entre pedras, é o peixe-__________.",
-                "pedra", "Animais", 8);
+                Arrays.asList("pedra", "stonefish", "peixe-pedra"), "Animais", 8);
 
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.DIFICIL,
                 "A maior serpente do Brasil, que pode ultrapassar 8 metros, é a __________.",
-                "sucuri", "Animais", 8);
+                Arrays.asList("sucuri", "sucuri", "anaconda"), "Animais", 8);
 
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.DIFICIL,
                 "O fenômeno de alguns animais manterem características juvenis na fase adulta é chamado de __________.",
-                "neotenia", "Animais", 8);
+                Arrays.asList("neotenia", "neoteny"), "Animais", 8);
 
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.DIFICIL,
                 "A única ave conhecida que consegue voar para trás é o __________.",
-                "beija-flor", "Animais", 8);
+                Arrays.asList("beija-flor", "beija flor", "hummingbird"), "Animais", 8);
 
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.DIFICIL,
                 "O maior invertebrado do mundo, que vive nas profundezas oceânicas, é a lula-__________.",
-                "gigante", "Animais", 8);
+                Arrays.asList("gigante", "colossal", "lula-gigante"), "Animais", 8);
 
-        // NATUREZA (7 perguntas NOVAS)
+        // NATUREZA (7 perguntas NOVAS) - manter originais
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "O único bioma exclusivamente brasileiro é a __________.",
-                "Caatinga", "Natureza", 8);
-
+                "O único bioma exclusivamente brasileiro é a __________.", "Caatinga", "Natureza", 8);
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "O fenômeno de inversão térmica que retém poluentes próximo ao solo ocorre principalmente no __________.",
-                "inverno", "Natureza", 8);
-
+                "O fenômeno de inversão térmica que retém poluentes próximo ao solo ocorre principalmente no __________.", "inverno", "Natureza", 8);
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "O tipo de vegetação adaptada a solos pobres em nutrientes e ricos em alumínio é chamada de vegetação __________.",
-                "oligotrófica", "Natureza", 8);
-
+                "O tipo de vegetação adaptada a solos pobres em nutrientes e ricos em alumínio é chamada de vegetação __________.", "oligotrófica", "Natureza", 8);
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "O fenômeno de acidificação dos oceanos é causado pelo aumento da absorção de __________.",
-                "CO2", "Natureza", 8);
-
+                "O fenômeno de acidificação dos oceanos é causado pelo aumento da absorção de __________.", "CO2", "Natureza", 8);
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "A região oceânica onde há maior biodiversidade devido à subida de nutrientes é a zona de __________.",
-                "ressurgência", "Natureza", 8);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "A região oceânica onde há maior biodiversidade devido à subida de nutrientes é a zona de __________.", "ressurgência", "Natureza", 8);
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.DIFICIL,
                 "O gás de efeito estufa liberado pelo degelo do permafrost é o __________.",
-                "metano", "Natureza", 8);
-
+                Arrays.asList("metano", "metano", "methane"), "Natureza", 8);
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "O tipo de relação ecológica onde um organismo se beneficia sem prejudicar o outro é o __________.",
-                "comensalismo", "Natureza", 8);
+                "O tipo de relação ecológica onde um organismo se beneficia sem prejudicar o outro é o __________.", "comensalismo", "Natureza", 8);
 
-        // SOBREVIVÊNCIA (6 perguntas NOVAS)
+        // SOBREVIVÊNCIA (6 perguntas NOVAS) - manter originais
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "A técnica de produzir água potável a partir da água do mar usando evaporação é a __________ solar.",
-                "destilação", "Sobrevivência", 8);
+                "A técnica de produzir água potável a partir da água do mar usando evaporação é a __________ solar.", "destilação", "Sobrevivência", 8);
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O fungo que cresce em troncos e pode ser usado como isca para fogo é o __________.", "pólvoro", "Sobrevivência", 8);
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "A técnica de orientação que usa a bissetriz do ângulo entre o sol e o ponteiro das horas é o método do __________.", "relógio", "Sobrevivência", 8);
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O tipo de hipotermia que ocorre por imersão em água fria é chamada de hipotermia por __________.", "condução", "Sobrevivência", 8);
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "A planta do cerrado que armazena água em seu caule e é conhecida como 'garrafa d'água' é a __________.", "barriguda", "Sobrevivência", 8);
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O método de navegação natural que usa a posição das estrelas é chamado de navegação __________.", "astronômica", "Sobrevivência", 8);
 
+        // RASTREAMENTO (5 perguntas NOVAS) - manter originais
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "O fungo que cresce em troncos e pode ser usado como isca para fogo é o __________.",
-                "pólvoro", "Sobrevivência", 8);
-
+                "O estudo científico das pegadas e rastros de animais é chamado de __________.", "icnologia", "Rastreamento", 8);
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "A técnica de orientação que usa a bissetriz do ângulo entre o sol e o ponteiro das horas é o método do __________.",
-                "relógio", "Sobrevivência", 8);
-
+                "A marca deixada pelo arrasto da cauda de um réptil é chamada de __________ caudal.", "sulco", "Rastreamento", 8);
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "O tipo de hipotermia que ocorre por imersão em água fria é chamada de hipotermia por __________.",
-                "condução", "Sobrevivência", 8);
-
+                "O padrão de movimento de um animal que está caçando, com paradas frequentes, é chamado de marcha __________.", "furtiva", "Rastreamento", 8);
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "A planta do cerrado que armazena água em seu caule e é conhecida como 'garrafa d'água' é a __________.",
-                "barriguda", "Sobrevivência", 8);
-
+                "A técnica de identificar animais pelo som de seus passos é chamada de __________ acústico.", "rastreamento", "Rastreamento", 8);
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "O método de navegação natural que usa a posição das estrelas é chamado de navegação __________.",
-                "astronômica", "Sobrevivência", 8);
-
-        // RASTREAMENTO (5 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "O estudo científico das pegadas e rastros de animais é chamado de __________.",
-                "icnologia", "Rastreamento", 8);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "A marca deixada pelo arrasto da cauda de um réptil é chamada de __________ caudal.",
-                "sulco", "Rastreamento", 8);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "O padrão de movimento de um animal que está caçando, com paradas frequentes, é chamado de marcha __________.",
-                "furtiva", "Rastreamento", 8);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "A técnica de identificar animais pelo som de seus passos é chamada de __________ acústico.",
-                "rastreamento", "Rastreamento", 8);
-
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "O padrão de desgaste assimétrico nas pegadas de um quadrúpede indica que o animal está __________.",
-                "mancando", "Rastreamento", 8);
+                "O padrão de desgaste assimétrico nas pegadas de um quadrúpede indica que o animal está __________.", "mancando", "Rastreamento", 8);
     }
 
 
@@ -2268,9 +2144,10 @@ public class BancoPerguntas {
                 "A arte marcial chinesa que imita movimentos de animais é o __________.",
                 "Kung Fu", "Combate", 1);
 
-        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.FACIL,
                 "O local onde se praticam lutas é chamado de __________.",
-                "ringue", "Combate", 1);
+                Arrays.asList("ringue", "ring", "octógono", "cage"),
+                "Combate", 1);
 
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.FACIL,
                 "A faixa que os judocas usam na cintura é chamada de __________.",
@@ -2312,18 +2189,21 @@ public class BancoPerguntas {
                 "A especialidade do Jiu-Jitsu brasileiro é a luta no __________.",
                 "chão", "Combate", 1);
 
-        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.FACIL,
                 "Os praticantes de Boxe são chamados de __________.",
-                "pugilistas", "Combate", 1);
+                Arrays.asList("pugilistas", "pugilista", "boxeadores", "boxeador", "lutadores de boxe", "lutador de boxe"),
+                "Combate", 1);
 
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.FACIL,
                 "A arte marcial que significa 'caminho das mãos vazias' é o __________.",
                 "Caratê", "Combate", 1);
 
         // ESTRATÉGIA MILITAR (10 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.FACIL,
+        // ⭐ MÚLTIPLAS RESPOSTAS
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.FACIL,
                 "O oficial que comanda um exército é o __________.",
-                "general", "Estratégia", 1);
+                Arrays.asList("general", "comandante", "chefe militar"),
+                "Estratégia", 1);
 
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.FACIL,
                 "A ação de atacar o inimigo durante a noite é chamada de ataque __________.",
@@ -2333,10 +2213,10 @@ public class BancoPerguntas {
                 "A tática de destruir tudo que possa ser útil ao inimigo é a terra __________.",
                 "arrasada", "Estratégia", 1);
 
-        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.FACIL,
                 "O soldado que vigia o acampamento durante a noite é o __________.",
-                "sentinela", "Estratégia", 1);
-
+                Arrays.asList("sentinela", "guarda", "vigia"),
+                "Estratégia", 1);
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.FACIL,
                 "A posição elevada que oferece vantagem tática é chamada de __________.",
                 "terreno alto", "Estratégia", 1);
@@ -2603,35 +2483,35 @@ public class BancoPerguntas {
 
     private void carregarGuerreiroMedioLacuna() {
         // COMBATE E ARTES MARCIAIS (7 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.MEDIO,
                 "A faixa vermelha no Jiu-Jitsu representa o grau de __________ dan.",
-                "nono", "Combate", 4);
+                Arrays.asList("nono", "9º", "9", "nono grau"), "Combate", 4);
 
-        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.MEDIO,
                 "O estilo de Caratê fundado por Gichin Funakoshi é o __________.",
-                "Shotokan", "Combate", 4);
+                Arrays.asList("Shotokan", "Shoto-kan"), "Combate", 4);
 
-        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.MEDIO,
                 "A finalização que ataca o joelho no Jiu-Jitsu é a chave de __________.",
-                "perna", "Combate", 4);
+                Arrays.asList("perna", "joelho", "leg lock"), "Combate", 4);
 
-        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.MEDIO,
                 "O sistema de defesa pessoal usado pelas Forças de Defesa de Israel é o __________.",
-                "Krav Maga", "Combate", 4);
+                Arrays.asList("Krav Maga", "krav maga", "Kravmaga"), "Combate", 4);
 
-        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.MEDIO,
                 "A postura defensiva no Boxe com a mão dianteira baixa é chamada de guarda __________.",
-                "baixa", "Combate", 4);
+                Arrays.asList("baixa", "low", "guarda baixa"), "Combate", 4);
 
-        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.MEDIO,
                 "O fundador do Aikidô foi __________.",
-                "Morihei Ueshiba", "Combate", 4);
+                Arrays.asList("Morihei Ueshiba", "Ueshiba", "O Sensei"), "Combate", 4);
 
-        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.MEDIO,
                 "O chute frontal poderoso no Muay Thai é chamado de __________.",
-                "teep", "Combate", 4);
+                Arrays.asList("teep", "push kick", "chute empurrão"), "Combate", 4);
 
-        // ESTRATÉGIA MILITAR (7 perguntas NOVAS)
+        // ESTRATÉGIA MILITAR (7 perguntas NOVAS) - manter originais
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.MEDIO,
                 "A formação defensiva com escudos sobrepostos dos romanos era a __________.",
                 "tartaruga", "Estratégia", 4);
@@ -2648,9 +2528,9 @@ public class BancoPerguntas {
                 "O bombardeio intenso antes de um ataque terrestre é chamado de fogo de __________.",
                 "preparação", "Estratégia", 4);
 
-        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.MEDIO,
                 "A falsa informação plantada para enganar o inimigo é chamada de __________.",
-                "desinformação", "Estratégia", 4);
+                Arrays.asList("desinformação", "desinformacao", "fake news"), "Estratégia", 4);
 
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.MEDIO,
                 "A manobra de atacar o inimigo por trás é chamada de ataque pela __________.",
@@ -2660,50 +2540,29 @@ public class BancoPerguntas {
                 "O princípio de concentrar forças no ponto decisivo é chamado de __________ de força.",
                 "concentração", "Estratégia", 4);
 
-        // HISTÓRIA DE GUERRAS (11 perguntas NOVAS)
+        // HISTÓRIA DE GUERRAS (11 perguntas NOVAS) - manter originais
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.MEDIO,
-                "A falange era a formação de combate dos __________.",
-                "gregos", "História", 4);
-
+                "A falange era a formação de combate dos __________.", "gregos", "História", 4);
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.MEDIO,
-                "A guerra entre Roma e Cartago foi chamada de Guerras __________.",
-                "Púnicas", "História", 4);
-
+                "A guerra entre Roma e Cartago foi chamada de Guerras __________.", "Púnicas", "História", 4);
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.MEDIO,
-                "O líder cartaginês que usou elefantes nos Alpes foi __________.",
-                "Aníbal", "História", 4);
-
+                "O líder cartaginês que usou elefantes nos Alpes foi __________.", "Aníbal", "História", 4);
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.MEDIO,
-                "A guerra civil inglesa do século XV foi a Guerra das __________.",
-                "Rosas", "História", 4);
-
+                "A guerra civil inglesa do século XV foi a Guerra das __________.", "Rosas", "História", 4);
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.MEDIO,
-                "A batalha naval em que Nelson derrotou Napoleão foi __________.",
-                "Trafalgar", "História", 4);
-
+                "A batalha naval em que Nelson derrotou Napoleão foi __________.", "Trafalgar", "História", 4);
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.MEDIO,
-                "O plano alemão de invadir a França pela Bélgica era o Plano __________.",
-                "Schlieffen", "História", 4);
-
+                "O plano alemão de invadir a França pela Bélgica era o Plano __________.", "Schlieffen", "História", 4);
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.MEDIO,
-                "O dia da invasão aliada na Normandia é chamado de __________.",
-                "Dia D", "História", 4);
-
+                "O dia da invasão aliada na Normandia é chamado de __________.", "Dia D", "História", 4);
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.MEDIO,
-                "A operação alemã para invadir a URSS foi a Operação __________.",
-                "Barbarossa", "História", 4);
-
+                "A operação alemã para invadir a URSS foi a Operação __________.", "Barbarossa", "História", 4);
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.MEDIO,
-                "O marechal brasileiro que comandou a FEB foi __________.",
-                "Mascarenhas de Morais", "História", 4);
-
+                "O marechal brasileiro que comandou a FEB foi __________.", "Mascarenhas de Morais", "História", 4);
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.MEDIO,
-                "A guerra entre Israel e países árabes em 1973 foi a Guerra do __________.",
-                "Yom Kippur", "História", 4);
-
+                "A guerra entre Israel e países árabes em 1973 foi a Guerra do __________.", "Yom Kippur", "História", 4);
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.MEDIO,
-                "O general alemão conhecido como 'Raposa do Deserto' foi __________.",
-                "Erwin Rommel", "História", 4);
+                "O general alemão conhecido como 'Raposa do Deserto' foi __________.", "Erwin Rommel", "História", 4);
     }
 
     private void carregarGuerreiroDificilMultiplaEscolha() {
@@ -2847,107 +2706,79 @@ public class BancoPerguntas {
 
     private void carregarGuerreiroDificilLacuna() {
         // COMBATE E ARTES MARCIAIS (7 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "A técnica de controle da respiração no Caratê é chamada de __________.",
-                "Kokyu", "Combate", 8);
+                Arrays.asList("Kokyu", "kokyu"), "Combate", 8);
 
-        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "O golpe de cotovelo descendente no Muay Thai é chamado de __________.",
-                "sok ti", "Combate", 8);
+                Arrays.asList("sok ti", "sokti", "cotovelo descendente"), "Combate", 8);
 
-        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "A posição de montada nas costas no Jiu-Jitsu é chamada de __________.",
-                "back mount", "Combate", 8);
+                Arrays.asList("back mount", "back-mount", "montada nas costas"), "Combate", 8);
 
-        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "O kata mais antigo do Caratê Shotokan é o __________.",
-                "Heian Shodan", "Combate", 8);
+                Arrays.asList("Heian Shodan", "Heian Shodan 1", "primeiro Heian"), "Combate", 8);
 
-        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "A finalização que comprime o pescoço com as pernas é o __________.",
-                "triângulo", "Combate", 8);
+                Arrays.asList("triângulo", "triangulo", "triangle choke"), "Combate", 8);
 
-        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "O termo japonês para 'caminho' nas artes marciais é __________.",
-                "Dô", "Combate", 8);
+                Arrays.asList("Dô", "Do", "dô", "do"), "Combate", 8);
 
-        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "A defesa contra agarramento no Jiu-Jitsu quando se está por baixo é chamada de __________.",
-                "guarda", "Combate", 8);
+                Arrays.asList("guarda", "guard", "closed guard"), "Combate", 8);
 
-        // ESTRATÉGIA MILITAR (6 perguntas NOVAS)
+        // ESTRATÉGIA MILITAR (6 perguntas NOVAS) - manter originais
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "A estratégia chinesa de evitar combate direto e usar táticas indiretas vem de __________.",
                 "Sun Tzu", "Estratégia", 8);
-
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "O conceito de 'centro de gravidade' na estratégia foi desenvolvido por __________.",
                 "Clausewitz", "Estratégia", 8);
-
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "A tática de ataque em ondas sucessivas é chamada de ataque em __________.",
                 "escalões", "Estratégia", 8);
-
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "O princípio de manter uma força reserva para momentos decisivos é a __________.",
                 "reserva estratégica", "Estratégia", 8);
-
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "A operação militar que usa forças especiais atrás das linhas inimigas é chamada de operação __________.",
                 "de profundidade", "Estratégia", 8);
-
-        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "O uso de drones armados em combate é parte da guerra __________.",
-                "assimétrica", "Estratégia", 8);
+                Arrays.asList("assimétrica", "assimetrica", "assimetrica"), "Estratégia", 8);
 
-        // HISTÓRIA DE GUERRAS (12 perguntas NOVAS)
+        // HISTÓRIA DE GUERRAS (12 perguntas NOVAS) - manter originais
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
-                "A batalha onde Alexandre derrotou Dario III foi __________.",
-                "Gaugamela", "História", 8);
-
+                "A batalha onde Alexandre derrotou Dario III foi __________.", "Gaugamela", "História", 8);
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
-                "O cerco de Júlio César a Vercingetórix foi a Batalha de __________.",
-                "Alésia", "História", 8);
-
+                "O cerco de Júlio César a Vercingetórix foi a Batalha de __________.", "Alésia", "História", 8);
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
-                "A batalha que deteve o avanço otomano na Europa foi a Batalha de __________.",
-                "Viena", "História", 8);
-
+                "A batalha que deteve o avanço otomano na Europa foi a Batalha de __________.", "Viena", "História", 8);
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
-                "O massacre que marcou a Guerra do Vietnã foi o Massacre de __________.",
-                "My Lai", "História", 8);
-
+                "O massacre que marcou a Guerra do Vietnã foi o Massacre de __________.", "My Lai", "História", 8);
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
-                "A guerra entre Etiópia e Somália em 1977 foi a Guerra de __________.",
-                "Ogaden", "História", 8);
-
+                "A guerra entre Etiópia e Somália em 1977 foi a Guerra de __________.", "Ogaden", "História", 8);
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
-                "O general soviético que defendeu Stalingrado foi __________.",
-                "Júkov", "História", 8);
-
+                "O general soviético que defendeu Stalingrado foi __________.", "Júkov", "História", 8);
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
-                "A batalha de tanques decisiva na Segunda Guerra foi __________.",
-                "Kursk", "História", 8);
-
+                "A batalha de tanques decisiva na Segunda Guerra foi __________.", "Kursk", "História", 8);
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
-                "O tratado que encerrou a Primeira Guerra Mundial foi o Tratado de __________.",
-                "Versalhes", "História", 8);
-
+                "O tratado que encerrou a Primeira Guerra Mundial foi o Tratado de __________.", "Versalhes", "História", 8);
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
-                "A guerra civil espanhola foi um prelúdio para a __________ Guerra Mundial.",
-                "Segunda", "História", 8);
-
+                "A guerra civil espanhola foi um prelúdio para a __________ Guerra Mundial.", "Segunda", "História", 8);
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
-                "O código indígena usado pelos EUA na Segunda Guerra foi dos índios __________.",
-                "Navajos", "História", 8);
-
+                "O código indígena usado pelos EUA na Segunda Guerra foi dos índios __________.", "Navajos", "História", 8);
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
-                "A conferência que dividiu a Europa pós-guerra entre aliados foi a Conferência de __________.",
-                "Yalta", "História", 8);
-
+                "A conferência que dividiu a Europa pós-guerra entre aliados foi a Conferência de __________.", "Yalta", "História", 8);
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
-                "A guerra de independência da Argélia foi contra a __________.",
-                "França", "História", 8);
+                "A guerra de independência da Argélia foi contra a __________.", "França", "História", 8);
     }
 
 
@@ -3227,18 +3058,18 @@ public class BancoPerguntas {
     }
 
     private void carregarSabioFacilLacuna() {
-        // FILOSOFIA (10 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
+        // FILOSOFIA (10 perguntas)
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.FACIL,
                 "O filósofo que disse 'Só sei que nada sei' foi __________.",
-                "Sócrates", "Filosofia", 1);
+                Arrays.asList("Sócrates", "Socrates"), "Filosofia", 1);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.FACIL,
                 "A alegoria da __________ foi escrita por Platão.",
-                "Caverna", "Filosofia", 1);
+                Arrays.asList("Caverna", "caverna"), "Filosofia", 1);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.FACIL,
                 "O filósofo que escreveu 'Leviatã' foi __________.",
-                "Thomas Hobbes", "Filosofia", 1);
+                Arrays.asList("Thomas Hobbes", "Hobbes"), "Filosofia", 1);
 
         adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
                 "A frase 'O homem é a medida de todas as coisas' é do sofista __________.",
@@ -3256,95 +3087,91 @@ public class BancoPerguntas {
                 "O fundador do Estoicismo foi __________ de Cítio.",
                 "Zenão", "Filosofia", 1);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.FACIL,
                 "O autor de 'O Contrato Social' foi __________.",
-                "Jean-Jacques Rousseau", "Filosofia", 1);
+                Arrays.asList("Jean-Jacques Rousseau", "Rousseau"), "Filosofia", 1);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.FACIL,
                 "O filósofo que disse 'Penso, logo existo' foi __________.",
-                "René Descartes", "Filosofia", 1);
+                Arrays.asList("René Descartes", "Descartes"), "Filosofia", 1);
 
         adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
                 "A máxima 'Conhece-te a ti mesmo' estava inscrita no templo de __________.",
                 "Delfos", "Filosofia", 1);
 
-        // CIÊNCIA (10 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
+        // CIÊNCIA (10 perguntas)
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.FACIL,
                 "O cientista que descobriu a penicilina foi __________.",
-                "Alexander Fleming", "Ciência", 1);
+                Arrays.asList("Alexander Fleming", "Fleming"), "Ciência", 1);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.FACIL,
                 "O planeta mais próximo do Sol é __________.",
-                "Mercúrio", "Ciência", 1);
+                Arrays.asList("Mercúrio", "Mercurio"), "Ciência", 1);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.FACIL,
                 "O processo pelo qual as plantas fabricam seu alimento é a __________.",
-                "fotossíntese", "Ciência", 1);
+                Arrays.asList("fotossíntese", "fotossintese"), "Ciência", 1);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.FACIL,
                 "O osso mais longo do corpo humano é o __________.",
-                "fêmur", "Ciência", 1);
+                Arrays.asList("fêmur", "femur"), "Ciência", 1);
 
         adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
-                "A camada mais externa da Terra é a __________.",
-                "crosta", "Ciência", 1);
+                "A camada mais externa da Terra é a __________.", "crosta", "Ciência", 1);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.FACIL,
                 "O gás mais abundante na atmosfera é o __________.",
-                "nitrogênio", "Ciência", 1);
+                Arrays.asList("nitrogênio", "nitrogenio", "azoto"), "Ciência", 1);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.FACIL,
                 "O maior planeta do Sistema Solar é __________.",
-                "Júpiter", "Ciência", 1);
+                Arrays.asList("Júpiter", "Jupiter"), "Ciência", 1);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.FACIL,
                 "A vitamina produzida pelo corpo com exposição solar é a vitamina __________.",
-                "D", "Ciência", 1);
+                Arrays.asList("D", "d"), "Ciência", 1);
 
         adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
-                "O metal líquido à temperatura ambiente é o __________.",
-                "mercúrio", "Ciência", 1);
+                "O metal líquido à temperatura ambiente é o __________.", "mercúrio", "Ciência", 1);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.FACIL,
                 "O inventor da lâmpada elétrica foi __________.",
-                "Thomas Edison", "Ciência", 1);
+                Arrays.asList("Thomas Edison", "Edison", "Thomas Alva Edison"), "Ciência", 1);
 
-        // ARTE (10 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
+        // ARTE (10 perguntas)
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.FACIL,
                 "O pintor de 'Guernica' foi __________.",
-                "Pablo Picasso", "Arte", 1);
+                Arrays.asList("Pablo Picasso", "Picasso"), "Arte", 1);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.FACIL,
                 "A pintora mexicana conhecida por seus autorretratos foi __________.",
-                "Frida Kahlo", "Arte", 1);
+                Arrays.asList("Frida Kahlo", "Kahlo"), "Arte", 1);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.FACIL,
                 "O compositor de 'A Flauta Mágica' foi __________.",
-                "Wolfgang Amadeus Mozart", "Arte", 1);
+                Arrays.asList("Wolfgang Amadeus Mozart", "Mozart", "Amadeus"), "Arte", 1);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.FACIL,
                 "O escultor de 'O Pensador' foi __________.",
-                "Auguste Rodin", "Arte", 1);
+                Arrays.asList("Auguste Rodin", "Rodin"), "Arte", 1);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.FACIL,
                 "A pintura 'O Grito' foi criada por __________.",
-                "Edvard Munch", "Arte", 1);
+                Arrays.asList("Edvard Munch", "Munch"), "Arte", 1);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.FACIL,
                 "O movimento artístico liderado por Andy Warhol foi a __________.",
-                "Pop Art", "Arte", 1);
+                Arrays.asList("Pop Art", "pop art"), "Arte", 1);
 
         adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
-                "A famosa ópera 'Carmen' foi composta por __________.",
-                "Georges Bizet", "Arte", 1);
+                "A famosa ópera 'Carmen' foi composta por __________.", "Georges Bizet", "Arte", 1);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.FACIL,
                 "O artista que pintou 'A Persistência da Memória' (relógios derretendo) foi __________.",
-                "Salvador Dalí", "Arte", 1);
+                Arrays.asList("Salvador Dalí", "Dali"), "Arte", 1);
 
         adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
-                "A Vênus de Milo é uma famosa __________ grega.",
-                "escultura", "Arte", 1);
+                "A Vênus de Milo é uma famosa __________ grega.", "escultura", "Arte", 1);
 
         adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.FACIL,
                 "O pintor impressionista que pintou 'Impressão, Nascer do Sol' foi __________.",
@@ -3581,109 +3408,109 @@ public class BancoPerguntas {
 
     private void carregarSabioMedioLacuna() {
         // FILOSOFIA (5 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.MEDIO,
                 "O conceito de 'vontade de potência' foi desenvolvido por __________.",
-                "Nietzsche", "Filosofia", 4);
+                Arrays.asList("Nietzsche", "Friedrich Nietzsche"), "Filosofia", 4);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.MEDIO,
                 "A obra 'Crítica da Razão Pura' foi escrita por __________.",
-                "Immanuel Kant", "Filosofia", 4);
+                Arrays.asList("Immanuel Kant", "Kant", "Emanuel Kant"), "Filosofia", 4);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.MEDIO,
                 "O método socrático de questionamento é chamado de __________.",
-                "maiêutica", "Filosofia", 4);
+                Arrays.asList("maiêutica", "maiêutica socrática", "maieutica"), "Filosofia", 4);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.MEDIO,
                 "A filosofia que prega a busca do prazer como bem supremo é o __________.",
-                "hedonismo", "Filosofia", 4);
+                Arrays.asList("hedonismo", "hedonism"), "Filosofia", 4);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.MEDIO,
                 "O filósofo existencialista que escreveu 'O Mito de Sísifo' foi __________.",
-                "Albert Camus", "Filosofia", 4);
+                Arrays.asList("Albert Camus", "Camus"), "Filosofia", 4);
 
         // CIÊNCIA (5 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.MEDIO,
                 "O processo de divisão celular para crescimento e reparo é a __________.",
-                "mitose", "Ciência", 4);
+                Arrays.asList("mitose", "mitosis"), "Ciência", 4);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.MEDIO,
                 "A parte da célula responsável pela produção de energia é a __________.",
-                "mitocôndria", "Ciência", 4);
+                Arrays.asList("mitocôndria", "mitocondria", "mitochondria"), "Ciência", 4);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.MEDIO,
                 "O elemento químico mais abundante no universo é o __________.",
-                "hidrogênio", "Ciência", 4);
+                Arrays.asList("hidrogênio", "hidrogenio", "hydrogen"), "Ciência", 4);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.MEDIO,
                 "O hormônio produzido pelo pâncreas que regula o açúcar no sangue é a __________.",
-                "insulina", "Ciência", 4);
+                Arrays.asList("insulina", "insulin"), "Ciência", 4);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.MEDIO,
                 "A força responsável por manter os planetas em órbita é a força __________.",
-                "gravitacional", "Ciência", 4);
+                Arrays.asList("gravitacional", "gravidade", "da gravidade"), "Ciência", 4);
 
         // ARTE (5 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.MEDIO,
                 "O estilo arquitetônico com arcos ogivais e vitrais coloridos é o __________.",
-                "gótico", "Arte", 4);
+                Arrays.asList("gótico", "gotico", "gothic"), "Arte", 4);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.MEDIO,
                 "A técnica de pintura que usa pontos de cor pura é o __________.",
-                "pontilhismo", "Arte", 4);
+                Arrays.asList("pontilhismo", "pontilhismo", "pointillism"), "Arte", 4);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.MEDIO,
                 "O artista holandês que pintou 'A Ronda Noturna' foi __________.",
-                "Rembrandt", "Arte", 4);
+                Arrays.asList("Rembrandt", "Rembrandt van Rijn"), "Arte", 4);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.MEDIO,
                 "A 'Nona Sinfonia' com 'Ode à Alegria' foi composta por __________.",
-                "Beethoven", "Arte", 4);
+                Arrays.asList("Beethoven", "Ludwig van Beethoven"), "Arte", 4);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.MEDIO,
                 "O movimento artístico que valoriza a luz e a cor ao ar livre é o __________.",
-                "impressionismo", "Arte", 4);
+                Arrays.asList("impressionismo", "impressionism"), "Arte", 4);
 
         // MATEMÁTICA (5 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.MEDIO,
                 "O número que é a razão entre a circunferência e o diâmetro é o __________.",
-                "pi", "Matemática", 4);
+                Arrays.asList("pi", "π", "3,14"), "Matemática", 4);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.MEDIO,
                 "Um polígono com 8 lados é chamado de __________.",
-                "octógono", "Matemática", 4);
+                Arrays.asList("octógono", "octogono", "octagon"), "Matemática", 4);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.MEDIO,
                 "A fórmula para calcular a área do triângulo é base vezes altura dividido por __________.",
-                "dois", "Matemática", 4);
+                Arrays.asList("dois", "2"), "Matemática", 4);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.MEDIO,
                 "O teorema de Pitágoras relaciona os lados de um triângulo __________.",
-                "retângulo", "Matemática", 4);
+                Arrays.asList("retângulo", "retangulo", "right"), "Matemática", 4);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.MEDIO,
                 "A sequência onde cada número é a soma dos dois anteriores é a sequência de __________.",
-                "Fibonacci", "Matemática", 4);
+                Arrays.asList("Fibonacci", "Fibonaci"), "Matemática", 4);
 
         // FÍSICA (5 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.MEDIO,
                 "A lei de Ohm relaciona tensão, corrente e __________.",
-                "resistência", "Física", 4);
+                Arrays.asList("resistência", "resistencia", "resistance"), "Física", 4);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.MEDIO,
                 "A unidade de medida de carga elétrica é o __________.",
-                "coulomb", "Física", 4);
+                Arrays.asList("coulomb", "Coulomb", "C"), "Física", 4);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.MEDIO,
                 "O desvio da luz ao passar de um meio para outro é chamado de __________.",
-                "refração", "Física", 4);
+                Arrays.asList("refração", "refracao", "refraction"), "Física", 4);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.MEDIO,
                 "A força que empurra um corpo para cima em um fluido é o __________.",
-                "empuxo", "Física", 4);
+                Arrays.asList("empuxo", "empuxo", "buoyancy"), "Física", 4);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.MEDIO,
                 "A energia armazenada em um corpo devido à sua posição é a energia __________.",
-                "potencial", "Física", 4);
+                Arrays.asList("potencial", "potential"), "Física", 4);
     }
 
     private void carregarSabioDificilMultiplaEscolha() {
@@ -3833,109 +3660,109 @@ public class BancoPerguntas {
 
     private void carregarSabioDificilLacuna() {
         // FILOSOFIA (5 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.DIFICIL,
                 "A obra 'Assim Falou Zaratustra' foi escrita por __________.",
-                "Friedrich Nietzsche", "Filosofia", 8);
+                Arrays.asList("Friedrich Nietzsche", "Nietzsche"), "Filosofia", 8);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.DIFICIL,
                 "O conceito de 'Dasein' (ser-aí) foi desenvolvido por __________.",
-                "Martin Heidegger", "Filosofia", 8);
+                Arrays.asList("Martin Heidegger", "Heidegger"), "Filosofia", 8);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.DIFICIL,
                 "A 'Escola de Frankfurt' desenvolveu a teoria __________.",
-                "crítica", "Filosofia", 8);
+                Arrays.asList("crítica", "critica", "critical"), "Filosofia", 8);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.DIFICIL,
                 "O filósofo que escreveu 'O Ser e o Nada' foi __________.",
-                "Jean-Paul Sartre", "Filosofia", 8);
+                Arrays.asList("Jean-Paul Sartre", "Sartre"), "Filosofia", 8);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.DIFICIL,
                 "A filosofia que afirma que a existência precede a essência é o __________.",
-                "existencialismo", "Filosofia", 8);
+                Arrays.asList("existencialismo", "existentialism"), "Filosofia", 8);
 
         // CIÊNCIA (5 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.DIFICIL,
                 "O processo de morte celular programada é chamado de __________.",
-                "apoptose", "Ciência", 8);
+                Arrays.asList("apoptose", "apoptosis"), "Ciência", 8);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.DIFICIL,
                 "A técnica de edição genética que revolucionou a biotecnologia é o __________.",
-                "CRISPR", "Ciência", 8);
+                Arrays.asList("CRISPR", "Crispr", "CRISPR-Cas9"), "Ciência", 8);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.DIFICIL,
                 "O fenômeno quântico onde partículas se comunicam instantaneamente é o __________ quântico.",
-                "emaranhamento", "Ciência", 8);
+                Arrays.asList("emaranhamento", "entrelaçamento", "entanglement"), "Ciência", 8);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.DIFICIL,
                 "A menor partícula de um elemento químico que mantém suas propriedades é o __________.",
-                "átomo", "Ciência", 8);
+                Arrays.asList("átomo", "atomo", "atom"), "Ciência", 8);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.DIFICIL,
                 "O exame de imagem que usa raios-X para criar cortes transversais é a __________.",
-                "tomografia", "Ciência", 8);
+                Arrays.asList("tomografia", "tomografia computadorizada", "CT"), "Ciência", 8);
 
         // ARTE (5 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.DIFICIL,
                 "O movimento artístico que pregava a destruição da arte tradicional foi o __________.",
-                "dadaísmo", "Arte", 8);
+                Arrays.asList("dadaísmo", "dadaismo", "dada"), "Arte", 8);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.DIFICIL,
                 "A pintora brasileira que pintou 'Abaporu' foi __________.",
-                "Tarsila do Amaral", "Arte", 8);
+                Arrays.asList("Tarsila do Amaral", "Tarsila"), "Arte", 8);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.DIFICIL,
                 "O compositor de 'O Lago dos Cisnes' foi __________.",
-                "Tchaikovsky", "Arte", 8);
+                Arrays.asList("Tchaikovsky", "Tchaikovsky", "Tchaikovsky"), "Arte", 8);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.DIFICIL,
                 "A 'Fonte' (urinol invertido) foi uma obra de __________.",
-                "Marcel Duchamp", "Arte", 8);
+                Arrays.asList("Marcel Duchamp", "Duchamp"), "Arte", 8);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.DIFICIL,
                 "O movimento cultural renascentista que valorizava o ser humano era o __________.",
-                "humanismo", "Arte", 8);
+                Arrays.asList("humanismo", "humanism"), "Arte", 8);
 
         // MATEMÁTICA (5 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.DIFICIL,
                 "O conjunto dos números que inclui raiz de números negativos é o conjunto dos números __________.",
-                "complexos", "Matemática", 8);
+                Arrays.asList("complexos", "complex"), "Matemática", 8);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.DIFICIL,
                 "A derivada de uma função que representa sua taxa de variação instantânea é estudada no __________.",
-                "cálculo diferencial", "Matemática", 8);
+                Arrays.asList("cálculo diferencial", "calculo diferencial", "diferencial"), "Matemática", 8);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.DIFICIL,
                 "O número de Euler, base dos logaritmos naturais, é aproximadamente __________.",
-                "2,718", "Matemática", 8);
+                Arrays.asList("2,718", "2.718", "2,71828", "2.71828"), "Matemática", 8);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.DIFICIL,
                 "A proporção áurea, representada pela letra grega φ (phi), é aproximadamente __________.",
-                "1,618", "Matemática", 8);
+                Arrays.asList("1,618", "1.618", "phi"), "Matemática", 8);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.DIFICIL,
                 "O último teorema de __________ foi provado por Andrew Wiles em 1994.",
-                "Fermat", "Matemática", 8);
+                Arrays.asList("Fermat", "Fermat", "Pierre de Fermat"), "Matemática", 8);
 
         // FÍSICA (5 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.DIFICIL,
                 "O princípio que afirma ser impossível medir simultaneamente posição e momento é o princípio da __________.",
-                "incerteza", "Física", 8);
+                Arrays.asList("incerteza", "incerteza", "uncertainty"), "Física", 8);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.DIFICIL,
                 "A radiação de fundo do universo é chamada de radiação cósmica de __________.",
-                "micro-ondas", "Física", 8);
+                Arrays.asList("micro-ondas", "microondas", "background"), "Física", 8);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.DIFICIL,
                 "O fenômeno de dilatação do tempo ocorre devido à __________ restrita.",
-                "relatividade", "Física", 8);
+                Arrays.asList("relatividade", "relatividade", "relativity"), "Física", 8);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.DIFICIL,
                 "A partícula mediadora da força eletromagnética é o __________.",
-                "fóton", "Física", 8);
+                Arrays.asList("fóton", "foton", "photon"), "Física", 8);
 
-        adicionarPerguntaLacuna(PerTipo.SABIO, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.SABIO, Dificuldade.DIFICIL,
                 "A teoria que unifica as quatro forças fundamentais é chamada de teoria da __________.",
-                "grande unificação", "Física", 8);
+                Arrays.asList("grande unificação", "unificação", "GUT"), "Física", 8);
     }
 
     private void carregarPerguntasArcanista() {
@@ -4562,108 +4389,108 @@ public class BancoPerguntas {
 
     private void carregarArcanistaMedioLacuna() {
         // MITOLOGIA (7 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.MEDIO,
                 "O deus grego que carregava o mundo nos ombros era __________.",
-                "Atlas", "Mitologia", 4);
+                Arrays.asList("Atlas", "atlas"), "Mitologia", 4);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.MEDIO,
                 "As três irmãs gregas que teciam o destino eram as __________.",
-                "Moiras", "Mitologia", 4);
+                Arrays.asList("Moiras", "Moiras", "Fates", "Parcas"), "Mitologia", 4);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.MEDIO,
                 "O elmo da invisibilidade na mitologia grega pertencia a __________.",
-                "Hades", "Mitologia", 4);
+                Arrays.asList("Hades", "hades"), "Mitologia", 4);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.MEDIO,
                 "Na mitologia nórdica, as guerreiras que levavam os mortos a Valhala eram as __________.",
-                "valquírias", "Mitologia", 4);
+                Arrays.asList("valquírias", "valquirias", "Valkyries"), "Mitologia", 4);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.MEDIO,
                 "O deus grego do sono e irmão gêmeo da Morte é __________.",
-                "Hipnos", "Mitologia", 4);
+                Arrays.asList("Hipnos", "Hipnos", "Hypnos"), "Mitologia", 4);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.MEDIO,
                 "A caixa que Pandora abriu continha todos os __________.",
-                "males", "Mitologia", 4);
+                Arrays.asList("males", "maldades", "os males"), "Mitologia", 4);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.MEDIO,
                 "O deus egípcio da escrita e sabedoria, com cabeça de íbis, é __________.",
-                "Toth", "Mitologia", 4);
+                Arrays.asList("Toth", "Thoth", "Tot"), "Mitologia", 4);
 
         // MAGIA (5 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.MEDIO,
                 "A lei mágica que diz que 'semelhante atrai semelhante' é a lei da __________.",
-                "similaridade", "Magia", 4);
+                Arrays.asList("similaridade", "semelhança", "similaridade"), "Magia", 4);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.MEDIO,
                 "O sistema de correspondências mágicas que associa planetas, metais e cores é a __________.",
-                "tábua de correspondências", "Magia", 4);
+                Arrays.asList("tábua de correspondências", "tabela de correspondências"), "Magia", 4);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.MEDIO,
                 "A tradição mágica que segue o princípio 'Não prejudiques, faze o que queres' é a __________.",
-                "Wicca", "Magia", 4);
+                Arrays.asList("Wicca", "wicca"), "Magia", 4);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.MEDIO,
                 "O grimório medieval atribuído ao Rei Salomão é a __________ de Salomão.",
-                "Chave", "Magia", 4);
+                Arrays.asList("Chave", "chave", "Key"), "Magia", 4);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.MEDIO,
                 "A prática de criar talismãs com símbolos astrológicos é a magia __________.",
-                "talismânica", "Magia", 4);
+                Arrays.asList("talismânica", "talismanica", "talismanic"), "Magia", 4);
 
         // ELEMENTOS (5 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.MEDIO,
                 "Na roda do ano wiccana, o elemento fogo é celebrado no sabá de __________.",
-                "Beltane", "Elementos", 4);
+                Arrays.asList("Beltane", "beltane"), "Elementos", 4);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.MEDIO,
                 "O elemento chinês que representa o centro e a estabilidade é a __________.",
-                "terra", "Elementos", 4);
+                Arrays.asList("terra", "terra", "earth"), "Elementos", 4);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.MEDIO,
                 "O sal na alquimia representa o princípio __________ (corpo).",
-                "fixo", "Elementos", 4);
+                Arrays.asList("fixo", "fixo", "fixed"), "Elementos", 4);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.MEDIO,
                 "O 'Dragão Verde' na alquimia chinesa representa o elemento __________.",
-                "madeira", "Elementos", 4);
+                Arrays.asList("madeira", "madeira", "wood"), "Elementos", 4);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.MEDIO,
                 "A 'Águia Branca' na alquimia representa o princípio __________ (volátil).",
-                "mercúrio", "Elementos", 4);
+                Arrays.asList("mercúrio", "mercurio", "mercury"), "Elementos", 4);
 
         // OCULTISMO (8 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.MEDIO,
                 "A Árvore da Vida na Cabala tem __________ esferas (sefirot).",
-                "dez", "Ocultismo", 4);
+                Arrays.asList("dez", "10", "ten"), "Ocultismo", 4);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.MEDIO,
                 "A prática de projetar a consciência para fora do corpo é chamada de __________ astral.",
-                "projeção", "Ocultismo", 4);
+                Arrays.asList("projeção", "projecao", "projection"), "Ocultismo", 4);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.MEDIO,
                 "O baralho cigano de adivinhação com 36 cartas é o __________.",
-                "Petit Lenormand", "Ocultismo", 4);
+                Arrays.asList("Petit Lenormand", "Lenormand"), "Ocultismo", 4);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.MEDIO,
                 "A pedra que muda de cor conforme a luz e é usada em adivinhação é a __________.",
-                "opala", "Ocultismo", 4);
+                Arrays.asList("opala", "opala", "opal"), "Ocultismo", 4);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.MEDIO,
                 "O ritual wiccano que celebra a lua cheia é chamado de __________.",
-                "Esbat", "Ocultismo", 4);
+                Arrays.asList("Esbat", "esbat"), "Ocultismo", 4);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.MEDIO,
                 "O símbolo composto por três luas (crescente, cheia e minguante) representa a __________.",
-                "Deusa Tríplice", "Ocultismo", 4);
+                Arrays.asList("Deusa Tríplice", "Deusa Triplice", "Triple Goddess"), "Ocultismo", 4);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.MEDIO,
                 "A tradição esotérica judaica que estuda os mistérios da Torá é a __________.",
-                "Cabala", "Ocultismo", 4);
+                Arrays.asList("Cabala", "Cabala", "Kabbalah"), "Ocultismo", 4);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.MEDIO,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.MEDIO,
                 "O dia dos mortos na tradição celta, que originou o Halloween, é o __________.",
-                "Samhain", "Ocultismo", 4);
+                Arrays.asList("Samhain", "samhain"), "Ocultismo", 4);
     }
 
     private void carregarArcanistaDificilMultiplaEscolha() {
@@ -4808,108 +4635,108 @@ public class BancoPerguntas {
 
     private void carregarArcanistaDificilLacuna() {
         // MITOLOGIA (7 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
                 "O deus grego primordial que personificava o abismo antes da criação é __________.",
-                "Caos", "Mitologia", 8);
+                Arrays.asList("Caos", "caos", "Chaos"), "Mitologia", 8);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
                 "A cidade mítica submersa descrita por Platão é __________.",
-                "Atlântida", "Mitologia", 8);
+                Arrays.asList("Atlântida", "Atlantida", "Atlantis"), "Mitologia", 8);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
                 "Na mitologia hindu, o preservador do universo que monta Garuda é __________.",
-                "Vishnu", "Mitologia", 8);
+                Arrays.asList("Vishnu", "vishnu"), "Mitologia", 8);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
                 "O gigante de fogo que incendiará o mundo no Ragnarök é __________.",
-                "Surt", "Mitologia", 8);
+                Arrays.asList("Surt", "Surtr"), "Mitologia", 8);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
                 "A deusa japonesa da criação e da morte é __________.",
-                "Izanami", "Mitologia", 8);
+                Arrays.asList("Izanami", "izanami"), "Mitologia", 8);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
                 "O deus asteca da guerra e do sol é __________.",
-                "Huitzilopochtli", "Mitologia", 8);
+                Arrays.asList("Huitzilopochtli", "Huitzilopochtli"), "Mitologia", 8);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
                 "O rio do submundo grego que causa esquecimento é o __________.",
-                "Lete", "Mitologia", 8);
+                Arrays.asList("Lete", "Lete", "Lethe"), "Mitologia", 8);
 
         // MAGIA (5 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
                 "O sistema de magia cerimonial baseado na Árvore da Vida é a __________ Hermética.",
-                "Cabala", "Magia", 8);
+                Arrays.asList("Cabala", "Cabala", "Kabbalah"), "Magia", 8);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
                 "A sociedade secreta que influenciou o ocultismo ocidental no século XIX foi a Ordem Hermética da __________.",
-                "Aurora Dourada", "Magia", 8);
+                Arrays.asList("Aurora Dourada", "Golden Dawn"), "Magia", 8);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
                 "O mago inglês que fundou a filosofia de Thelema foi __________.",
-                "Aleister Crowley", "Magia", 8);
+                Arrays.asList("Aleister Crowley", "Crowley"), "Magia", 8);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
                 "O alfabeto mágico recebido por John Dee e Edward Kelley é o alfabeto __________.",
-                "Enoquiano", "Magia", 8);
+                Arrays.asList("Enoquiano", "Enochian"), "Magia", 8);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
                 "A obra 'Dogma e Ritual da Alta Magia' foi escrita por __________.",
-                "Eliphas Lévi", "Magia", 8);
+                Arrays.asList("Eliphas Lévi", "Levi", "Eliphas Levi"), "Magia", 8);
 
         // ELEMENTOS (5 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
                 "O conceito chinês de forças opostas e complementares é __________ e Yang.",
-                "Yin", "Elementos", 8);
+                Arrays.asList("Yin", "yin"), "Elementos", 8);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
                 "A 'Obra em Negro' na alquimia representa o estágio de __________.",
-                "putrefação", "Elementos", 8);
+                Arrays.asList("putrefação", "putrefacao", "putrefaction"), "Elementos", 8);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
                 "A 'Obra em Branco' na alquimia representa o estágio de __________.",
-                "purificação", "Elementos", 8);
+                Arrays.asList("purificação", "purificacao", "purification"), "Elementos", 8);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
                 "A 'Obra em Vermelho' na alquimia representa o estágio final da __________.",
-                "transmutação", "Elementos", 8);
+                Arrays.asList("transmutação", "transmutacao", "transmutation"), "Elementos", 8);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
                 "O elemento sutil que compõe o corpo energético segundo os vedas é o __________.",
-                "akasha", "Elementos", 8);
+                Arrays.asList("akasha", "Akasha"), "Elementos", 8);
 
         // OCULTISMO (8 perguntas NOVAS)
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
                 "A esfera mais elevada da Árvore da Vida, que representa a coroa, é __________.",
-                "Kether", "Ocultismo", 8);
+                Arrays.asList("Kether", "Kether", "Keter"), "Ocultismo", 8);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
                 "O livro central da Cabala, escrito em aramaico, é o __________.",
-                "Zohar", "Ocultismo", 8);
+                Arrays.asList("Zohar", "zohar"), "Ocultismo", 8);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
                 "A técnica de adivinhação que usa areia ou terra é a __________.",
-                "geomancia", "Ocultismo", 8);
+                Arrays.asList("geomancia", "geomancy"), "Ocultismo", 8);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
                 "A palavra egípcia antiga para magia ou poder criador é __________.",
-                "heka", "Ocultismo", 8);
+                Arrays.asList("heka", "Heka"), "Ocultismo", 8);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
                 "O conceito hindu de centros energéticos no corpo são os __________.",
-                "chakras", "Ocultismo", 8);
+                Arrays.asList("chakras", "chakras"), "Ocultismo", 8);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
                 "A prática de comunicação com espíritos através de uma mesa é o __________ giratório.",
-                "copó", "Ocultismo", 8);
+                Arrays.asList("copó", "copo", "glass"), "Ocultismo", 8);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
                 "O 'Livro dos Mortos' egípcio é na verdade o 'Livro para Sair à __________'.",
-                "Luz do Dia", "Ocultismo", 8);
+                Arrays.asList("Luz do Dia", "luz do dia", "light of day"), "Ocultismo", 8);
 
-        adicionarPerguntaLacuna(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
+        adicionarPerguntaLacunaMultiResposta(PerTipo.ARCANISTA, Dificuldade.DIFICIL,
                 "A pedra sagrada dos druidas usada na coroação de reis era a Pedra do __________.",
-                "Destino", "Ocultismo", 8);
+                Arrays.asList("Destino", "destino", "Stone of Destiny"), "Ocultismo", 8);
     }
 
 
@@ -4936,6 +4763,15 @@ public class BancoPerguntas {
         // Usa o estagioMaximo da dificuldade
         int estagioMaximo = diff.getEstagioMaximo();
         Pergunta p = new PerguntaCompletarLacuna(proximoId++, texto, respostaCorreta,
+                diff, tipo, categoria, estagioMinimo, estagioMaximo);
+        perguntasPorPersonagem.get(tipo).add(p);
+        perguntasPorDificuldade.get(tipo).get(diff).add(p);
+    }
+    private void adicionarPerguntaLacunaMultiResposta(PerTipo tipo, Dificuldade diff,
+                                                      String texto, List<String> respostasCorretas,
+                                                      String categoria, int estagioMinimo) {
+        int estagioMaximo = diff.getEstagioMaximo();
+        Pergunta p = new PerguntaCompletarLacuna(proximoId++, texto, respostasCorretas,
                 diff, tipo, categoria, estagioMinimo, estagioMaximo);
         perguntasPorPersonagem.get(tipo).add(p);
         perguntasPorDificuldade.get(tipo).get(diff).add(p);

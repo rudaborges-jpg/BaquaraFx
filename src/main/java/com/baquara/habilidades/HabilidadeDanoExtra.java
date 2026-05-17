@@ -6,11 +6,14 @@ import com.baquara.modelo.Inimigo;
 import com.baquara.modelo.Personagem;
 import com.baquara.modelo.AtributoEspecial;
 import com.baquara.modelo.ValoresHabilidade;
+import com.baquara.modelo.efeitos.DebuffAtaqueEfeito;
 
 public class HabilidadeDanoExtra implements HabilidadeEspecial {
     private Personagem usuario;
     private String nome;
     private String descricao;
+    private static final double MULTIPLICADOR_DEBUFF = 0.8;  // Reduz 20% do ataque
+    private static final int DURACAO_DEBUFF = 3;             // Dura 2 rodadas
 
     public HabilidadeDanoExtra(Personagem usuario) {
         this.usuario = usuario;
@@ -25,7 +28,8 @@ public class HabilidadeDanoExtra implements HabilidadeEspecial {
                 " de dano extra.\n" +
                 "   💪 Quanto mais Espírito de Luta restante, mais forte!\n" +
                 "   💫 Custo: " + ValoresHabilidade.CUSTO_GUERREIRO + " de Espírito de Luta\n" +
-                "   ✨ Recupera " + ValoresHabilidade.RECUPERACAO_GUERREIRO + " de Espírito de Luta por acerto!";
+                "   🛡️ Aplica debuff de -20% de ataque no inimigo por " + DURACAO_DEBUFF + " rodadas\n" +
+                "   🔄 Efeito resetável (usar novamente renova a duração)";
     }
 
     @Override
@@ -66,7 +70,7 @@ public class HabilidadeDanoExtra implements HabilidadeEspecial {
         AtributoEspecial attr = (AtributoEspecial) usuario;
         int custo = ValoresHabilidade.CUSTO_GUERREIRO;
 
-        // Verifica se tem recurso suficiente
+        // Consome o recurso
         if (!attr.consumir(custo)) {
             if (attr.getValorAtual() > 10) {
                 System.out.println("⚠️ " + attr.getNomeAtributo() + " baixo! Usando FÚRIA reduzida...");
@@ -95,6 +99,10 @@ public class HabilidadeDanoExtra implements HabilidadeEspecial {
         System.out.println("💥 DANO TOTAL: " + danoTotal + "!");
 
         alvo.tomarDano(danoTotal);
+
+        // ⭐ APLICA O DEBUFF USANDO O SISTEMA DE EFEITOS
+        DebuffAtaqueEfeito debuff = new DebuffAtaqueEfeito(DURACAO_DEBUFF, MULTIPLICADOR_DEBUFF);
+        alvo.adicionarEfeito(debuff);
 
         return danoTotal;
     }
