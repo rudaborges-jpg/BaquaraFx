@@ -340,6 +340,9 @@ public class TelaBatalhaController {
         painelPergunta.setVisible(true);
         painelPergunta.setManaged(true);
 
+        btnVoltarMenu.setVisible(false);
+        btnVoltarMenu.setManaged(false);
+
         rodadaAtual++;
         lblTurno.setText("⚔️ RODADA " + rodadaAtual + " ⚔️");
 

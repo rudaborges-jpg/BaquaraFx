@@ -28,25 +28,53 @@ public class AvaliadorRespostas {
     }
 
     /**
-     * Avalia perguntas de completar lacuna
+     * Avalia perguntas de completar lacuna - VERSÃO CORRIGIDA
+     * Agora exige correspondência EXATA ou próxima, não apenas "contém"
      */
     private static boolean avaliarLacuna(Pergunta pergunta, String respostaJogador) {
         String respostaNormalizada = normalizarTexto(respostaJogador);
         String corretaNormalizada = normalizarTexto(pergunta.getRespostaCorreta());
 
-        // Verificação exata
+        // ⭐ 1. VERIFICAÇÃO EXATA (MAIS RÍGIDA)
         if (respostaNormalizada.equals(corretaNormalizada)) {
             return true;
         }
 
-        // Verificação de "contém" (para respostas com palavras extras)
-        if (respostaNormalizada.contains(corretaNormalizada) ||
-                corretaNormalizada.contains(respostaNormalizada)) {
+        // ⭐ 2. PERMITE APENAS SE FOR MUITO PARECIDA (90% de similaridade)
+        // Evita que "e" seja aceito para "espírito"
+        if (Math.abs(respostaNormalizada.length() - corretaNormalizada.length()) > 3) {
+            return false;  // Diferença de tamanho muito grande
+        }
+
+        // ⭐ 3. VERIFICA SE A RESPOSTA É UMA PALAVRA INTEIRA (não apenas uma letra)
+        if (respostaNormalizada.length() <= 2 && !corretaNormalizada.equals(respostaNormalizada)) {
+            return false;  // Resposta muito curta (1-2 letras) que não é exatamente a correta
+        }
+
+        // ⭐ 4. VERIFICAÇÃO DE "CONTER" APENAS SE FOR UMA PALAVRA COMPLETA
+        // Ex: "espírito" contém "espírito" - OK
+        // Ex: "e" contém "espírito" - NÃO OK (já barrado pelo passo 3)
+        if (corretaNormalizada.contains(respostaNormalizada) && respostaNormalizada.length() > 3) {
             return true;
         }
 
-        // Verificação de variações comuns
+        // ⭐ 5. VERIFICAÇÃO DE VARIAÇÕES COMUNS (plural, acentos, etc.)
         return verificarVariacoesComuns(respostaNormalizada, corretaNormalizada);
+    }
+
+    // ⭐ ADICIONAR ESTE MÉTODO AUXILIAR PARA VALIDAR TAMANHO MÍNIMO
+    private static boolean isRespostaValida(String resposta) {
+        if (resposta == null || resposta.trim().isEmpty()) return false;
+
+        // Remove espaços extras
+        String trimmed = resposta.trim();
+
+        // Resposta muito curta (1-2 caracteres) geralmente é inválida para lacuna
+        if (trimmed.length() <= 2) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
