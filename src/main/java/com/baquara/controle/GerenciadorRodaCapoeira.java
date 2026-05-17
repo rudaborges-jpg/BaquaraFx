@@ -1,7 +1,7 @@
 package com.baquara.controle;
 
+import com.baquara.dados.BancoPerguntas;
 import com.baquara.modelo.*;
-import com.baquara.dados.BancoPerguntasCapoeira;
 import com.baquara.modelo.Pergunta.Dificuldade;
 import java.util.*;
 
@@ -13,7 +13,7 @@ public class GerenciadorRodaCapoeira {
     private int pontuacaoTotal;
     private Scanner scanner;
     private Random random;
-    private BancoPerguntasCapoeira bancoCapoeira;
+    private BancoPerguntas  bancoPerguntas;
 
     private int perguntasCertas;
     private int perguntasErradas;
@@ -115,7 +115,7 @@ public class GerenciadorRodaCapoeira {
         this.pontuacaoTotal = 0;
         this.scanner = new Scanner(System.in);
         this.random = new Random();
-        this.bancoCapoeira = new BancoPerguntasCapoeira();
+        this.bancoPerguntas = new BancoPerguntas();
 
         this.perguntasCertas = 0;
         this.perguntasErradas = 0;
@@ -316,8 +316,11 @@ public class GerenciadorRodaCapoeira {
             }
 
             Dificuldade dificuldade = getDificuldadePorAtaque(escolhaAtaque);
-            Pergunta pergunta = bancoCapoeira.getPerguntaAleatoria(dificuldade);
-
+            Pergunta pergunta = bancoPerguntas.getPerguntaAleatoriaPorDificuldade(
+                    PerTipo.CAPOEIRISTA,
+                    dificuldade,
+                    estagioAtual  // estágio atual (1-10)
+            );
             if (pergunta == null) {
                 System.out.println("❌ Erro ao carregar pergunta!");
                 return false;

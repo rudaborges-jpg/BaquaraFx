@@ -1,7 +1,7 @@
 package com.baquara.gui.controllers;
 
 import com.baquara.controle.AvaliadorRespostas;
-import com.baquara.dados.BancoPerguntasCapoeira;
+import com.baquara.dados.BancoPerguntas;
 import com.baquara.modelo.*;
 import com.baquara.modelo.Pergunta.Dificuldade;
 import javafx.application.Platform;
@@ -54,7 +54,7 @@ public class TelaCapoeiraController {
     private Jogador jogador;
     private Capoeirista capoeirista;
     private Inimigo inimigoAtual;
-    private BancoPerguntasCapoeira bancoPerguntas;
+    private BancoPerguntas bancoPerguntas;
     private Pergunta perguntaAtual;
     private Random random;
 
@@ -79,7 +79,7 @@ public class TelaCapoeiraController {
     public void setJogador(Jogador jogador) {
         this.jogador = jogador;
         this.capoeirista = (Capoeirista) jogador.getPersonagem();
-        this.bancoPerguntas = new BancoPerguntasCapoeira();
+        this.bancoPerguntas = new BancoPerguntas();
         this.random = new Random();
 
         atualizarStatusJogador();
@@ -194,8 +194,11 @@ public class TelaCapoeiraController {
             nomeDificuldade += " 🔥 CHEFÃO! 🔥";
         }
 
-        perguntaAtual = bancoPerguntas.getPerguntaAleatoria(dificuldade);
-
+        perguntaAtual = bancoPerguntas.getPerguntaAleatoriaPorDificuldade(
+                PerTipo.CAPOEIRISTA,
+                dificuldade,
+                estagioAtual + 1  // estágio atual (1-10)
+        );
         if (perguntaAtual == null) {
             adicionarDialogoNormal("❌ Erro ao carregar pergunta!");
             return;
