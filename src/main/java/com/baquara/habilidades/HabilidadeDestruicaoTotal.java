@@ -1,23 +1,22 @@
+// 📁 habilidades/HabilidadeDestruicaoTotal.java
+
 package com.baquara.habilidades;
 
 import com.baquara.modelo.Inimigo;
 import com.baquara.modelo.Personagem;
 import com.baquara.modelo.AtributoEspecial;
+import com.baquara.modelo.ValoresHabilidade;
 import java.util.Random;
 
 public class HabilidadeDestruicaoTotal implements HabilidadeEspecial {
     private Personagem usuario;
-    private int cooldownMaximo;
-    private int cooldownAtual;
     private String nome;
     private String descricao;
     private Random random;
     private String[] elementos;
 
-    public HabilidadeDestruicaoTotal(Personagem usuario, int cooldown) {
+    public HabilidadeDestruicaoTotal(Personagem usuario) {
         this.usuario = usuario;
-        this.cooldownMaximo = cooldown;
-        this.cooldownAtual = 0;
         this.random = new Random();
         this.nome = "CATACLISMO ARCANO";
         this.elementos = new String[]{"🔥 Fogo", "❄️ Gelo", "⚡ Raio", "🌑 Sombra", "✨ Luz"};
@@ -30,11 +29,15 @@ public class HabilidadeDestruicaoTotal implements HabilidadeEspecial {
         this.descricao = "Libera poder arcano massivo causando ~" + danoEstimado +
                 " de dano elemental.\n" +
                 "   💥 Dano aumenta com Poder Arcano consumido!\n" +
-                "   🎲 Efeito elemental aleatório adicional!";
+                "   🎲 Efeito elemental aleatório adicional!\n" +
+                "   💫 Custo: " + ValoresHabilidade.CUSTO_ARCANISTA + " de Poder Arcano\n" +
+                "   ✨ Recupera " + ValoresHabilidade.RECUPERACAO_ARCANISTA + " de Poder Arcano por acerto!";
     }
 
     @Override
-    public String getNome() { return nome; }
+    public String getNome() {
+        return nome;
+    }
 
     @Override
     public String getDescricao() {
@@ -43,24 +46,31 @@ public class HabilidadeDestruicaoTotal implements HabilidadeEspecial {
     }
 
     @Override
-    public int getCooldown() { return cooldownMaximo; }
+    public boolean podeUsar() {
+        if (!(usuario instanceof AtributoEspecial)) return false;
+        AtributoEspecial attr = (AtributoEspecial) usuario;
+        return attr.getValorAtual() >= ValoresHabilidade.CUSTO_ARCANISTA;
+    }
 
     @Override
-    public int getCooldownAtual() { return cooldownAtual; }
-
-    @Override
-    public boolean estaPronta() { return cooldownAtual == 0; }
+    public void recarregarAposAcerto() {
+        if (!(usuario instanceof AtributoEspecial)) return;
+        AtributoEspecial attr = (AtributoEspecial) usuario;
+        attr.recarregar(ValoresHabilidade.RECUPERACAO_ARCANISTA);
+        System.out.println("✨ +" + ValoresHabilidade.RECUPERACAO_ARCANISTA + " de " + attr.getNomeAtributo() + " recuperado!");
+    }
 
     @Override
     public int executar(Inimigo alvo) {
-        if (!estaPronta()) {
-            System.out.println("⏳ Habilidade em cooldown!");
+        if (!podeUsar()) {
+            System.out.println("❌ " + usuario.getNome() + " não tem " +
+                    ((AtributoEspecial) usuario).getNomeAtributo() + " suficiente!");
             return 0;
         }
 
         // ========== LÓGICA COM ATRIBUTO ESPECIAL ==========
         AtributoEspecial attr = (AtributoEspecial) usuario;
-        int custo = 50;
+        int custo = ValoresHabilidade.CUSTO_ARCANISTA;
 
         // Verifica se tem recurso suficiente
         if (!attr.consumir(custo)) {
@@ -98,10 +108,9 @@ public class HabilidadeDestruicaoTotal implements HabilidadeEspecial {
         aplicarEfeitoElemental(elemento, alvo);
 
         // Recupera um pouco de poder arcano
-        attr.recarregar(3);
-        System.out.println("✨ +3 de " + attr.getNomeAtributo() + " recuperado!");
+        attr.recarregar(ValoresHabilidade.RECUPERACAO_ARCANISTA);
+        System.out.println("✨ +" + ValoresHabilidade.RECUPERACAO_ARCANISTA + " de " + attr.getNomeAtributo() + " recuperado!");
 
-        cooldownAtual = cooldownMaximo;
         return dano;
     }
 
@@ -126,12 +135,4 @@ public class HabilidadeDestruicaoTotal implements HabilidadeEspecial {
             usuario.curar(curaLuz);
         }
     }
-
-    @Override
-    public void reduzirCooldown() {
-        if (cooldownAtual > 0) cooldownAtual--;
-    }
-
-    @Override
-    public void resetarCooldown() { cooldownAtual = 0; }
 }

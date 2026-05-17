@@ -11,8 +11,10 @@ public abstract class Personagem {
     protected int defesa;
     protected int nivel;
     protected int experiencia;
-    protected int spatkCooldown;
-    protected int atualCooldown;
+
+    // ⭐ REMOVIDOS: spatkCooldown e atualCooldown
+    // protected int spatkCooldown;
+    // protected int atualCooldown;
 
     protected HabilidadeEspecial habilidade;
 
@@ -25,8 +27,8 @@ public abstract class Personagem {
         this.defesa = defesa;
         this.nivel = 1;
         this.experiencia = 0;
-        this.spatkCooldown = 3;
-        this.atualCooldown = 0;
+        // ⭐ REMOVIDO: this.spatkCooldown = 3;
+        // ⭐ REMOVIDO: this.atualCooldown = 0;
     }
 
     // Getters
@@ -38,7 +40,9 @@ public abstract class Personagem {
     public int getDefesa() { return defesa; }
     public int getNivel() { return nivel; }
     public int getExperiencia() { return experiencia; }
-    public boolean taProntaHabilidade() { return atualCooldown == 0; }
+
+    // ⭐ REMOVIDOS: taProntaHabilidade(), getCooldownAtual()
+    // public boolean taProntaHabilidade() { return atualCooldown == 0; }
 
     public void setHabilidade(HabilidadeEspecial habilidade) {
         this.habilidade = habilidade;
@@ -48,34 +52,35 @@ public abstract class Personagem {
         return habilidade;
     }
 
-    public boolean isHabilidadePronta() {
-        return habilidade != null && habilidade.estaPronta();
-    }
+    // ⭐ REMOVIDO - não precisa mais verificar cooldown
+    // public boolean isHabilidadePronta() {
+    //     return habilidade != null && habilidade.estaPronta();
+    // }
 
-    public int getCooldownAtual() {
-        return habilidade != null ? habilidade.getCooldownAtual() : 0;
-    }
-
-    public void reduzirCooldownHabilidade() {
-        if (habilidade != null) {
-            habilidade.reduzirCooldown();
-        }
-    }
-
-    public void resetarCooldownHabilidade() {
-        if (habilidade != null) {
-            habilidade.resetarCooldown();
-        }
-    }
+    // ⭐ REMOVIDOS: getCooldownAtual(), reduzirCooldownHabilidade(), resetarCooldownHabilidade()
+    // public int getCooldownAtual() {
+    //     return habilidade != null ? habilidade.getCooldownAtual() : 0;
+    // }
+    //
+    // public void reduzirCooldownHabilidade() {
+    //     if (habilidade != null) {
+    //         habilidade.reduzirCooldown();
+    //     }
+    // }
+    //
+    // public void resetarCooldownHabilidade() {
+    //     if (habilidade != null) {
+    //         habilidade.resetarCooldown();
+    //     }
+    // }
 
     public int usarHabilidade(Inimigo alvo) {
-        if (habilidade != null && habilidade.estaPronta()) {
+        if (habilidade != null && habilidade.podeUsar()) {
             return habilidade.executar(alvo);
         }
         System.out.println("❌ Habilidade não disponível!");
         return 0;
     }
-
 
     public void tomarDano(int danoBruto) {
         double reducao = (double) defesa / (defesa + 50);
@@ -139,7 +144,6 @@ public abstract class Personagem {
         System.out.println("\n🎉 " + nome + " subiu para o NÍVEL " + nivel + "!");
         System.out.println("   ❤️ Vida +" + aumentoVida + " | ⚔️ Ataque +5 | 🛡️ Defesa +3 (Total: " + defesa + ")");
 
-
         recarregarPorNivel(nivel);
     }
 
@@ -153,12 +157,9 @@ public abstract class Personagem {
         System.out.println("   🛡️ Defesa: " + defesa + " (reduz " + percentualReducao + "% do dano)");
 
         if (habilidade != null) {
-            if (habilidade.estaPronta()) {
-                System.out.println("   ✨ Habilidade: " + habilidade.getNome() + " [PRONTA]");
-            } else {
-                System.out.println("   ⏳ Habilidade: " + habilidade.getNome() +
-                        " [Cooldown: " + habilidade.getCooldownAtual() + "]");
-            }
+            AtributoEspecial attr = (AtributoEspecial) this;
+            System.out.println("   ✨ " + habilidade.getNome() + " [" + attr.getNomeAtributo() + ": " +
+                    attr.getValorAtual() + "/" + attr.getValorMaximo() + "]");
         }
     }
 

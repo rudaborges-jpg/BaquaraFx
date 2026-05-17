@@ -1,20 +1,19 @@
+// 📁 habilidades/HabilidadeDanoExtra.java
+
 package com.baquara.habilidades;
 
 import com.baquara.modelo.Inimigo;
 import com.baquara.modelo.Personagem;
 import com.baquara.modelo.AtributoEspecial;
+import com.baquara.modelo.ValoresHabilidade;
 
 public class HabilidadeDanoExtra implements HabilidadeEspecial {
     private Personagem usuario;
-    private int cooldownMaximo;
-    private int cooldownAtual;
     private String nome;
     private String descricao;
 
-    public HabilidadeDanoExtra(Personagem usuario, int cooldown) {
+    public HabilidadeDanoExtra(Personagem usuario) {
         this.usuario = usuario;
-        this.cooldownMaximo = cooldown;
-        this.cooldownAtual = 0;
         this.nome = "FÚRIA DO GUERREIRO";
         atualizarDescricao();
     }
@@ -24,11 +23,15 @@ public class HabilidadeDanoExtra implements HabilidadeEspecial {
         int danoEstimado = (int)(ataque * 2.0);
         this.descricao = "Libera fúria acumulada causando ~" + danoEstimado +
                 " de dano extra.\n" +
-                "   💪 Quanto mais Espírito de Luta restante, mais forte!";
+                "   💪 Quanto mais Espírito de Luta restante, mais forte!\n" +
+                "   💫 Custo: " + ValoresHabilidade.CUSTO_GUERREIRO + " de Espírito de Luta\n" +
+                "   ✨ Recupera " + ValoresHabilidade.RECUPERACAO_GUERREIRO + " de Espírito de Luta por acerto!";
     }
 
     @Override
-    public String getNome() { return nome; }
+    public String getNome() {
+        return nome;
+    }
 
     @Override
     public String getDescricao() {
@@ -37,24 +40,31 @@ public class HabilidadeDanoExtra implements HabilidadeEspecial {
     }
 
     @Override
-    public int getCooldown() { return cooldownMaximo; }
+    public boolean podeUsar() {
+        if (!(usuario instanceof AtributoEspecial)) return false;
+        AtributoEspecial attr = (AtributoEspecial) usuario;
+        return attr.getValorAtual() >= ValoresHabilidade.CUSTO_GUERREIRO;
+    }
 
     @Override
-    public int getCooldownAtual() { return cooldownAtual; }
-
-    @Override
-    public boolean estaPronta() { return cooldownAtual == 0; }
+    public void recarregarAposAcerto() {
+        if (!(usuario instanceof AtributoEspecial)) return;
+        AtributoEspecial attr = (AtributoEspecial) usuario;
+        attr.recarregar(ValoresHabilidade.RECUPERACAO_GUERREIRO);
+        System.out.println("✨ +" + ValoresHabilidade.RECUPERACAO_GUERREIRO + " de " + attr.getNomeAtributo() + " recuperado!");
+    }
 
     @Override
     public int executar(Inimigo alvo) {
-        if (!estaPronta()) {
-            System.out.println("⏳ Habilidade em cooldown!");
+        if (!podeUsar()) {
+            System.out.println("❌ " + usuario.getNome() + " não tem " +
+                    ((AtributoEspecial) usuario).getNomeAtributo() + " suficiente!");
             return 0;
         }
 
         // ========== LÓGICA COM ATRIBUTO ESPECIAL ==========
         AtributoEspecial attr = (AtributoEspecial) usuario;
-        int custo = 40;
+        int custo = ValoresHabilidade.CUSTO_GUERREIRO;
 
         // Verifica se tem recurso suficiente
         if (!attr.consumir(custo)) {
@@ -87,18 +97,9 @@ public class HabilidadeDanoExtra implements HabilidadeEspecial {
         alvo.tomarDano(danoTotal);
 
         // O ímpeto da batalha recupera um pouco do espírito
-        attr.recarregar(8);
-        System.out.println("✨ +8 de " + attr.getNomeAtributo() + " recuperado!");
+        attr.recarregar(ValoresHabilidade.RECUPERACAO_GUERREIRO);
+        System.out.println("✨ +" + ValoresHabilidade.RECUPERACAO_GUERREIRO + " de " + attr.getNomeAtributo() + " recuperado!");
 
-        cooldownAtual = cooldownMaximo;
         return danoTotal;
     }
-
-    @Override
-    public void reduzirCooldown() {
-        if (cooldownAtual > 0) cooldownAtual--;
-    }
-
-    @Override
-    public void resetarCooldown() { cooldownAtual = 0; }
 }

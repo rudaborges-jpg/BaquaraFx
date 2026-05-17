@@ -1,21 +1,20 @@
+// 📁 habilidades/HabilidadePoderMagico.java
+
 package com.baquara.habilidades;
 
 import com.baquara.modelo.Inimigo;
 import com.baquara.modelo.Personagem;
 import com.baquara.modelo.AtributoEspecial;
+import com.baquara.modelo.ValoresHabilidade;
 
 public class HabilidadePoderMagico implements HabilidadeEspecial {
     private Personagem usuario;
-    private int cooldownMaximo;
-    private int cooldownAtual;
     private String nome;
     private String descricao;
     private int conhecimento;
 
-    public HabilidadePoderMagico(Personagem usuario, int cooldown) {
+    public HabilidadePoderMagico(Personagem usuario) {
         this.usuario = usuario;
-        this.cooldownMaximo = cooldown;
-        this.cooldownAtual = 0;
         this.nome = "SABEDORIA ANCESTRAL";
         this.conhecimento = 0;
         atualizarDescricao();
@@ -28,11 +27,15 @@ public class HabilidadePoderMagico implements HabilidadeEspecial {
         this.descricao = "Conjura sabedoria arcana causando ~" + danoEstimado +
                 " de dano e curando ~" + curaEstimada + ".\n" +
                 "   📚 Conhecimento acumulado aumenta poder!\n" +
-                "   💙 Recupera mana após o uso!";
+                "   💙 Recupera mana após o uso!\n" +
+                "   💫 Custo: " + ValoresHabilidade.CUSTO_SABIO + " de Mana\n" +
+                "   ✨ Recupera " + ValoresHabilidade.RECUPERACAO_SABIO + " de Mana por acerto!";
     }
 
     @Override
-    public String getNome() { return nome; }
+    public String getNome() {
+        return nome;
+    }
 
     @Override
     public String getDescricao() {
@@ -41,24 +44,31 @@ public class HabilidadePoderMagico implements HabilidadeEspecial {
     }
 
     @Override
-    public int getCooldown() { return cooldownMaximo; }
+    public boolean podeUsar() {
+        if (!(usuario instanceof AtributoEspecial)) return false;
+        AtributoEspecial attr = (AtributoEspecial) usuario;
+        return attr.getValorAtual() >= ValoresHabilidade.CUSTO_SABIO;
+    }
 
     @Override
-    public int getCooldownAtual() { return cooldownAtual; }
-
-    @Override
-    public boolean estaPronta() { return cooldownAtual == 0; }
+    public void recarregarAposAcerto() {
+        if (!(usuario instanceof AtributoEspecial)) return;
+        AtributoEspecial attr = (AtributoEspecial) usuario;
+        attr.recarregar(ValoresHabilidade.RECUPERACAO_SABIO);
+        System.out.println("✨ +" + ValoresHabilidade.RECUPERACAO_SABIO + " de " + attr.getNomeAtributo() + " recuperado!");
+    }
 
     @Override
     public int executar(Inimigo alvo) {
-        if (!estaPronta()) {
-            System.out.println("⏳ Habilidade em cooldown!");
+        if (!podeUsar()) {
+            System.out.println("❌ " + usuario.getNome() + " não tem " +
+                    ((AtributoEspecial) usuario).getNomeAtributo() + " suficiente!");
             return 0;
         }
 
         // ========== LÓGICA COM ATRIBUTO ESPECIAL ==========
         AtributoEspecial attr = (AtributoEspecial) usuario;
-        int custo = 30;
+        int custo = ValoresHabilidade.CUSTO_SABIO;
 
         // Verifica se tem recurso suficiente
         if (!attr.consumir(custo)) {
@@ -97,19 +107,10 @@ public class HabilidadePoderMagico implements HabilidadeEspecial {
         System.out.println("💚 Curou " + cura + " de vida!");
 
         // Recupera mana
-        int recuperacao = 10 + (conhecimento / 2);
+        int recuperacao = ValoresHabilidade.RECUPERACAO_SABIO + (conhecimento / 2);
         attr.recarregar(recuperacao);
         System.out.println("🔮 +" + recuperacao + " de " + attr.getNomeAtributo() + " recuperado!");
 
-        cooldownAtual = cooldownMaximo;
         return dano;
     }
-
-    @Override
-    public void reduzirCooldown() {
-        if (cooldownAtual > 0) cooldownAtual--;
-    }
-
-    @Override
-    public void resetarCooldown() { cooldownAtual = 0; }
 }

@@ -97,7 +97,6 @@ public class TelaBatalhaController {
         this.jogador = jogador;
         this.bancoPerguntas = new BancoPerguntas();
 
-        // INICIALIZA O SISTEMA DE ROTAS
         this.gerenciadorRotas = new GerenciadorRotas();
         PerTipo tipo = jogador.getPersonagem().getTipo();
         this.rotaAtual = gerenciadorRotas.getRota(tipo);
@@ -105,7 +104,7 @@ public class TelaBatalhaController {
         this.estagioIndex = 0;
         this.estagioAtualNumero = 1;
 
-        inicializarHabilidadeDoPersonagem();
+        inicializarHabilidadeDoPersonagem();  // ⭐ MODIFICAR este método
         atualizarStatusJogador();
         atualizarStatusDetalhadoJogador();
 
@@ -116,34 +115,41 @@ public class TelaBatalhaController {
         adicionarDialogoNormal("🗺️ Rota: " + rotaAtual.getNomeRota());
 
         Personagem p = jogador.getPersonagem();
-        if (p.getHabilidade() != null) {
+        HabilidadeEspecial hab = p.getHabilidade();  // ✅ Pega a habilidade
+
+        if (hab != null) {
             adicionarDialogoNormal("🌟 Habilidade: " + p.getHabilidade().getNome());
             adicionarDialogoNormal("   " + p.getHabilidade().getDescricao());
+
+            // Mostra o custo da habilidade
+            AtributoEspecial attr = (AtributoEspecial) p;
+            adicionarDialogoNormal("   💫 Custo: " + getCustoHabilidade(p) + " de " + attr.getNomeAtributo());
+            adicionarDialogoNormal("   ✨ Recupera " + getRecuperacaoHabilidade(p) + " de " + attr.getNomeAtributo() + " por acerto!");
         }
 
-        atualizarInterfaceHabilidade();
+        atualizarBotaoHabilidade();  // NOVO método
     }
 
     private void inicializarHabilidadeDoPersonagem() {
         Personagem p = jogador.getPersonagem();
 
         if (p instanceof Paladino && p.getHabilidade() == null) {
-            p.setHabilidade(new com.baquara.habilidades.HabilidadeCura(p, 8));
+            p.setHabilidade(new com.baquara.habilidades.HabilidadeCura(p));
         } else if (p instanceof Guerreiro && p.getHabilidade() == null) {
-            p.setHabilidade(new com.baquara.habilidades.HabilidadeDanoExtra(p, 8));
+            p.setHabilidade(new com.baquara.habilidades.HabilidadeDanoExtra(p));
         } else if (p instanceof Cacadora && p.getHabilidade() == null) {
-            p.setHabilidade(new com.baquara.habilidades.HabilidadeCritico(p, 8));
+            p.setHabilidade(new com.baquara.habilidades.HabilidadeCritico(p));
         } else if (p instanceof Sabio && p.getHabilidade() == null) {
-            p.setHabilidade(new com.baquara.habilidades.HabilidadePoderMagico(p, 8));
+            p.setHabilidade(new com.baquara.habilidades.HabilidadePoderMagico(p));
         } else if (p instanceof Arcanista && p.getHabilidade() == null) {
-            p.setHabilidade(new com.baquara.habilidades.HabilidadeDestruicaoTotal(p, 8));
+            p.setHabilidade(new com.baquara.habilidades.HabilidadeDestruicaoTotal(p));
         }
     }
-
-    private void atualizarInterfaceHabilidade() {
+    private void atualizarBotaoHabilidade() {
         Platform.runLater(() -> {
             Personagem p = jogador.getPersonagem();
             HabilidadeEspecial hab = p.getHabilidade();
+
 
             if (hab == null) {
                 btnHabilidade.setDisable(true);
@@ -151,24 +157,36 @@ public class TelaBatalhaController {
                 return;
             }
 
-            if (hab.estaPronta()) {
+            if (hab.podeUsar()) {
                 btnHabilidade.setDisable(false);
-                lblCooldown.setText("✨ PRONTA!");
+                AtributoEspecial attr = (AtributoEspecial) p;
+                lblCooldown.setText("✨ PRONTA! (" + attr.getValorAtual() + "/" + attr.getValorMaximo() + " " + attr.getNomeAtributo() + ")");
                 lblCooldown.setStyle("-fx-text-fill: #4CAF50;");
             } else {
                 btnHabilidade.setDisable(true);
-                lblCooldown.setText("⏳ Cooldown: " + hab.getCooldownAtual() + " rodada(s)");
-                lblCooldown.setStyle("-fx-text-fill: #FF9800;");
+                AtributoEspecial attr = (AtributoEspecial) p;
+                lblCooldown.setText("❌ " + attr.getNomeAtributo() + " insuficiente! (Precisa: " + getCustoHabilidade(p) + ")");
+                lblCooldown.setStyle("-fx-text-fill: #ff4444;");
             }
         });
     }
 
-    private void reduzirCooldown() {
-        Personagem p = jogador.getPersonagem();
-        if (p != null && p.getHabilidade() != null) {
-            p.reduzirCooldownHabilidade();
-            atualizarInterfaceHabilidade();
-        }
+    private int getCustoHabilidade(Personagem p) {
+        if (p instanceof Paladino) return ValoresHabilidade.CUSTO_PALADINO;
+        if (p instanceof Guerreiro) return ValoresHabilidade.CUSTO_GUERREIRO;
+        if (p instanceof Cacadora) return ValoresHabilidade.CUSTO_CACADORA;
+        if (p instanceof Sabio) return ValoresHabilidade.CUSTO_SABIO;
+        if (p instanceof Arcanista) return ValoresHabilidade.CUSTO_ARCANISTA;
+        return 30;
+    }
+
+    private int getRecuperacaoHabilidade(Personagem p) {
+        if (p instanceof Paladino) return ValoresHabilidade.RECUPERACAO_PALADINO;
+        if (p instanceof Guerreiro) return ValoresHabilidade.RECUPERACAO_GUERREIRO;
+        if (p instanceof Cacadora) return ValoresHabilidade.RECUPERACAO_CACADORA;
+        if (p instanceof Sabio) return ValoresHabilidade.RECUPERACAO_SABIO;
+        if (p instanceof Arcanista) return ValoresHabilidade.RECUPERACAO_ARCANISTA;
+        return 5;
     }
 
     @FXML
@@ -249,7 +267,7 @@ public class TelaBatalhaController {
             String nomeInimigo = "🛡️ Guardião do " + estagio.getNome() + " 🛡️";
 
             // CÁLCULO DE VIDA E ATAQUE PROGRESSIVOS (mais desafiador)
-            int vidaBase = 80 + (numeroEstagio * 25);
+            int vidaBase = 60 + (numeroEstagio * 100);
             int ataqueBase = 20 + (numeroEstagio * 4);
             int defesaBase = 5 + (numeroEstagio * 3);
 
@@ -294,16 +312,12 @@ public class TelaBatalhaController {
             ((AtributoEspecial) p).recarregarPorEstagio(estagioAtualNumero);
         }
 
-        // Recarrega cooldown da habilidade
-        if (p.getHabilidade() != null) {
-            p.resetarCooldownHabilidade();
-            adicionarDialogoNormal("⏱️ Cooldown da habilidade foi resetado!");
-        }
 
         adicionarDialogoNormal("\n🎵 Prepare-se para o próximo desafio...\n");
 
         // Carrega próximo inimigo
         carregarProximoInimigo();
+        atualizarBotaoHabilidade();
     }
 
     private String getInimigoSprite(int estagio) {
@@ -418,6 +432,18 @@ public class TelaBatalhaController {
 
         if (correta) {
             perguntasCertas++;
+            Personagem p = jogador.getPersonagem();
+            HabilidadeEspecial hab = p.getHabilidade();
+            if (hab != null) {
+                hab.recarregarAposAcerto();  // ✅ Chama na habilidade
+                adicionarDialogoNormal("✨ +" + getRecuperacaoHabilidade(p) + " de " +
+                        ((AtributoEspecial) p).getNomeAtributo() + " recuperado!");
+
+                atualizarStatusJogador();
+                atualizarBotaoHabilidade();
+            }
+
+
             int danoBruto = calcularDano(perguntaAtual.getDificuldade());
 
             int defesaInimigo = inimigoAtual.getDefesa();
@@ -449,7 +475,7 @@ public class TelaBatalhaController {
 
             if (jogador.getPersonagem().getNivel() > nivelAntes) {
                 adicionarDialogoAcerto("🎉 " + jogador.getPersonagem().getNome() + " subiu para o NÍVEL " + jogador.getPersonagem().getNivel() + "!");
-                Personagem p = jogador.getPersonagem();
+                p = jogador.getPersonagem();
                 adicionarDialogoNormal("   ❤️ Vida +40 | ⚔️ Ataque +5 | 🛡️ Defesa +3");
             }
 
@@ -485,7 +511,6 @@ public class TelaBatalhaController {
             atualizarStatusInimigo();
             atualizarStatusDetalhadoInimigo();
 
-            reduzirCooldown();
             voltarAoMenu();
 
         } else {
@@ -519,7 +544,6 @@ public class TelaBatalhaController {
                 return;
             }
 
-            reduzirCooldown();
             voltarAoMenu();
         }
     }
@@ -596,9 +620,11 @@ public class TelaBatalhaController {
             return;
         }
 
-        if (!hab.estaPronta()) {
-            adicionarDialogoErro("⏳ Habilidade em cooldown! Aguarde " +
-                    hab.getCooldownAtual() + " rodada(s).");
+        if (!hab.podeUsar()) {
+            AtributoEspecial attr = (AtributoEspecial) p;
+            adicionarDialogoErro("❌ " + attr.getNomeAtributo() + " insuficiente! " +
+                    "Você tem " + attr.getValorAtual() + "/" + attr.getValorMaximo() +
+                    ". Precisa de " + getCustoHabilidade(p) + "!");
             return;
         }
 
@@ -611,7 +637,8 @@ public class TelaBatalhaController {
         adicionarDialogoAcerto("💥 Causou " + dano + " de dano devastador!");
         atualizarStatusInimigo();
         atualizarStatusDetalhadoInimigo();
-        atualizarInterfaceHabilidade();
+        atualizarBotaoHabilidade();  // Atualiza o botão após usar
+        atualizarStatusJogador();     // Atualiza a barra do atributo
 
         if (!inimigoAtual.vivo()) {
             Estagio estagioAtualObj = estagios.get(estagioIndex);
@@ -628,6 +655,12 @@ public class TelaBatalhaController {
             jogador.addPontuacao(bonus);
             adicionarDialogoNormal("🏆 Bônus de estágio: +" + bonus + " pontos!");
 
+            // ⭐ RECUPERA ATRIBUTO AO VENCER ESTÁGIO
+            if (hab != null) {
+                hab.recarregarAposAcerto();
+                hab.recarregarAposAcerto(); // Recupera dobrado
+            }
+
             avancarEstagio();
 
             if (estagioIndex >= estagios.size()) {
@@ -635,7 +668,6 @@ public class TelaBatalhaController {
             }
         }
 
-        reduzirCooldown();
         voltarAoMenu();
     }
 

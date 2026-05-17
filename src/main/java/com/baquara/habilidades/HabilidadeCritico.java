@@ -1,22 +1,21 @@
+// 📁 habilidades/HabilidadeCritico.java
+
 package com.baquara.habilidades;
 
 import com.baquara.modelo.Inimigo;
 import com.baquara.modelo.Personagem;
 import com.baquara.modelo.AtributoEspecial;
+import com.baquara.modelo.ValoresHabilidade;
 import java.util.Random;
 
 public class HabilidadeCritico implements HabilidadeEspecial {
     private Personagem usuario;
-    private int cooldownMaximo;
-    private int cooldownAtual;
     private String nome;
     private String descricao;
     private Random random;
 
-    public HabilidadeCritico(Personagem usuario, int cooldown) {
+    public HabilidadeCritico(Personagem usuario) {
         this.usuario = usuario;
-        this.cooldownMaximo = cooldown;
-        this.cooldownAtual = 0;
         this.random = new Random();
         this.nome = "CHUVA DE FLECHAS";
         atualizarDescricao();
@@ -27,11 +26,15 @@ public class HabilidadeCritico implements HabilidadeEspecial {
         int danoEstimado = (int)(ataque * 1.8);
         this.descricao = "Dispara múltiplas flechas causando ~" + danoEstimado +
                 " de dano + sangramento.\n" +
-                "   🎯 Chance de crítico aumenta com Penetração restante!";
+                "   🎯 Chance de crítico aumenta com Penetração restante!\n" +
+                "   💫 Custo: " + ValoresHabilidade.CUSTO_CACADORA + " de Penetração\n" +
+                "   ✨ Recupera " + ValoresHabilidade.RECUPERACAO_CACADORA + " de Penetração por acerto!";
     }
 
     @Override
-    public String getNome() { return nome; }
+    public String getNome() {
+        return nome;
+    }
 
     @Override
     public String getDescricao() {
@@ -40,24 +43,31 @@ public class HabilidadeCritico implements HabilidadeEspecial {
     }
 
     @Override
-    public int getCooldown() { return cooldownMaximo; }
+    public boolean podeUsar() {
+        if (!(usuario instanceof AtributoEspecial)) return false;
+        AtributoEspecial attr = (AtributoEspecial) usuario;
+        return attr.getValorAtual() >= ValoresHabilidade.CUSTO_CACADORA;
+    }
 
     @Override
-    public int getCooldownAtual() { return cooldownAtual; }
-
-    @Override
-    public boolean estaPronta() { return cooldownAtual == 0; }
+    public void recarregarAposAcerto() {
+        if (!(usuario instanceof AtributoEspecial)) return;
+        AtributoEspecial attr = (AtributoEspecial) usuario;
+        attr.recarregar(ValoresHabilidade.RECUPERACAO_CACADORA);
+        System.out.println("✨ +" + ValoresHabilidade.RECUPERACAO_CACADORA + " de " + attr.getNomeAtributo() + " recuperado!");
+    }
 
     @Override
     public int executar(Inimigo alvo) {
-        if (!estaPronta()) {
-            System.out.println("⏳ Habilidade em cooldown!");
+        if (!podeUsar()) {
+            System.out.println("❌ " + usuario.getNome() + " não tem " +
+                    ((AtributoEspecial) usuario).getNomeAtributo() + " suficiente!");
             return 0;
         }
 
         // ========== LÓGICA COM ATRIBUTO ESPECIAL ==========
         AtributoEspecial attr = (AtributoEspecial) usuario;
-        int custo = 35;
+        int custo = ValoresHabilidade.CUSTO_CACADORA;
 
         // Verifica se tem recurso suficiente
         if (!attr.consumir(custo)) {
@@ -101,18 +111,9 @@ public class HabilidadeCritico implements HabilidadeEspecial {
         alvo.tomarDano(sangramento);
 
         // Recupera um pouco de penetração
-        attr.recarregar(5);
-        System.out.println("✨ +5 de " + attr.getNomeAtributo() + " recuperado!");
+        attr.recarregar(ValoresHabilidade.RECUPERACAO_CACADORA);
+        System.out.println("✨ +" + ValoresHabilidade.RECUPERACAO_CACADORA + " de " + attr.getNomeAtributo() + " recuperado!");
 
-        cooldownAtual = cooldownMaximo;
         return dano + sangramento;
     }
-
-    @Override
-    public void reduzirCooldown() {
-        if (cooldownAtual > 0) cooldownAtual--;
-    }
-
-    @Override
-    public void resetarCooldown() { cooldownAtual = 0; }
 }

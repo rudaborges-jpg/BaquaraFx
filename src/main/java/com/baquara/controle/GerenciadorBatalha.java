@@ -52,29 +52,50 @@ public class GerenciadorBatalha {
         inicializarHabilidades();
     }
 
-    // ========= INICIALIZAÇÃO DE HABILIDADES =========
+    // ========= INICIALIZAÇÃO DE HABILIDADES (SEM COOLDOWN) =========
 
     private void inicializarHabilidades() {
         Personagem p = jogador.getPersonagem();
 
         if (p instanceof Paladino) {
-            p.setHabilidade(new HabilidadeCura(p, 8));
+            p.setHabilidade(new HabilidadeCura(p));
         } else if (p instanceof Guerreiro) {
-            p.setHabilidade(new HabilidadeDanoExtra(p, 8));
+            p.setHabilidade(new HabilidadeDanoExtra(p));
         } else if (p instanceof Cacadora) {
-            p.setHabilidade(new HabilidadeCritico(p, 8));
+            p.setHabilidade(new HabilidadeCritico(p));
         } else if (p instanceof Sabio) {
-            p.setHabilidade(new HabilidadePoderMagico(p, 8));
+            p.setHabilidade(new HabilidadePoderMagico(p));
         } else if (p instanceof Arcanista) {
-            p.setHabilidade(new HabilidadeDestruicaoTotal(p, 8));
+            p.setHabilidade(new HabilidadeDestruicaoTotal(p));
         }
 
         if (p.getHabilidade() != null) {
+            AtributoEspecial attr = (AtributoEspecial) p;
             System.out.println("\n🌟 " + p.getNome() + " possui a habilidade: " +
                     p.getHabilidade().getNome());
             System.out.println("   " + p.getHabilidade().getDescricao());
-            System.out.println("   ⏱️ Cooldown: " + p.getHabilidade().getCooldown() + " rodadas");
+            System.out.println("   💫 Custo: " + getCustoHabilidade(p) + " de " + attr.getNomeAtributo());
+            System.out.println("   ✨ Recupera " + getRecuperacaoHabilidade(p) + " de " + attr.getNomeAtributo() + " por acerto!");
         }
+    }
+
+    // Métodos auxiliares para custo e recuperação
+    private int getCustoHabilidade(Personagem p) {
+        if (p instanceof Paladino) return 30;
+        if (p instanceof Guerreiro) return 40;
+        if (p instanceof Cacadora) return 35;
+        if (p instanceof Sabio) return 30;
+        if (p instanceof Arcanista) return 50;
+        return 30;
+    }
+
+    private int getRecuperacaoHabilidade(Personagem p) {
+        if (p instanceof Paladino) return 5;
+        if (p instanceof Guerreiro) return 8;
+        if (p instanceof Cacadora) return 5;
+        if (p instanceof Sabio) return 10;
+        if (p instanceof Arcanista) return 3;
+        return 5;
     }
 
     // ========= INÍCIO DO JOGO =========
@@ -121,15 +142,23 @@ public class GerenciadorBatalha {
             Personagem p = jogador.getPersonagem();
             p.recarregarPorEstagio(estagio.getNumero());
 
+            // ⭐ RECUPERA UM POUCO DO ATRIBUTO AO VENCER ESTÁGIO
+            if (p.getHabilidade() != null) {
+                p.getHabilidade().recarregarAposAcerto();
+                p.getHabilidade().recarregarAposAcerto(); // Recupera dobrado
+            }
+
             // Cura parcial após estágio
             p.curar(30);
-            p.resetarCooldownHabilidade();
+
+            // ⭐ REMOVIDO: resetarCooldownHabilidade()
 
             estagioIndex++;
 
             if (estagioIndex < rotaAtual.getTotalEstagios() && jogador.vivo()) {
                 System.out.println("\n✨ Você avança para o próximo estágio! +30 de vida! ✨");
-                System.out.println("⏱️ Cooldown de habilidade resetado!");
+                System.out.println("✨ +" + getRecuperacaoHabilidade(p) * 2 + " de " +
+                        ((AtributoEspecial) p).getNomeAtributo() + " recuperado!");
                 System.out.print("\nPressione ENTER para continuar...");
                 scanner.nextLine();
             }
@@ -146,8 +175,10 @@ public class GerenciadorBatalha {
     private void criarInimigoParaEstagio(Estagio estagio) {
         int vidaBase = 60 + (estagio.getNumero() * 100);
         int ataqueBase = 25 + (estagio.getNumero() * 5);
+        int defesaBase = 5 + (estagio.getNumero() * 3);
         String nome = "🗡️ Guardião do " + estagio.getNome() + " 🗡️";
-        this.inimigoAtual = new Inimigo(nome, vidaBase, ataqueBase, estagio.getNumero());
+
+        this.inimigoAtual = new Inimigo(nome, vidaBase, ataqueBase, defesaBase, estagio.getNumero());
     }
 
     // ========= GERENCIAMENTO DE PERGUNTAS =========
@@ -220,14 +251,18 @@ public class GerenciadorBatalha {
             jogador.mostrarStatus();
             inimigoAtual.mostrarStatus();
 
-            // Mostra status da habilidade
+            // Mostra status da habilidade (sem cooldown)
             Personagem personagem = jogador.getPersonagem();
             if (personagem.getHabilidade() != null) {
-                if (personagem.isHabilidadePronta()) {
+                AtributoEspecial attr = (AtributoEspecial) personagem;
+                if (personagem.getHabilidade().podeUsar()) {
                     System.out.println("✨ HABILIDADE ESPECIAL PRONTA! ✨");
+                    System.out.println("   💫 Custo: " + getCustoHabilidade(personagem) + " de " + attr.getNomeAtributo());
+                    System.out.println("   📊 " + attr.getNomeAtributo() + ": " + attr.getValorAtual() + "/" + attr.getValorMaximo());
                 } else {
-                    System.out.println("⏳ Habilidade em cooldown: " +
-                            personagem.getCooldownAtual() + " rodadas");
+                    System.out.println("❌ " + attr.getNomeAtributo() + " insuficiente! (Precisa: " +
+                            getCustoHabilidade(personagem) + ")");
+                    System.out.println("   📊 " + attr.getNomeAtributo() + ": " + attr.getValorAtual() + "/" + attr.getValorMaximo());
                 }
             }
 
@@ -239,23 +274,23 @@ public class GerenciadorBatalha {
                     realizarRodadaPergunta(estagio);
                     break;
                 case 2:
-                    if (personagem.getHabilidade() != null && personagem.isHabilidadePronta()) {
+                    if (personagem.getHabilidade() != null && personagem.getHabilidade().podeUsar()) {
                         realizarRodadaHabilidade(estagio);
                     } else if (personagem.getHabilidade() == null) {
                         System.out.println("\n❌ Seu personagem não possui habilidade especial!");
                         System.out.println("   Voltando ao ataque normal...");
                         realizarRodadaPergunta(estagio);
                     } else {
-                        System.out.println("\n⏳ Habilidade ainda em cooldown! " +
-                                "Aguarde " + personagem.getCooldownAtual() + " rodadas.");
+                        System.out.println("\n❌ " + ((AtributoEspecial) personagem).getNomeAtributo() +
+                                " insuficiente! Precisa de " + getCustoHabilidade(personagem) + ".");
                         System.out.println("   Voltando ao ataque normal...");
                         realizarRodadaPergunta(estagio);
                     }
                     break;
             }
 
-            // Atualiza cooldown da habilidade
-            personagem.reduzirCooldownHabilidade();
+            // ⭐ REMOVIDO: Atualiza cooldown da habilidade (não existe mais)
+            // personagem.reduzirCooldownHabilidade();
 
             // Verifica vitória
             if (!inimigoAtual.vivo()) {
@@ -292,9 +327,13 @@ public class GerenciadorBatalha {
             System.out.println("1 🗡️ Responder Pergunta (Ataque Normal)");
 
             if (personagem.getHabilidade() != null) {
-                String status = personagem.isHabilidadePronta() ? "✅ PRONTA" : "⏳ COOLDOWN";
+                AtributoEspecial attr = (AtributoEspecial) personagem;
+                String status = personagem.getHabilidade().podeUsar() ?
+                        "✅ PRONTA (" + attr.getValorAtual() + "/" + attr.getValorMaximo() + ")" :
+                        "❌ RECURSO INSUFICIENTE";
                 System.out.println("2 🌟 Usar Habilidade Especial - " +
                         personagem.getHabilidade().getNome() + " [" + status + "]");
+                System.out.println("   💫 Custo: " + getCustoHabilidade(personagem) + " de " + attr.getNomeAtributo());
             } else {
                 System.out.println("2 ❌ Sem habilidade especial");
             }
@@ -364,6 +403,14 @@ public class GerenciadorBatalha {
             perguntasCertas++;
             System.out.println("\n✅ CORRETO!");
 
+            // ⭐ RECUPERA ATRIBUTO ESPECIAL AO ACERTAR PERGUNTA
+            Personagem p = jogador.getPersonagem();
+            if (p.getHabilidade() != null) {
+                p.getHabilidade().recarregarAposAcerto();
+                System.out.println("✨ +" + getRecuperacaoHabilidade(p) + " de " +
+                        ((AtributoEspecial) p).getNomeAtributo() + " recuperado!");
+            }
+
             // Calcula e aplica dano
             int dano = calcularDano(pergunta.getDificuldade(), estagio);
             inimigoAtual.tomarDano(dano);
@@ -411,6 +458,10 @@ public class GerenciadorBatalha {
             return;
         }
 
+        AtributoEspecial attr = (AtributoEspecial) personagem;
+        System.out.println("\n💫 Custo: " + getCustoHabilidade(personagem) + " de " + attr.getNomeAtributo());
+        System.out.println("📊 " + attr.getNomeAtributo() + " atual: " + attr.getValorAtual() + "/" + attr.getValorMaximo());
+
         habilidadesUsadas++;
         int dano = personagem.usarHabilidade(inimigoAtual);
         danoTotalCausado += dano;
@@ -418,6 +469,7 @@ public class GerenciadorBatalha {
         if (dano > 0) {
             System.out.println("\n💥 " + personagem.getNome() + " causa " + dano +
                     " de dano com sua habilidade especial!");
+            System.out.println("📊 " + attr.getNomeAtributo() + " restante: " + attr.getValorAtual() + "/" + attr.getValorMaximo());
         }
     }
 
@@ -491,6 +543,7 @@ public class GerenciadorBatalha {
 
         return Math.max(20, experiencia);
     }
+
     private void exibirTelaDerrota() {
         System.out.println("\n" + "=".repeat(60));
         System.out.println("💀💀💀 GAME OVER 💀💀💀");
