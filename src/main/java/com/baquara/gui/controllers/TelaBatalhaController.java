@@ -306,12 +306,6 @@ public class TelaBatalhaController {
         jogador.getPersonagem().curar(30);
         adicionarDialogoNormal("\n✨ +30 de vida recuperada pelo avanço de estágio!");
 
-        // Recarrega atributo especial
-        Personagem p = jogador.getPersonagem();
-        if (p instanceof AtributoEspecial) {
-            ((AtributoEspecial) p).recarregarPorEstagio(estagioAtualNumero);
-        }
-
 
         adicionarDialogoNormal("\n🎵 Prepare-se para o próximo desafio...\n");
 
@@ -655,11 +649,6 @@ public class TelaBatalhaController {
             jogador.addPontuacao(bonus);
             adicionarDialogoNormal("🏆 Bônus de estágio: +" + bonus + " pontos!");
 
-            // ⭐ RECUPERA ATRIBUTO AO VENCER ESTÁGIO
-            if (hab != null) {
-                hab.recarregarAposAcerto();
-                hab.recarregarAposAcerto(); // Recupera dobrado
-            }
 
             avancarEstagio();
 

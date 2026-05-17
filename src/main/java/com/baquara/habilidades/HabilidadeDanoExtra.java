@@ -96,10 +96,6 @@ public class HabilidadeDanoExtra implements HabilidadeEspecial {
 
         alvo.tomarDano(danoTotal);
 
-        // O ímpeto da batalha recupera um pouco do espírito
-        attr.recarregar(ValoresHabilidade.RECUPERACAO_GUERREIRO);
-        System.out.println("✨ +" + ValoresHabilidade.RECUPERACAO_GUERREIRO + " de " + attr.getNomeAtributo() + " recuperado!");
-
         return danoTotal;
     }
 }

@@ -12,9 +12,6 @@ public abstract class Personagem {
     protected int nivel;
     protected int experiencia;
 
-    // ⭐ REMOVIDOS: spatkCooldown e atualCooldown
-    // protected int spatkCooldown;
-    // protected int atualCooldown;
 
     protected HabilidadeEspecial habilidade;
 
@@ -27,8 +24,6 @@ public abstract class Personagem {
         this.defesa = defesa;
         this.nivel = 1;
         this.experiencia = 0;
-        // ⭐ REMOVIDO: this.spatkCooldown = 3;
-        // ⭐ REMOVIDO: this.atualCooldown = 0;
     }
 
     // Getters
@@ -41,8 +36,6 @@ public abstract class Personagem {
     public int getNivel() { return nivel; }
     public int getExperiencia() { return experiencia; }
 
-    // ⭐ REMOVIDOS: taProntaHabilidade(), getCooldownAtual()
-    // public boolean taProntaHabilidade() { return atualCooldown == 0; }
 
     public void setHabilidade(HabilidadeEspecial habilidade) {
         this.habilidade = habilidade;
@@ -52,27 +45,6 @@ public abstract class Personagem {
         return habilidade;
     }
 
-    // ⭐ REMOVIDO - não precisa mais verificar cooldown
-    // public boolean isHabilidadePronta() {
-    //     return habilidade != null && habilidade.estaPronta();
-    // }
-
-    // ⭐ REMOVIDOS: getCooldownAtual(), reduzirCooldownHabilidade(), resetarCooldownHabilidade()
-    // public int getCooldownAtual() {
-    //     return habilidade != null ? habilidade.getCooldownAtual() : 0;
-    // }
-    //
-    // public void reduzirCooldownHabilidade() {
-    //     if (habilidade != null) {
-    //         habilidade.reduzirCooldown();
-    //     }
-    // }
-    //
-    // public void resetarCooldownHabilidade() {
-    //     if (habilidade != null) {
-    //         habilidade.resetarCooldown();
-    //     }
-    // }
 
     public int usarHabilidade(Inimigo alvo) {
         if (habilidade != null && habilidade.podeUsar()) {
@@ -144,7 +116,7 @@ public abstract class Personagem {
         System.out.println("\n🎉 " + nome + " subiu para o NÍVEL " + nivel + "!");
         System.out.println("   ❤️ Vida +" + aumentoVida + " | ⚔️ Ataque +5 | 🛡️ Defesa +3 (Total: " + defesa + ")");
 
-        recarregarPorNivel(nivel);
+        //recarregarPorNivel(nivel);
     }
 
     public void mostrarStatus() {

@@ -107,10 +107,6 @@ public class HabilidadeDestruicaoTotal implements HabilidadeEspecial {
         // Efeito elemental
         aplicarEfeitoElemental(elemento, alvo);
 
-        // Recupera um pouco de poder arcano
-        attr.recarregar(ValoresHabilidade.RECUPERACAO_ARCANISTA);
-        System.out.println("✨ +" + ValoresHabilidade.RECUPERACAO_ARCANISTA + " de " + attr.getNomeAtributo() + " recuperado!");
-
         return dano;
     }
 

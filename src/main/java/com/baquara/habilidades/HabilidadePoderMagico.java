@@ -106,11 +106,6 @@ public class HabilidadePoderMagico implements HabilidadeEspecial {
         usuario.curar(cura);
         System.out.println("💚 Curou " + cura + " de vida!");
 
-        // Recupera mana
-        int recuperacao = ValoresHabilidade.RECUPERACAO_SABIO + (conhecimento / 2);
-        attr.recarregar(recuperacao);
-        System.out.println("🔮 +" + recuperacao + " de " + attr.getNomeAtributo() + " recuperado!");
-
         return dano;
     }
 }

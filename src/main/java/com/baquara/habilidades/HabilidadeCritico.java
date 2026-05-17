@@ -110,10 +110,6 @@ public class HabilidadeCritico implements HabilidadeEspecial {
         System.out.println("🩸 Sangramento! +" + sangramento + " de dano adicional!");
         alvo.tomarDano(sangramento);
 
-        // Recupera um pouco de penetração
-        attr.recarregar(ValoresHabilidade.RECUPERACAO_CACADORA);
-        System.out.println("✨ +" + ValoresHabilidade.RECUPERACAO_CACADORA + " de " + attr.getNomeAtributo() + " recuperado!");
-
         return dano + sangramento;
     }
 }
