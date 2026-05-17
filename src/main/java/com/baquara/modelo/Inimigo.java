@@ -9,13 +9,13 @@ public class Inimigo {
     private int defesa;
     private int nivel;
 
-    public Inimigo(String nome, int vida, int ataque, int nivel) {
+    public Inimigo(String nome, int vida, int ataque, int defesa, int nivel) {
         this.nome = nome;
         this.vida = vida;
         this.vidaMax = vida;
         this.ataque = ataque;
+        this.defesa = defesa;
         this.nivel = nivel;
-        this.defesa = 5 + (nivel * 3);
     }
 
     public String getNome() { return nome; }
