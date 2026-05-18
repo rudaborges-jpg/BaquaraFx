@@ -38,6 +38,8 @@
                         <Label fx:id="lblInimigoVida" style="-fx-font-size: 8px;" text="HP: 100/100" textFill="WHITE" />
                         <Label fx:id="lblInimigoStatus" style="-fx-font-size: 8px;" text="⚔️ Ataque: 0" textFill="#ccc" />
                         <Label fx:id="lblInimigoDefesa" style="-fx-font-size: 8px;" text="🛡️ Defesa: 0 (-0%)" textFill="#ccc" />
+                        <!-- ⭐ NOVO: Label para mostrar efeitos ativos (sangramento, debuffs) -->
+                        <Label fx:id="lblInimigoEfeitos" style="-fx-font-size: 9px; -fx-font-weight: bold; -fx-text-fill: #FF9800;" text="" wrapText="true" />
                     </children>
                 </VBox>
             </children>
@@ -64,6 +66,9 @@
                 </VBox>
             </children>
         </VBox>
+
+        <!-- ==================== ÍCONE DE SANGRAMENTO FLUTUANTE ==================== -->
+        <Label fx:id="lblSangramentoIcon" layoutX="0.0" layoutY="0.0" style="-fx-font-size: 24px;" text="" visible="false" />
 
         <!-- ==================== ÁREA INFERIOR (DIÁLOGO + MENU) ==================== -->
         <HBox spacing="15.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" maxHeight="140.0" minHeight="100.0">

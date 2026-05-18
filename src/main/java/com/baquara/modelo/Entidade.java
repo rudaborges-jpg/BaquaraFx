@@ -1,4 +1,3 @@
-// 📁 modelo/Entidade.java
 package com.baquara.modelo;
 
 import com.baquara.modelo.efeitos.EfeitoStatus;

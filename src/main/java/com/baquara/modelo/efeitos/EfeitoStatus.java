@@ -1,5 +1,4 @@
 package com.baquara.modelo.efeitos;
-
 import com.baquara.modelo.Entidade;
 
 public abstract class EfeitoStatus {
@@ -31,26 +30,13 @@ public abstract class EfeitoStatus {
         return ativo && duracaoRestante > 0;
     }
 
-    /**
-     * Aplica o efeito ao alvo (chamado quando o efeito é aplicado)
-     */
     public abstract void aplicar(Entidade alvo);
-
-    /**
-     * Remove o efeito do alvo (chamado quando o efeito expira)
-     */
     public abstract void remover(Entidade alvo);
 
-    /**
-     * Atualiza o efeito a cada rodada (opcional - pode ser sobrescrito)
-     */
     public void atualizar(Entidade alvo) {
         // Implementação padrão - pode ser sobrescrita pelas classes filhas
     }
 
-    /**
-     * Reduz a duração e retorna se ainda está ativo
-     */
     public boolean reduzirDuracao() {
         if (duracaoRestante > 0) {
             duracaoRestante--;
@@ -61,17 +47,12 @@ public abstract class EfeitoStatus {
         return ativo;
     }
 
-    /**
-     * Renova o efeito (reseta a duração)
-     */
     public void renovar() {
         this.duracaoRestante = this.duracaoMaxima;
         this.ativo = true;
+        System.out.println("🔄 " + nome + " renovado! Duração resetada para " + duracaoMaxima + " rodada(s)");
     }
 
-    /**
-     * Retorna descrição do efeito para exibição
-     */
     public String getDescricao() {
         return nome + ": " + duracaoRestante + " rodada(s) restante(s)";
     }

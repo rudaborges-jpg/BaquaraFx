@@ -10,8 +10,6 @@ public class Cacadora extends Personagem implements AtributoEspecial, Entidade {
     private int flechasPrecisas;
     private Random random;
     private double chanceCritico;
-
-    // ⭐ CAMPOS PARA EFEITOS DE STATUS
     private Map<Class<? extends EfeitoStatus>, EfeitoStatus> efeitos;
 
     public Cacadora() {
@@ -21,18 +19,12 @@ public class Cacadora extends Personagem implements AtributoEspecial, Entidade {
         this.flechasPrecisas = 0;
         this.random = new Random();
         this.chanceCritico = 0.30;
-
-        // ⭐ INICIALIZA O MAPA DE EFEITOS
         this.efeitos = new HashMap<>();
     }
-
-    // ============ GETTERS ============
 
     public int getPenetracao() { return penetracao; }
     public int getPenetracaoMaxima() { return penetracaoMaxima; }
     public int getFlechasPrecisas() { return flechasPrecisas; }
-
-    // ============ MÉTODOS DE PENETRAÇÃO ============
 
     public boolean consumirPenetracao(int quantidade) {
         if (penetracao >= quantidade) {
@@ -46,7 +38,6 @@ public class Cacadora extends Personagem implements AtributoEspecial, Entidade {
         return false;
     }
 
-    // ⭐ MÉTODO PARA RECUPERAR PENETRAÇÃO (chamado ao acertar perguntas)
     public void recuperarPenetracao(int quantidade) {
         int penetracaoAntes = penetracao;
         penetracao = Math.min(penetracaoMaxima, penetracao + quantidade);
@@ -57,7 +48,6 @@ public class Cacadora extends Personagem implements AtributoEspecial, Entidade {
         }
     }
 
-    // ⭐ RECARREGA PENETRAÇÃO AO FINALIZAR ESTÁGIO
     @Override
     public void recarregarPorEstagio(int estagioNumero) {
         int recarga = estagioNumero * 8;
@@ -66,7 +56,6 @@ public class Cacadora extends Personagem implements AtributoEspecial, Entidade {
                 " (" + penetracao + "/" + penetracaoMaxima + ")");
     }
 
-    // ⭐ RECARREGA PENETRAÇÃO AO SUBIR DE NÍVEL
     @Override
     public void recarregarPorNivel(int novoNivel) {
         penetracaoMaxima += 10;
@@ -76,47 +65,25 @@ public class Cacadora extends Personagem implements AtributoEspecial, Entidade {
         System.out.println("💫 Chance de crítico: " + (int)(chanceCritico * 100) + "%");
     }
 
-    // ============ MÉTODOS DA INTERFACE ENTIDADE ============
-
+    // Métodos da interface Entidade
     @Override
-    public int getAtaque() {
-        return ataque;
-    }
-
+    public int getAtaque() { return ataque; }
     @Override
-    public int getDefesa() {
-        return defesa;
-    }
-
+    public int getDefesa() { return defesa; }
     @Override
-    public int getVida() {
-        return vida;
-    }
-
+    public int getVida() { return vida; }
     @Override
-    public int getVidaMax() {
-        return vidaMax;
-    }
-
+    public int getVidaMax() { return vidaMax; }
     @Override
-    public void setAtaque(int ataque) {
-        this.ataque = ataque;
-    }
-
+    public void setAtaque(int ataque) { this.ataque = ataque; }
     @Override
-    public void setDefesa(int defesa) {
-        this.defesa = defesa;
-    }
-
+    public void setDefesa(int defesa) { this.defesa = defesa; }
     @Override
-    public void setVida(int vida) {
-        this.vida = Math.max(0, Math.min(vida, vidaMax));
-    }
+    public void setVida(int vida) { this.vida = Math.max(0, Math.min(vida, vidaMax)); }
 
     @Override
     public void adicionarEfeito(EfeitoStatus efeito) {
         Class<? extends EfeitoStatus> tipo = efeito.getClass();
-
         if (efeitos.containsKey(tipo)) {
             EfeitoStatus existente = efeitos.get(tipo);
             existente.renovar();
@@ -139,8 +106,7 @@ public class Cacadora extends Personagem implements AtributoEspecial, Entidade {
 
     @Override
     public boolean temEfeito(Class<? extends EfeitoStatus> tipoEfeito) {
-        return efeitos.containsKey(tipoEfeito) &&
-                efeitos.get(tipoEfeito).estaAtivo();
+        return efeitos.containsKey(tipoEfeito) && efeitos.get(tipoEfeito).estaAtivo();
     }
 
     @Override
@@ -152,7 +118,6 @@ public class Cacadora extends Personagem implements AtributoEspecial, Entidade {
     @Override
     public void atualizarEfeitos() {
         List<Class<? extends EfeitoStatus>> paraRemover = new ArrayList<>();
-
         for (EfeitoStatus efeito : efeitos.values()) {
             if (efeito.estaAtivo()) {
                 efeito.atualizar(this);
@@ -163,7 +128,6 @@ public class Cacadora extends Personagem implements AtributoEspecial, Entidade {
                 paraRemover.add(efeito.getClass());
             }
         }
-
         for (Class<? extends EfeitoStatus> tipo : paraRemover) {
             removerEfeito(tipo);
         }
@@ -176,8 +140,6 @@ public class Cacadora extends Personagem implements AtributoEspecial, Entidade {
         efeitos.clear();
         System.out.println("✨ Todos os efeitos de " + nome + " foram removidos!");
     }
-
-    // ============ HABILIDADE ESPECIAL COM SANGRAMENTO ============
 
     @Override
     public void usarHabilidadeEspecial(Personagem alvo) {
@@ -195,7 +157,6 @@ public class Cacadora extends Personagem implements AtributoEspecial, Entidade {
             }
         }
 
-        // Calcula dano inicial
         int danoInicial = 45 + (nivel * 4);
         boolean critico = random.nextDouble() < chanceCritico;
 
@@ -207,15 +168,13 @@ public class Cacadora extends Personagem implements AtributoEspecial, Entidade {
         System.out.println("💥 Rajada de flechas causa " + danoInicial + " de dano!");
         alvo.tomarDano(danoInicial);
 
-        // ⭐⭐⭐ APLICA O EFEITO DE SANGRAMENTO
-        int duracaoSangramento = 3;  // 3 rodadas
+        int duracaoSangramento = 3;
         int danoSangramentoPorRodada = 10 + (flechasPrecisas * 2);
 
         System.out.println("\n🩸 SANGRAMENTO APLICADO!");
         System.out.println("   ⏱️ Duração: " + duracaoSangramento + " rodadas");
         System.out.println("   💔 Dano por rodada: " + danoSangramentoPorRodada);
 
-        // Verifica se o alvo já tem sangramento ativo
         if (alvo.temEfeito(SangramentoEfeito.class)) {
             SangramentoEfeito sangramentoExistente = alvo.getEfeito(SangramentoEfeito.class);
             sangramentoExistente.renovar();
@@ -227,7 +186,6 @@ public class Cacadora extends Personagem implements AtributoEspecial, Entidade {
 
         System.out.println("🏹 Flechas precisas acumuladas: " + flechasPrecisas);
 
-        // ⭐ RECUPERA PENETRAÇÃO APÓS O USO DA HABILIDADE
         int recuperacao = 8;
         if (critico) recuperacao = 12;
         recuperarPenetracao(recuperacao);
@@ -247,14 +205,10 @@ public class Cacadora extends Personagem implements AtributoEspecial, Entidade {
                 "   🩸 O sangramento acumula com flechas precisas!";
     }
 
-    // ============ ATAQUE NORMAL COM RECUPERAÇÃO ============
-
     @Override
     public int ataqueInimigo(Personagem alvo) {
-        // Ataque normal também recupera um pouco de penetração
         int recuperacao = 5;
         recuperarPenetracao(recuperacao);
-
         int dano = ataque + (nivel * 2);
         System.out.println("🏹 " + nome + " dispara uma flecha causando " + dano + " de dano!");
         alvo.tomarDano(dano);
@@ -269,8 +223,6 @@ public class Cacadora extends Personagem implements AtributoEspecial, Entidade {
         if (flechasPrecisas > 0) {
             System.out.println("   🏹 Flechas Precisas: " + flechasPrecisas);
         }
-
-        // Mostra efeitos ativos
         for (EfeitoStatus efeito : efeitos.values()) {
             if (efeito.estaAtivo()) {
                 System.out.println("   " + efeito.getDescricao());
@@ -278,40 +230,19 @@ public class Cacadora extends Personagem implements AtributoEspecial, Entidade {
         }
     }
 
-    // ============ IMPLEMENTAÇÃO DE AtributoEspecial ============
-
+    // AtributoEspecial
     @Override
-    public String getNomeAtributo() {
-        return "Penetração";
-    }
-
+    public String getNomeAtributo() { return "Penetração"; }
     @Override
-    public int getValorAtual() {
-        return penetracao;
-    }
-
+    public int getValorAtual() { return penetracao; }
     @Override
-    public int getValorMaximo() {
-        return penetracaoMaxima;
-    }
-
+    public int getValorMaximo() { return penetracaoMaxima; }
     @Override
-    public double getPorcentagem() {
-        return (double) penetracao / penetracaoMaxima * 100;
-    }
-
+    public double getPorcentagem() { return (double) penetracao / penetracaoMaxima * 100; }
     @Override
-    public boolean consumir(int quantidade) {
-        return consumirPenetracao(quantidade);
-    }
-
+    public boolean consumir(int quantidade) { return consumirPenetracao(quantidade); }
     @Override
-    public void recarregar(int quantidade) {
-        recuperarPenetracao(quantidade);
-    }
-
+    public void recarregar(int quantidade) { recuperarPenetracao(quantidade); }
     @Override
-    public void recarregarCompletamente() {
-        penetracao = penetracaoMaxima;
-    }
+    public void recarregarCompletamente() { penetracao = penetracaoMaxima; }
 }

@@ -1,7 +1,6 @@
-// 📁 modelo/efeitos/DebuffAtaqueEfeito.java
-
 package com.baquara.modelo.efeitos;
 
+import com.baquara.modelo.efeitos.EfeitoStatus;
 import com.baquara.modelo.Entidade;
 
 public class DebuffAtaqueEfeito extends EfeitoStatus {
@@ -18,14 +17,20 @@ public class DebuffAtaqueEfeito extends EfeitoStatus {
         this.ataqueOriginal = alvo.getAtaque();
         int novoAtaque = (int)(ataqueOriginal * multiplicador);
         alvo.setAtaque(novoAtaque);
-        System.out.println("💢 Ataque de " + alvo.getNome() + " reduzido em " +
-                (int)((1 - multiplicador) * 100) + "%! (" + ataqueOriginal + " → " + novoAtaque + ")");
-        System.out.println("⏳ Duração restante: " + duracaoRestante + " pergunta(s)");
+
+        System.out.println("\n" + "=".repeat(50));
+        System.out.println("🔻🔻🔻 " + alvo.getNome() + " TEVE O ATAQUE REDUZIDO! 🔻🔻🔻");
+        System.out.println("   ⚔️ " + ataqueOriginal + " → " + novoAtaque + " (-" + (int)((1 - multiplicador) * 100) + "%)");
+        System.out.println("   ⏳ Duração: " + duracaoRestante + " rodada(s)");
+        System.out.println("=".repeat(50));
     }
 
     @Override
     public void remover(Entidade alvo) {
         alvo.setAtaque(ataqueOriginal);
-        System.out.println("✨ Ataque de " + alvo.getNome() + " voltou ao normal! (" + ataqueOriginal + ")");
+        System.out.println("\n" + "=".repeat(50));
+        System.out.println("✨✨✨ Ataque de " + alvo.getNome() + " voltou ao normal! ✨✨✨");
+        System.out.println("   ⚔️ " + alvo.getAtaque() + " de ataque restaurado!");
+        System.out.println("=".repeat(50));
     }
 }
