@@ -43,21 +43,28 @@ public class TelaResultadoController {
     private RankingManager rankingManager;
     private boolean venceu;
 
+    // ⭐ NOVA FLAG: controla se o ranking já foi salvo
+    private boolean rankingJaSalvo = false;
+
     public void setDados(Jogador jogador, Map<String, Object> estatisticas, boolean venceu) {
         this.jogador = jogador;
         this.estatisticas = estatisticas;
         this.venceu = venceu;
         this.rankingManager = new RankingManager();
 
-        // Adicionar ao ranking
-        rankingManager.adicionarPontuacao(
-                jogador.getNome(),
-                jogador.getPersonagem().getNome(),
-                (int) estatisticas.get("pontuacao"),
-                (int) estatisticas.get("estagiosCompletados"),
-                venceu,
-                (String) estatisticas.get("modoJogo")
-        );
+        // ⭐ SÓ SALVA O RANKING UMA VEZ
+        if (!rankingJaSalvo) {
+            rankingManager.adicionarPontuacao(
+                    jogador.getNome(),
+                    jogador.getPersonagem().getNome(),
+                    (int) estatisticas.get("pontuacao"),
+                    (int) estatisticas.get("estagiosCompletados"),
+                    venceu,
+                    (String) estatisticas.get("modoJogo")
+            );
+            rankingJaSalvo = true;  // Marca que já salvou
+            System.out.println("🏆 Ranking salvo uma única vez!");
+        }
 
         atualizarInterface();
     }
@@ -85,6 +92,8 @@ public class TelaResultadoController {
 
         double aproveitamento = (double) (int) estatisticas.get("acertos") /
                 ((int) estatisticas.get("acertos") + (int) estatisticas.get("erros")) * 100;
+
+        if (Double.isNaN(aproveitamento)) aproveitamento = 0;
         lblAproveitamento.setText(String.format("📈 Aproveitamento: %.1f%%", aproveitamento));
 
         lblDanoCausado.setText("⚔️ Dano Causado: " + estatisticas.get("danoCausado"));
@@ -120,14 +129,14 @@ public class TelaResultadoController {
         }
     }
 
-    // ⭐ MODIFICADO: Mostra ranking VINDO DA TELA DE RESULTADO
+    // ⭐ MOSTRA RANKING (sem salvar novamente)
     private void mostrarRanking() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/tela-ranking.fxml"));
             Parent root = loader.load();
 
             TelaRankingController controller = loader.getController();
-            // Usa o método específico para quando vem da tela de resultado
+            // Passa os dados, mas o ranking já foi salvo antes
             controller.setDadosERanking(rankingManager, jogador, estatisticas, venceu);
 
             Stage stage = (Stage) btnVerRanking.getScene().getWindow();
