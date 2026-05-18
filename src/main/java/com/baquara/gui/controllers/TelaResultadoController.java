@@ -120,17 +120,20 @@ public class TelaResultadoController {
         }
     }
 
+    // ⭐ MODIFICADO: Mostra ranking VINDO DA TELA DE RESULTADO
     private void mostrarRanking() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/tela-ranking.fxml"));
             Parent root = loader.load();
 
             TelaRankingController controller = loader.getController();
-            controller.setRankingManager(rankingManager);
+            // Usa o método específico para quando vem da tela de resultado
+            controller.setDadosERanking(rankingManager, jogador, estatisticas, venceu);
 
             Stage stage = (Stage) btnVerRanking.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Baquara - Ranking");
+            stage.setTitle("Baquara - Ranking de Jogadores");
+
         } catch (Exception e) {
             e.printStackTrace();
         }

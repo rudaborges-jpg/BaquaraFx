@@ -1,5 +1,6 @@
 package com.baquara.gui.controllers;
 
+import com.baquara.controle.RankingManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,22 +14,24 @@ public class TelaInicialController {
 
     @FXML private TextField txtNome;
     @FXML private Button btnJogar;
+    @FXML private Button btnRanking;  // ⭐ NOVO
     @FXML private Button btnSair;
 
     @FXML
     public void initialize() {
         btnJogar.setOnAction(e -> iniciarJogo());
+        btnRanking.setOnAction(e -> mostrarRanking());  // ⭐ NOVO
         btnSair.setOnAction(e -> sair());
         txtNome.setPromptText("Digite seu nome");
 
-        // ⭐ CONFIGURA O ENTER PARA INICIAR O JOGO
+        // CONFIGURA O ENTER PARA INICIAR O JOGO
         txtNome.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 iniciarJogo();
             }
         });
 
-        // ⭐ OPCIONAL: Faz o txtNome ganhar foco automaticamente ao abrir a tela
+        // Faz o txtNome ganhar foco automaticamente ao abrir a tela
         txtNome.requestFocus();
     }
 
@@ -39,7 +42,7 @@ public class TelaInicialController {
             txtNome.setStyle("-fx-border-color: red; -fx-border-width: 2px; -fx-border-radius: 5;");
             txtNome.setPromptText("⚠️ Digite seu nome!");
 
-            // ⭐ Pisca o campo para chamar atenção
+            // Pisca o campo para chamar atenção
             new Thread(() -> {
                 try {
                     Thread.sleep(200);
@@ -70,6 +73,25 @@ public class TelaInicialController {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Erro ao carregar tela de personagem: " + e.getMessage());
+        }
+    }
+
+    // ⭐ NOVO MÉTODO PARA MOSTRAR O RANKING ⭐
+    private void mostrarRanking() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/tela-ranking.fxml"));
+            Parent root = loader.load();
+
+            TelaRankingController controller = loader.getController();
+            controller.setRankingManager(new RankingManager());
+
+            Stage stage = (Stage) btnRanking.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Baquara - Ranking de Jogadores");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Erro ao carregar tela de ranking: " + e.getMessage());
         }
     }
 
