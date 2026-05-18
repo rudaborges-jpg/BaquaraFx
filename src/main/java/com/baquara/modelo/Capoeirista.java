@@ -7,6 +7,7 @@ public class Capoeirista extends Personagem implements AtributoEspecial {
     private int energiaMaxima;
     private int esquivasRestantes;
     private int esquivasMaximas;
+    private boolean esquivaAtiva;  // ⭐ NOVO: indica se o jogador tem uma esquiva ativa
     private Random random;
 
     private String[] titulos = {
@@ -26,8 +27,9 @@ public class Capoeirista extends Personagem implements AtributoEspecial {
         super(PerTipo.CAPOEIRISTA, "INICIANTE NA RODA", 120, 25, 15);
         this.energiaMaxima = 100;
         this.energiaGinga = 100;
-        this.esquivasMaximas = 3;  // Aumentado para 3 esquivas
+        this.esquivasMaximas = 3;
         this.esquivasRestantes = 3;
+        this.esquivaAtiva = false;  // ⭐ INICIA SEM ESQUIVA ATIVA
         this.random = new Random();
     }
 
@@ -37,6 +39,7 @@ public class Capoeirista extends Personagem implements AtributoEspecial {
     public int getEnergiaMaxima() { return energiaMaxima; }
     public int getEsquivasRestantes() { return esquivasRestantes; }
     public int getEsquivasMaximas() { return esquivasMaximas; }
+    public boolean isEsquivaAtiva() { return esquivaAtiva; }  // ⭐ NOVO
 
     // ============ MÉTODOS DE GINGA ============
 
@@ -52,36 +55,37 @@ public class Capoeirista extends Personagem implements AtributoEspecial {
         return false;
     }
 
+    // ⭐ MÉTODO PARA USAR ESQUIVA (CONSOME UMA E ATIVA A PROTEÇÃO)
     public boolean usarEsquiva() {
         if (esquivasRestantes > 0) {
             esquivasRestantes--;
+            this.esquivaAtiva = true;
+            System.out.println("🌀 ESQUIVA ATIVADA! Você desviará do próximo ataque inimigo!");
             return true;
         }
+        System.out.println("❌ Sem esquivas disponíveis! (" + esquivasRestantes + "/" + esquivasMaximas + ")");
         return false;
     }
 
-    public void recarregarEsquivas() {
-        esquivasRestantes = esquivasMaximas;
-    }
+    // ⭐ MÉTODO PARA TENTAR DESVIAR (CHAMADO QUANDO O JOGADOR ERRA)
+    public boolean tentarDesviar(Inimigo inimigo, int danoQueSofreria) {
+        if (!this.esquivaAtiva) {
+            return false;  // Não tem esquiva ativa
+        }
 
-    public void recarregarTotalmente() {
-        energiaGinga = energiaMaxima;
-        recarregarEsquivas();
-        System.out.println("🌀 Ginga e esquivas totalmente restauradas!");
+        // Desativa a esquiva (já foi usada)
+        this.esquivaAtiva = false;
+
+        return executarEsquiva(inimigo, danoQueSofreria);
     }
 
     /**
-     * Executa a esquiva - BLOQUEIA o próximo dano e causa contra-ataque
+     * Executa a esquiva - BLOQUEIA o dano e causa contra-ataque
      * @param inimigo O inimigo que atacaria
      * @param danoQueSofreria O dano que seria causado (se houver)
      * @return true se esquivou com sucesso
      */
-    public boolean executarEsquiva(Inimigo inimigo, int danoQueSofreria) {
-        if (!usarEsquiva()) {
-            System.out.println("❌ Sem esquivas disponíveis! (" + esquivasRestantes + "/" + esquivasMaximas + ")");
-            return false;
-        }
-
+    private boolean executarEsquiva(Inimigo inimigo, int danoQueSofreria) {
         System.out.println("\n🌀 ESQUIVA DE CAPOEIRA! 🌀");
         System.out.println("   Você desviou do golpe inimigo com maestria!");
 
@@ -89,14 +93,10 @@ public class Capoeirista extends Personagem implements AtributoEspecial {
             System.out.println("   🛡️ Dano evitado: " + danoQueSofreria + " de dano!");
         }
 
-        // Contra-ataque (60% de chance)
-        if (random.nextDouble() < 0.6) {
-            int contraAtaque = (ataque / 2) + random.nextInt(15) + 5;
-            System.out.println("⚡ CONTRA-ATAQUE RÁPIDO! Causou " + contraAtaque + " de dano!");
-            inimigo.tomarDano(contraAtaque);
-        } else {
-            System.out.println("   O inimigo recuou, você não conseguiu contra-atacar.");
-        }
+        // Contra-ataque garantido (100%)
+        int contraAtaque = (ataque / 2) + random.nextInt(15) + 5;
+        System.out.println("⚡ CONTRA-ATAQUE RÁPIDO! Causou " + contraAtaque + " de dano!");
+        inimigo.tomarDano(contraAtaque);
 
         // Recupera Ginga
         int gingaRecuperada = 15;
@@ -107,10 +107,32 @@ public class Capoeirista extends Personagem implements AtributoEspecial {
     }
 
     /**
-     * Versão simples da esquiva (sem dano para bloquear)
+     * Versão para usar quando não há dano específico para bloquear
      */
     public boolean executarEsquiva(Inimigo inimigo) {
+        if (!this.esquivaAtiva) {
+            return false;
+        }
+        this.esquivaAtiva = false;
         return executarEsquiva(inimigo, 0);
+    }
+
+    public void recarregarEsquivas() {
+        esquivasRestantes = esquivasMaximas;
+        this.esquivaAtiva = false;  // ⭐ RESETA ESQUIVA ATIVA
+    }
+
+    public void recarregarTotalmente() {
+        energiaGinga = energiaMaxima;
+        recarregarEsquivas();
+        System.out.println("🌀 Ginga e esquivas totalmente restauradas!");
+    }
+
+    // ⭐ RESETA APENAS AS ESQUIVAS (MANTÉM A GINGA)
+    public void resetarEsquivas() {
+        esquivasRestantes = esquivasMaximas;
+        this.esquivaAtiva = false;
+        System.out.println("🌀 Esquivas recarregadas: " + esquivasRestantes + "/" + esquivasMaximas);
     }
 
     // ============ EVOLUÇÃO ============
@@ -125,10 +147,6 @@ public class Capoeirista extends Personagem implements AtributoEspecial {
         vida = vidaMax;
         ataque += 5;
         defesa += 3;
-        energiaMaxima += 15;
-        energiaGinga = energiaMaxima;
-        esquivasMaximas++;
-        esquivasRestantes = esquivasMaximas;
 
         System.out.println("\n🥋 VOCÊ EVOLUIU! 🥋");
         System.out.println("   🏅 Novo título: " + nome);
@@ -140,14 +158,11 @@ public class Capoeirista extends Personagem implements AtributoEspecial {
     public void recarregarPorEstagio(int estagioNumero) {
         int recarga = 15;
         energiaGinga = Math.min(energiaMaxima, energiaGinga + recarga);
-        recarregarEsquivas();
         System.out.println("🌀 Ginga recuperada: +" + recarga + " (" + energiaGinga + "/" + energiaMaxima + ")");
-        System.out.println("🔄 Esquivas restauradas: " + esquivasRestantes + "/" + esquivasMaximas);
     }
 
     @Override
     public void recarregarPorNivel(int novoNivel) {
-        energiaMaxima += 20;
         energiaGinga = energiaMaxima;
     }
 
@@ -294,5 +309,8 @@ public class Capoeirista extends Personagem implements AtributoEspecial {
         System.out.println("   🛡️ Defesa: " + defesa + " (reduz " + percentualReducao + "% do dano)");
         System.out.println("   🌀 Energia da Ginga: " + energiaGinga + "/" + energiaMaxima);
         System.out.println("   🔄 Esquivas: " + esquivasRestantes + "/" + esquivasMaximas);
+        if (esquivaAtiva) {
+            System.out.println("   🛡️ ESQUIVA ATIVA! Próximo ataque será desviado!");
+        }
     }
 }

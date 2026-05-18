@@ -63,6 +63,8 @@ public class TelaCapoeiraController {
     private int tipoAtaqueSelecionado = 0;
     private boolean aguardandoResposta = false;
 
+    private Dificuldade dificuldadePerguntaAtual;
+
     // Timer
     private Thread timerThread;
     private int tempoMaximoAtual = 0;
@@ -105,7 +107,6 @@ public class TelaCapoeiraController {
         int ataque = ataquesMestres[estagioAtual];
         int defesa = 5 + (nivel * 3);
 
-        // ⭐ CONSTRUTOR ATUALIZADO: nome, nivel, vida, ataque, defesa
         inimigoAtual = new Inimigo(nome, nivel, vida, ataque, defesa);
 
         atualizarStatusInimigo();
@@ -189,6 +190,8 @@ public class TelaCapoeiraController {
                 break;
         }
 
+        this.dificuldadePerguntaAtual = dificuldade;
+
         if (inimigoAtual instanceof BesouroManganga) {
             tempoMaximoAtual = 8;
             nomeDificuldade += " 🔥 CHEFÃO! 🔥";
@@ -197,7 +200,7 @@ public class TelaCapoeiraController {
         perguntaAtual = bancoPerguntas.getPerguntaAleatoriaPorDificuldade(
                 PerTipo.CAPOEIRISTA,
                 dificuldade,
-                estagioAtual + 1  // estágio atual (1-10)
+                estagioAtual + 1
         );
         if (perguntaAtual == null) {
             adicionarDialogoNormal("❌ Erro ao carregar pergunta!");
@@ -370,15 +373,15 @@ public class TelaCapoeiraController {
 
             int danoInimigo = (int)(calcularDanoInimigo() * 0.7);
 
-            if (capoeirista.getEsquivasRestantes() > 0) {
-                adicionarDialogoNormal("🌀 VOCÊ USA UMA ESQUIVA PARA DESVIAR DO CONTRA-ATAQUE!");
-                capoeirista.executarEsquiva(inimigoAtual, danoInimigo);
-                atualizarStatusJogador();
+            // ⭐ TENTA USAR ESQUIVA SE TIVER ATIVA
+            if (capoeirista.tentarDesviar(inimigoAtual, danoInimigo)) {
+                adicionarDialogoNormal("🌀 ESQUIVA BEM-SUCEDIDA! Você desviou do contra-ataque!");
             } else {
                 adicionarDialogoErro("💢 " + inimigoAtual.getNome() + " aproveita sua hesitação e causa " + danoInimigo + " de dano!");
                 jogador.tomarDano(danoInimigo);
-                atualizarStatusJogador();
             }
+
+            atualizarStatusJogador();
 
             if (!jogador.vivo()) {
                 finalizarJogo(false);
@@ -398,8 +401,16 @@ public class TelaCapoeiraController {
             inimigoAtual.tomarDano(dano);
             adicionarDialogoAcerto("✅ CORRETO! Causou " + dano + " de dano!");
 
-            int recuperacao = tipoAtaqueSelecionado == 1 ? 15 : (tipoAtaqueSelecionado == 2 ? 10 : 5);
-            capoeirista.recarregar(recuperacao);
+            // Recupera Ginga ao acertar
+            int recuperacaoGinga;
+            switch (tipoAtaqueSelecionado) {
+                case 1: recuperacaoGinga = 15; break;
+                case 2: recuperacaoGinga = 10; break;
+                default: recuperacaoGinga = 5; break;
+            }
+            capoeirista.recarregar(recuperacaoGinga);
+            adicionarDialogoNormal("🌀 +" + recuperacaoGinga + " de Ginga recuperada!");
+
             atualizarStatusJogador();
 
             if (!inimigoAtual.vivo()) {
@@ -412,7 +423,7 @@ public class TelaCapoeiraController {
                     adicionarDialogoAcerto("\n🎉 VITÓRIA! " + inimigoAtual.getNome() + " foi derrotado!");
                     estagioAtual++;
                     capoeirista.evoluirTitulo(estagioAtual + 1);
-                    capoeirista.recarregarCompletamente();
+                    capoeirista.resetarEsquivas();  // ⭐ RECARREGA ESQUIVAS
                     atualizarStatusJogador();
 
                     if (estagioAtual >= nomesMestres.length) {
@@ -436,15 +447,15 @@ public class TelaCapoeiraController {
 
             int danoInimigo = calcularDanoInimigo();
 
-            if (capoeirista.getEsquivasRestantes() > 0) {
-                adicionarDialogoNormal("🌀 VOCÊ USA UMA ESQUIVA PARA DESVIAR DO CONTRA-ATAQUE!");
-                capoeirista.executarEsquiva(inimigoAtual, danoInimigo);
-                atualizarStatusJogador();
+            // ⭐⭐⭐ TENTA USAR ESQUIVA (VERIFICA SE O JOGADOR ATIVOU ANTES)
+            if (capoeirista.tentarDesviar(inimigoAtual, danoInimigo)) {
+                adicionarDialogoNormal("🌀 ESQUIVA BEM-SUCEDIDA! Você desviou do contra-ataque!");
             } else {
                 adicionarDialogoErro("💢 " + inimigoAtual.getNome() + " contra-ataca causando " + danoInimigo + " de dano!");
                 jogador.tomarDano(danoInimigo);
-                atualizarStatusJogador();
             }
+
+            atualizarStatusJogador();
 
             if (!jogador.vivo()) {
                 finalizarJogo(false);
@@ -460,30 +471,46 @@ public class TelaCapoeiraController {
 
     private int calcularDano(int tipoAtaque) {
         int danoBase;
+        int ataque = capoeirista.getAtaque();
+        int nivel = estagioAtual + 1;
+
+        int bonusDificuldade = 0;
+        switch (dificuldadePerguntaAtual) {
+            case FACIL:
+                bonusDificuldade = 5;
+                break;
+            case MEDIO:
+                bonusDificuldade = 15;
+                break;
+            case DIFICIL:
+                bonusDificuldade = 30;
+                break;
+        }
 
         switch (tipoAtaque) {
             case 1:
-                danoBase = capoeirista.getAtaque() + random.nextInt(10) + 5;
+                danoBase = ataque + random.nextInt(10) + 5 + bonusDificuldade;
                 break;
             case 2:
-                danoBase = capoeirista.getAtaque() + 15 + random.nextInt(20);
+                danoBase = ataque + 15 + random.nextInt(20) + bonusDificuldade * 2;
                 break;
             default:
                 int golpes = 3 + random.nextInt(2);
                 danoBase = 0;
                 for (int i = 0; i < golpes; i++) {
-                    danoBase += 8 + random.nextInt(12);
+                    danoBase += 8 + random.nextInt(12) + (bonusDificuldade / 2);
                 }
+                danoBase += bonusDificuldade * 2;
                 break;
         }
 
-        int multiplicador = (estagioAtual / 3) + 1;
+        int multiplicador = Math.max(1, (estagioAtual / 3) + 1);
         int dano = danoBase * multiplicador;
 
         double variacao = 0.85 + (random.nextDouble() * 0.3);
         dano = (int) (dano * variacao);
 
-        return Math.max(10, Math.min(350, dano));
+        return Math.max(10, Math.min(450, dano));
     }
 
     private int calcularDanoInimigo() {
@@ -607,6 +634,14 @@ public class TelaCapoeiraController {
     public void initialize() {
         txtDialogo.setStyle("-fx-font-size: 11px; -fx-background-color: #FFF8DC; -fx-text-fill: #000000; -fx-border-color: #FFD700; -fx-border-width: 2; -fx-border-radius: 5;");
 
+        // ⭐ GARANTE QUE OS PAINÉIS ESTEJAM VISÍVEIS
+        painelDialogo.setVisible(true);
+        painelDialogo.setManaged(true);
+        painelAcoes.setVisible(true);
+        painelAcoes.setManaged(true);
+        painelPergunta.setVisible(false);
+        painelPergunta.setManaged(false);
+
         btnBasico.setOnAction(e -> {
             if (inimigoAtual != null && inimigoAtual.vivo() && !aguardandoResposta) {
                 adicionarDialogoNormal("🔄 GINGA BÁSICA!");
@@ -646,18 +681,20 @@ public class TelaCapoeiraController {
             }
         });
 
+        // ⭐⭐⭐ BOTÃO DE ESQUIVA - ATIVA A PROTEÇÃO PARA O PRÓXIMO ERRO
         btnEsquiva.setOnAction(e -> {
             if (inimigoAtual != null && inimigoAtual.vivo() && !aguardandoResposta) {
-                if (capoeirista.getEsquivasRestantes() > 0) {
-                    adicionarDialogoNormal("🌀 ESQUIVA! Você desvia do próximo ataque!");
-                    capoeirista.usarEsquiva();
+                if (capoeirista.usarEsquiva()) {
+                    adicionarDialogoNormal("🌀 ESQUIVA ATIVADA! Você desviará do PRÓXIMO ataque inimigo!");
+                    adicionarDialogoNormal("   ⚡ Um contra-ataque será aplicado automaticamente!");
                     atualizarStatusJogador();
                 } else {
-                    adicionarDialogoErro("❌ Sem esquivas disponíveis!");
+                    adicionarDialogoErro("❌ Sem esquivas disponíveis! (" + capoeirista.getEsquivasRestantes() + "/" + capoeirista.getEsquivasMaximas() + ")");
                 }
             }
         });
 
-        btnVoltarMenu.setOnAction(e -> limparPergunta());
+        btnVoltarMenu.setVisible(false);
+        btnVoltarMenu.setManaged(false);
     }
 }

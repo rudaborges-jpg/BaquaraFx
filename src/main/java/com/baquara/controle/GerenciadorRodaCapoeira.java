@@ -1,3 +1,5 @@
+// 📁 GerenciadorRodaCapoeira.java - Com reset apenas quando esgota todas as perguntas
+
 package com.baquara.controle;
 
 import com.baquara.dados.BancoPerguntas;
@@ -13,24 +15,26 @@ public class GerenciadorRodaCapoeira {
     private int pontuacaoTotal;
     private Scanner scanner;
     private Random random;
-    private BancoPerguntas  bancoPerguntas;
+    private BancoPerguntas bancoPerguntas;
 
     private int perguntasCertas;
     private int perguntasErradas;
     private int vitorias;
-    private int vezesSemTempo;
     private int contadorAtaquesBasicos;
 
+    // ⭐ CONTROLE GLOBAL: perguntas usadas em toda a rota
+    private Set<Integer> perguntasUsadasGlobal = new HashSet<>();
+
+    // ⭐ MAPA para rastrear quantas perguntas cada dificuldade tem
+    private Map<Dificuldade, Integer> totalPerguntasPorDificuldade = new HashMap<>();
+
+    // ⭐ MAPA para rastrear quantas resets cada dificuldade já fez
+    private Map<Dificuldade, Integer> resetsPorDificuldade = new HashMap<>();
+
     private String[] nomesMestres = {
-            "MESTRE BIMBA",
-            "MESTRE PASTINHA",
-            "MESTRE JOÃO GRANDE",
-            "MESTRE JOÃO PEQUENO",
-            "MESTRE CANJIQUINHA",
-            "MESTRE CAIÇARA",
-            "MESTRE SUASSUNA",
-            "MESTRE NENEL",
-            "MESTRE MORAES"
+            "MESTRE BIMBA", "MESTRE PASTINHA", "MESTRE JOÃO GRANDE",
+            "MESTRE JOÃO PEQUENO", "MESTRE CANJIQUINHA", "MESTRE CAIÇARA",
+            "MESTRE SUASSUNA", "MESTRE NENEL", "MESTRE MORAES"
     };
 
     private String[] titulosMestres = {
@@ -99,13 +103,8 @@ public class GerenciadorRodaCapoeira {
             "Malandro que é malandro não repete golpe!"
     };
 
-    private int[] vidasMestres = {
-            160, 260, 360, 460, 560, 660, 760, 860, 960
-    };
-
-    private int[] ataquesMestres = {
-            36, 42, 48, 54, 60, 66, 72, 78, 84
-    };
+    private int[] vidasMestres = { 160, 260, 360, 460, 560, 660, 760, 860, 960 };
+    private int[] ataquesMestres = { 36, 42, 48, 54, 60, 66, 72, 78, 84 };
 
     public GerenciadorRodaCapoeira(Jogador jogador) {
         this.jogador = jogador;
@@ -120,94 +119,188 @@ public class GerenciadorRodaCapoeira {
         this.perguntasCertas = 0;
         this.perguntasErradas = 0;
         this.vitorias = 0;
-        this.vezesSemTempo = 0;
         this.contadorAtaquesBasicos = 0;
 
-        // Cria os inimigos baseados nos mestres usando o NOVO CONSTRUTOR
+        // Cria os inimigos baseados nos mestres
         for (int i = 0; i < 9; i++) {
             int nivel = i + 1;
             int defesa = 5 + (nivel * 3);
-            // ⭐ CONSTRUTOR ATUALIZADO: nome, nivel, vida, ataque, defesa
             inimigos[i] = new Inimigo(nomesMestres[i], nivel, vidasMestres[i], ataquesMestres[i], defesa);
         }
+
+        // Inicializa contadores de perguntas por dificuldade
+        inicializarContadoresPerguntas();
     }
 
-    public void iniciarRodaProibida() {
-        System.out.println("\n🥋 A RODA PROIBIDA COMEÇA! 🥋");
-        System.out.println("=".repeat(60));
-        System.out.println("📋 REGRAS DA RODA:");
-        System.out.println("   🎯 Escolha seu tipo de ataque (SEM pressa)");
-        System.out.println("   📚 Ataque Básico     → Pergunta FÁCIL");
-        System.out.println("   💫 Ataque Difícil    → Pergunta MÉDIA");
-        System.out.println("   🔥 Combinação Mortal → Pergunta DIFÍCIL");
-        System.out.println("   🌀 Esquiva           → SEM pergunta (desvia do ataque)");
-        System.out.println("   ⚠️  3 ataques básicos seguidos → Inimigo ESQUIVA (100%)");
-        System.out.println("=".repeat(60));
-
-        System.out.print("\n🎵 Pressione ENTER para o berimbau tocar...");
-        scanner.nextLine();
-
-        for (int i = 0; i < inimigos.length; i++) {
-            estagioAtual = i + 1;
-            boolean venceu = enfrentarMestre(inimigos[i], i);
-
-            if (!venceu) {
-                derrotaNaRoda();
-                return;
+    /**
+     * ⭐ INICIALIZA o total de perguntas disponíveis por dificuldade
+     */
+    private void inicializarContadoresPerguntas() {
+        for (Dificuldade diff : Dificuldade.values()) {
+            List<Pergunta> perguntas = bancoPerguntas.getPerguntasPorDificuldade(
+                    PerTipo.CAPOEIRISTA, diff, 1);
+            if (perguntas != null) {
+                totalPerguntasPorDificuldade.put(diff, perguntas.size());
+            } else {
+                totalPerguntasPorDificuldade.put(diff, 0);
             }
+            resetsPorDificuldade.put(diff, 0);
+        }
 
-            vitorias++;
+        System.out.println("\n📚 RODA DE CAPOEIRA - Banco de perguntas carregado:");
+        for (Dificuldade diff : Dificuldade.values()) {
+            System.out.println("   " + diff.getNome() + ": " +
+                    totalPerguntasPorDificuldade.get(diff) + " perguntas");
+        }
+        System.out.println("\n✨ O banco reinicia APENAS quando todas as perguntas de uma dificuldade forem usadas!\n");
+    }
 
-            Capoeirista cap = (Capoeirista) jogador.getPersonagem();
-            cap.evoluirTitulo(estagioAtual + 1);
-            cap.recarregarTotalmente();
+    /**
+     * ⭐ Obtém pergunta - reseta apenas quando TODAS as perguntas da dificuldade foram usadas
+     */
+    private Pergunta getPerguntaComReset(Dificuldade dificuldade) {
+        List<Pergunta> todasPerguntas = bancoPerguntas.getPerguntasPorDificuldade(
+                PerTipo.CAPOEIRISTA, dificuldade, 1);
 
-            if (i < inimigos.length - 1) {
-                System.out.println("\n🎵 O berimbau chama o próximo desafiante...");
-                System.out.print("\nPressione ENTER para continuar...");
-                scanner.nextLine();
+        if (todasPerguntas == null || todasPerguntas.isEmpty()) {
+            System.out.println("❌ Nenhuma pergunta disponível para " + dificuldade.getNome());
+            return null;
+        }
+
+        // Filtra perguntas ainda NÃO usadas
+        List<Pergunta> naoUsadas = new ArrayList<>();
+        for (Pergunta p : todasPerguntas) {
+            if (!perguntasUsadasGlobal.contains(p.getId())) {
+                naoUsadas.add(p);
             }
         }
 
-        System.out.println("\n" + "=".repeat(60));
-        System.out.println("🦗 O BESOURO MANGANGÁ ENTRA NA RODA! 🦗");
-        System.out.println("=".repeat(60));
-        System.out.println("\n📜 A LENDA DO BESOURO:");
-        System.out.println("Manoel Henrique Pereira (1895-1924), o lendário Besouro Mangangá.");
-        System.out.println("Nascido em Santo Amaro da Purificação, Bahia.");
-        System.out.println("Diziam que tinha o 'corpo fechado' - balas e facas não o feriam.");
-        System.out.println("\n🦗 'FECHADO! NINGUÉM ME SEGURA!'\n");
+        // ⭐⭐ SE ACABARAM TODAS AS PERGUNTAS DESTA DIFICULDADE, RESETA!
+        if (naoUsadas.isEmpty()) {
+            int resetNumero = resetsPorDificuldade.get(dificuldade) + 1;
+            resetsPorDificuldade.put(dificuldade, resetNumero);
 
-        System.out.print("Pressione ENTER para o confronto final...");
-        scanner.nextLine();
+            System.out.println("\n" + "=".repeat(60));
+            System.out.println("🔄 RESET DO BANCO DE PERGUNTAS! 🔄");
+            System.out.println("   Dificuldade: " + dificuldade.getNome());
+            System.out.println("   Você já usou TODAS as " + totalPerguntasPorDificuldade.get(dificuldade) +
+                    " perguntas desta dificuldade!");
+            System.out.println("   Reset #" + resetNumero + " - Reiniciando o ciclo...");
+            System.out.println("=".repeat(60) + "\n");
 
-        contadorAtaquesBasicos = 0;
-        boolean venceuBesouro = batalhaDeCapoeira(besouro, true);
+            // Reseta APENAS as perguntas desta dificuldade
+            // Remove do conjunto global todas as perguntas desta dificuldade
+            for (Pergunta p : todasPerguntas) {
+                perguntasUsadasGlobal.remove(p.getId());
+            }
 
-        if (venceuBesouro) {
-            vitoriaFinal();
-        } else {
-            derrotaFinal();
+            // Agora todas estão disponíveis novamente
+            naoUsadas = new ArrayList<>(todasPerguntas);
+        }
+
+        // Escolhe aleatória entre as disponíveis
+        Pergunta escolhida = naoUsadas.get(random.nextInt(naoUsadas.size()));
+        perguntasUsadasGlobal.add(escolhida.getId());
+
+        // Mostra estatísticas
+        int restantes = naoUsadas.size() - 1; // -1 porque vamos usar uma agora
+        int total = totalPerguntasPorDificuldade.get(dificuldade);
+        int resets = resetsPorDificuldade.get(dificuldade);
+
+        System.out.println("\n📊 ESTATÍSTICA DA RODA:");
+        System.out.println("   📚 " + dificuldade.getNome() + ": " + restantes + "/" + total + " restantes");
+        System.out.println("   🔄 Resets nesta dificuldade: " + resets);
+        System.out.println("   📝 Total de perguntas já respondidas: " + perguntasUsadasGlobal.size());
+
+        return escolhida;
+    }
+
+    /**
+     * ⭐ MODIFICADO: Menu de ataque com informações de quantas perguntas restam
+     */
+    private int mostrarMenuAtaqueSemTempo() {
+        Capoeirista cap = (Capoeirista) jogador.getPersonagem();
+        int escolha = -1;
+
+        while (escolha < 1 || escolha > 4) {
+            System.out.println("\n" + "=".repeat(60));
+            System.out.println("📋 ESCOLHA SEU TIPO DE ATAQUE:");
+            System.out.println("=".repeat(60));
+
+            // Mostra quantas perguntas restam por dificuldade
+            System.out.println("\n📚 PERGUNTAS DISPONÍVEIS (antes de reset):");
+            for (Dificuldade diff : Dificuldade.values()) {
+                List<Pergunta> todas = bancoPerguntas.getPerguntasPorDificuldade(PerTipo.CAPOEIRISTA, diff, 1);
+                int usadas = 0;
+                if (todas != null) {
+                    for (Pergunta p : todas) {
+                        if (perguntasUsadasGlobal.contains(p.getId())) {
+                            usadas++;
+                        }
+                    }
+                }
+                int restantes = (todas != null ? todas.size() : 0) - usadas;
+                String emoji = restantes > 0 ? "✅" : "🔄";
+                System.out.println("   " + emoji + " " + diff.getNome() + ": " + restantes + " restantes" +
+                        (restantes == 0 ? " (resetará na próxima)" : ""));
+            }
+
+            System.out.println("\n1 🔄 GINGA BÁSICA (Pergunta FÁCIL)");
+            System.out.println("2 💫 ATAQUE DIFÍCIL (Pergunta MÉDIA)");
+            System.out.println("3 🔥 COMBINAÇÃO MORTAL (Pergunta DIFÍCIL)");
+            System.out.println("4 🌀 ESQUIVA DE CAPOEIRA (Sem pergunta)");
+            System.out.println("\n🌀 Ginga disponível: " + cap.getEnergiaGinga() + "/" + cap.getEnergiaMaxima());
+            System.out.println("=".repeat(60));
+            System.out.print("\n🎯 Sua escolha (1-4): ");
+
+            try {
+                String entrada = scanner.nextLine().trim();
+                escolha = Integer.parseInt(entrada);
+
+                // Verifica custos de Ginga
+                if (escolha == 2 && cap.getEnergiaGinga() < 20) {
+                    System.out.println("\n❌ GINGA INSUFICIENTE! Você precisa de 20 de Ginga.");
+                    escolha = -1;
+                    continue;
+                }
+                if (escolha == 3 && cap.getEnergiaGinga() < 40) {
+                    System.out.println("\n❌ GINGA INSUFICIENTE! Você precisa de 40 de Ginga.");
+                    escolha = -1;
+                    continue;
+                }
+                if (escolha == 4 && cap.getEsquivasRestantes() <= 0) {
+                    System.out.println("\n❌ SEM ESQUIVAS! Você já usou todas.");
+                    escolha = -1;
+                    continue;
+                }
+                if (escolha < 1 || escolha > 4) {
+                    System.out.println("\n❌ Opção inválida! Escolha entre 1 e 4.");
+                    escolha = -1;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\n❌ Entrada inválida! Digite um número de 1 a 4.");
+                escolha = -1;
+            }
+        }
+        return escolha;
+    }
+
+    private Dificuldade getDificuldadePorAtaque(int escolhaAtaque) {
+        switch (escolhaAtaque) {
+            case 1: return Dificuldade.FACIL;
+            case 2: return Dificuldade.MEDIO;
+            case 3: return Dificuldade.DIFICIL;
+            default: return Dificuldade.FACIL;
         }
     }
 
-    private boolean enfrentarMestre(Inimigo mestre, int index) {
-        System.out.println("\n" + "=".repeat(60));
-        System.out.println("🥋 ESTÁGIO " + (index + 1) + "/10");
-        System.out.println("=".repeat(60));
-
-        System.out.println("\n📜 HISTÓRIA DO MESTRE:");
-        System.out.println(historiasMestres[index]);
-
-        System.out.println("\n👥 DESAFIANTE: " + nomesMestres[index]);
-        System.out.println("   🏅 " + titulosMestres[index]);
-        System.out.println("   ❤️ Vida: " + vidasMestres[index] + " | ⚔️ Ataque: " + ataquesMestres[index]);
-
-        System.out.print("\nPressione ENTER para começar o jogo...");
-        scanner.nextLine();
-
-        contadorAtaquesBasicos = 0;
-        return batalhaDeCapoeira(mestre, false);
+    private String getNomeDificuldade(Dificuldade dificuldade) {
+        switch (dificuldade) {
+            case FACIL: return "⭐ FÁCIL";
+            case MEDIO: return "⭐⭐ MÉDIO";
+            case DIFICIL: return "⭐⭐⭐ DIFÍCIL";
+            default: return "⭐ FÁCIL";
+        }
     }
 
     private boolean inimigoVaiEsquivar(int escolhaAtaque, Inimigo inimigo) {
@@ -223,7 +316,6 @@ public class GerenciadorRodaCapoeira {
             System.out.println("   '" + inimigo.getNome() + "': Você só está gingando... Previsível!'");
             return true;
         }
-
         return false;
     }
 
@@ -239,154 +331,6 @@ public class GerenciadorRodaCapoeira {
         } else {
             System.out.println("   Mas o inimigo apenas desviou sem revidar.");
         }
-    }
-
-    private int calcularDanoBase(int tipoAtaque) {
-        Capoeirista cap = (Capoeirista) jogador.getPersonagem();
-        int ataque = cap.getAtaque();
-        int estagio = Math.max(1, estagioAtual);
-
-        switch (tipoAtaque) {
-            case 1: return (ataque + 5) * (estagio / 3 + 1);
-            case 2: return (ataque + 15) * (estagio / 3 + 1);
-            case 3: return (8 * 3) * (estagio / 3 + 1);
-            default: return ataque * (estagio / 3 + 1);
-        }
-    }
-
-    private int calcularDanoEscalado(int danoBase, Dificuldade dificuldade) {
-        if (estagioAtual <= 0) return danoBase;
-
-        int multiplicadorDificuldade;
-        switch (dificuldade) {
-            case FACIL: multiplicadorDificuldade = 1; break;
-            case MEDIO: multiplicadorDificuldade = 2; break;
-            case DIFICIL: multiplicadorDificuldade = 3; break;
-            default: multiplicadorDificuldade = 1;
-        }
-
-        int multiplicadorEstagio = Math.max(1, estagioAtual / 3 + 1);
-        int danoEscalado = danoBase * multiplicadorEstagio;
-        double variacao = 0.85 + (random.nextDouble() * 0.3);
-        danoEscalado = (int)(danoEscalado * variacao * multiplicadorDificuldade);
-        danoEscalado = Math.max(danoBase / 2, danoEscalado);
-        danoEscalado = Math.min(350, danoEscalado);
-
-        return danoEscalado;
-    }
-
-    private boolean batalhaDeCapoeira(Inimigo inimigo, boolean ehChefao) {
-        Capoeirista capoeirista = (Capoeirista) jogador.getPersonagem();
-        int rodada = 0;
-
-        while (jogador.vivo() && inimigo.vivo()) {
-            rodada++;
-            System.out.println("\n" + "=".repeat(60));
-            System.out.println("🔄 RODADA " + rodada);
-            if (ehChefao) {
-                System.out.println("🦗 CONFRONTO FINAL CONTRA O BESOURO!");
-            }
-            System.out.println("=".repeat(60));
-
-            capoeirista.mostrarStatus();
-            System.out.println();
-            inimigo.mostrarStatus();
-
-            int escolhaAtaque = mostrarMenuAtaqueSemTempo();
-
-            if (escolhaAtaque == 4) {
-                System.out.println("\n🌀 ESQUIVA DE CAPOEIRA!");
-                boolean esquivou = capoeirista.executarEsquiva(inimigo);
-                if (esquivou) {
-                    capoeirista.consumirEnergiaGinga(-5);
-                }
-                contadorAtaquesBasicos = 0;
-
-                if (!inimigo.vivo()) {
-                    System.out.println("\n💀 " + inimigo.getNome() + " FOI DERROTADO!");
-                    processarVitoriaInimigo(ehChefao);
-                    return true;
-                }
-
-                if (inimigo.vivo() && jogador.vivo()) {
-                    System.out.print("\n⏭️  Pressione ENTER para próxima rodada...");
-                    scanner.nextLine();
-                }
-                continue;
-            }
-
-            Dificuldade dificuldade = getDificuldadePorAtaque(escolhaAtaque);
-            Pergunta pergunta = bancoPerguntas.getPerguntaAleatoriaPorDificuldade(
-                    PerTipo.CAPOEIRISTA,
-                    dificuldade,
-                    estagioAtual  // estágio atual (1-10)
-            );
-            if (pergunta == null) {
-                System.out.println("❌ Erro ao carregar pergunta!");
-                return false;
-            }
-
-            System.out.println("\n" + "=".repeat(50));
-            System.out.println("📚 PERGUNTA DE CAPOEIRA");
-            System.out.println("   Dificuldade: " + getNomeDificuldade(dificuldade));
-            System.out.println("=".repeat(50));
-            pergunta.exibir();
-
-            System.out.print("\n✏️  Sua resposta: ");
-            String resposta = scanner.nextLine().trim().toUpperCase();
-
-            boolean acertou = AvaliadorRespostas.avaliar(pergunta, resposta);
-
-            if (acertou) {
-                perguntasCertas++;
-
-                if (inimigoVaiEsquivar(escolhaAtaque, inimigo)) {
-                    executarEsquivaInimigo(inimigo, ehChefao);
-                    capoeirista.consumirEnergiaGinga(-5);
-                } else {
-                    System.out.println("\n✅ CORRETO! Execute seu golpe!");
-                    int danoBase = executarAtaqueComDano(escolhaAtaque, capoeirista, inimigo);
-                    int danoFinal = calcularDanoEscalado(danoBase, dificuldade);
-                    System.out.println("💥 DANO: " + danoFinal);
-                    inimigo.tomarDano(danoFinal);
-
-                    int recargaGinga;
-                    switch (escolhaAtaque) {
-                        case 1: recargaGinga = 15; break;
-                        case 2: recargaGinga = 10; break;
-                        case 3: recargaGinga = 5; break;
-                        default: recargaGinga = 10;
-                    }
-                    capoeirista.consumirEnergiaGinga(-recargaGinga);
-                }
-            } else {
-                perguntasErradas++;
-                contadorAtaquesBasicos = 0;
-                System.out.println("\n❌ ERRADO!");
-                System.out.println("   📖 Resposta correta: " + pergunta.getRespostaCorreta());
-
-                int danoInimigo = calcularDanoInimigo(inimigo, ehChefao);
-                System.out.println("💢 " + inimigo.getNome() + " contra-ataca causando " + danoInimigo + " de dano!");
-                jogador.tomarDano(danoInimigo);
-            }
-
-            if (!inimigo.vivo()) {
-                System.out.println("\n💀 " + inimigo.getNome() + " FOI DERROTADO!");
-                processarVitoriaInimigo(ehChefao);
-                return true;
-            }
-
-            if (!jogador.vivo()) {
-                return false;
-            }
-
-            if (inimigo.vivo() && jogador.vivo()) {
-                System.out.print("\n⏭️  Pressione ENTER para próxima rodada...");
-                scanner.nextLine();
-            }
-        }
-
-        return jogador.vivo();
     }
 
     private int executarAtaqueComDano(int escolha, Capoeirista cap, Inimigo inimigo) {
@@ -450,6 +394,40 @@ public class GerenciadorRodaCapoeira {
         return danoBase;
     }
 
+    private int calcularDanoEscalado(int danoBase, Dificuldade dificuldade) {
+        if (estagioAtual <= 0) return danoBase;
+
+        int multiplicadorDificuldade;
+        switch (dificuldade) {
+            case FACIL: multiplicadorDificuldade = 1; break;
+            case MEDIO: multiplicadorDificuldade = 2; break;
+            case DIFICIL: multiplicadorDificuldade = 3; break;
+            default: multiplicadorDificuldade = 1;
+        }
+
+        int multiplicadorEstagio = Math.max(1, estagioAtual / 3 + 1);
+        int danoEscalado = danoBase * multiplicadorEstagio;
+        double variacao = 0.85 + (random.nextDouble() * 0.3);
+        danoEscalado = (int)(danoEscalado * variacao * multiplicadorDificuldade);
+        danoEscalado = Math.max(danoBase / 2, danoEscalado);
+        danoEscalado = Math.min(350, danoEscalado);
+
+        return danoEscalado;
+    }
+
+    private int calcularDanoInimigo(Inimigo inimigo, boolean ehChefao) {
+        int danoBase = inimigo.getAtaque();
+
+        if (ehChefao && besouro.getFaseAtual() == 3) {
+            danoBase *= 2;
+            System.out.println("⚡ FÚRIA DO BESOURO! Dano dobrado!");
+        }
+
+        double variacao = 0.85 + (random.nextDouble() * 0.3);
+        int danoFinal = (int)(danoBase * variacao);
+        return Math.max(5, danoFinal);
+    }
+
     private void processarVitoriaInimigo(boolean ehChefao) {
         if (!ehChefao) {
             int index = estagioAtual - 1;
@@ -464,82 +442,204 @@ public class GerenciadorRodaCapoeira {
         System.out.println("🏆 +" + bonus + " pontos! Total: " + pontuacaoTotal);
     }
 
-    private int mostrarMenuAtaqueSemTempo() {
-        Capoeirista cap = (Capoeirista) jogador.getPersonagem();
-        int escolha = -1;
+    public void iniciarRodaProibida() {
+        System.out.println("\n🥋 A RODA PROIBIDA COMEÇA! 🥋");
+        System.out.println("=".repeat(60));
+        System.out.println("📋 REGRAS DA RODA:");
+        System.out.println("   🎯 Escolha seu tipo de ataque (SEM pressa)");
+        System.out.println("   📚 Ataque Básico     → Pergunta FÁCIL");
+        System.out.println("   💫 Ataque Difícil    → Pergunta MÉDIA");
+        System.out.println("   🔥 Combinação Mortal → Pergunta DIFÍCIL");
+        System.out.println("   🌀 Esquiva           → SEM pergunta (desvia do ataque)");
+        System.out.println("   ⚠️  3 ataques básicos seguidos → Inimigo ESQUIVA (100%)");
+        System.out.println("\n✨ O banco de perguntas só reseta quando TODAS as perguntas de uma");
+        System.out.println("   dificuldade forem usadas! Você pode jogar infinitamente!");
+        System.out.println("=".repeat(60));
 
-        while (escolha < 1 || escolha > 4) {
-            System.out.println("\n" + "=".repeat(60));
-            System.out.println("📋 ESCOLHA SEU TIPO DE ATAQUE:");
-            System.out.println("=".repeat(60));
-            System.out.println("\n1 🔄 GINGA BÁSICA (Ataque Normal)");
-            System.out.println("2 💫 ATAQUE DIFÍCIL (Movimentos Acrobáticos)");
-            System.out.println("3 🔥 COMBINAÇÃO MORTAL (Sequência de Golpes)");
-            System.out.println("4 🌀 ESQUIVA DE CAPOEIRA");
-            System.out.println("\n🌀 Ginga disponível: " + cap.getEnergiaGinga() + "/" + cap.getEnergiaMaxima());
-            System.out.println("=".repeat(60));
-            System.out.print("\n🎯 Sua escolha (1-4): ");
+        System.out.print("\n🎵 Pressione ENTER para o berimbau tocar...");
+        scanner.nextLine();
 
-            try {
-                String entrada = scanner.nextLine().trim();
-                escolha = Integer.parseInt(entrada);
+        for (int i = 0; i < inimigos.length; i++) {
+            estagioAtual = i + 1;
+            boolean venceu = enfrentarMestre(inimigos[i], i);
 
-                if (escolha == 2 && cap.getEnergiaGinga() < 20) {
-                    System.out.println("\n❌ GINGA INSUFICIENTE! Você precisa de 20 de Ginga.");
-                    escolha = -1;
-                    continue;
-                }
-                if (escolha == 3 && cap.getEnergiaGinga() < 40) {
-                    System.out.println("\n❌ GINGA INSUFICIENTE! Você precisa de 40 de Ginga.");
-                    escolha = -1;
-                    continue;
-                }
-                if (escolha == 4 && cap.getEsquivasRestantes() <= 0) {
-                    System.out.println("\n❌ SEM ESQUIVAS! Você já usou todas.");
-                    escolha = -1;
-                    continue;
-                }
-                if (escolha < 1 || escolha > 4) {
-                    System.out.println("\n❌ Opção inválida! Escolha entre 1 e 4.");
-                    escolha = -1;
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("\n❌ Entrada inválida! Digite um número de 1 a 4.");
-                escolha = -1;
+            if (!venceu) {
+                derrotaNaRoda();
+                return;
+            }
+
+            vitorias++;
+
+            Capoeirista cap = (Capoeirista) jogador.getPersonagem();
+            cap.evoluirTitulo(estagioAtual + 1);
+            cap.recarregarTotalmente();
+
+            if (i < inimigos.length - 1) {
+                System.out.println("\n🎵 O berimbau chama o próximo desafiante...");
+                System.out.print("\nPressione ENTER para continuar...");
+                scanner.nextLine();
             }
         }
-        return escolha;
-    }
 
-    private Dificuldade getDificuldadePorAtaque(int escolhaAtaque) {
-        switch (escolhaAtaque) {
-            case 1: return Dificuldade.FACIL;
-            case 2: return Dificuldade.MEDIO;
-            case 3: return Dificuldade.DIFICIL;
-            default: return Dificuldade.FACIL;
+        System.out.println("\n" + "=".repeat(60));
+        System.out.println("🦗 O BESOURO MANGANGÁ ENTRA NA RODA! 🦗");
+        System.out.println("=".repeat(60));
+        System.out.println("\n📜 A LENDA DO BESOURO:");
+        System.out.println("Manoel Henrique Pereira (1895-1924), o lendário Besouro Mangangá.");
+        System.out.println("Nascido em Santo Amaro da Purificação, Bahia.");
+        System.out.println("Diziam que tinha o 'corpo fechado' - balas e facas não o feriam.");
+        System.out.println("\n🦗 'FECHADO! NINGUÉM ME SEGURA!'\n");
+
+        System.out.print("Pressione ENTER para o confronto final...");
+        scanner.nextLine();
+
+        contadorAtaquesBasicos = 0;
+        boolean venceuBesouro = batalhaDeCapoeira(besouro, true);
+
+        if (venceuBesouro) {
+            vitoriaFinal();
+        } else {
+            derrotaFinal();
         }
     }
 
-    private String getNomeDificuldade(Dificuldade dificuldade) {
-        switch (dificuldade) {
-            case FACIL: return "⭐ FÁCIL";
-            case MEDIO: return "⭐⭐ MÉDIO";
-            case DIFICIL: return "⭐⭐⭐ DIFÍCIL";
-            default: return "⭐ FÁCIL";
-        }
+    private boolean enfrentarMestre(Inimigo mestre, int index) {
+        System.out.println("\n" + "=".repeat(60));
+        System.out.println("🥋 ESTÁGIO " + (index + 1) + "/9");
+        System.out.println("=".repeat(60));
+
+        System.out.println("\n📜 HISTÓRIA DO MESTRE:");
+        System.out.println(historiasMestres[index]);
+
+        System.out.println("\n👥 DESAFIANTE: " + nomesMestres[index]);
+        System.out.println("   🏅 " + titulosMestres[index]);
+        System.out.println("   ❤️ Vida: " + vidasMestres[index] + " | ⚔️ Ataque: " + ataquesMestres[index]);
+
+        System.out.print("\nPressione ENTER para começar o jogo...");
+        scanner.nextLine();
+
+        contadorAtaquesBasicos = 0;
+        return batalhaDeCapoeira(mestre, false);
     }
 
-    private int calcularDanoInimigo(Inimigo inimigo, boolean ehChefao) {
-        int danoBase = inimigo.getAtaque();
+    private boolean batalhaDeCapoeira(Inimigo inimigo, boolean ehChefao) {
+        Capoeirista capoeirista = (Capoeirista) jogador.getPersonagem();
+        int rodada = 0;
 
-        if (ehChefao && besouro.getFaseAtual() == 3) {
-            danoBase *= 2;
-            System.out.println("⚡ FÚRIA DO BESOURO! Dano dobrado!");
+        while (jogador.vivo() && inimigo.vivo()) {
+            rodada++;
+            System.out.println("\n" + "=".repeat(60));
+            System.out.println("🔄 RODADA " + rodada);
+            if (ehChefao) {
+                System.out.println("🦗 CONFRONTO FINAL CONTRA O BESOURO!");
+            }
+            System.out.println("=".repeat(60));
+
+            capoeirista.mostrarStatus();
+            System.out.println();
+            inimigo.mostrarStatus();
+
+            int escolhaAtaque = mostrarMenuAtaqueSemTempo();
+
+            // ESQUIVA
+            if (escolhaAtaque == 4) {
+                System.out.println("\n🌀 ESQUIVA DE CAPOEIRA!");
+                boolean esquivou = capoeirista.executarEsquiva(inimigo);
+                if (esquivou) {
+                    capoeirista.consumirEnergiaGinga(-5);
+                }
+                contadorAtaquesBasicos = 0;
+
+                if (!inimigo.vivo()) {
+                    System.out.println("\n💀 " + inimigo.getNome() + " FOI DERROTADO!");
+                    processarVitoriaInimigo(ehChefao);
+                    return true;
+                }
+
+                if (inimigo.vivo() && jogador.vivo()) {
+                    System.out.print("\n⏭️  Pressione ENTER para próxima rodada...");
+                    scanner.nextLine();
+                }
+                continue;
+            }
+
+            // ATAQUE COM PERGUNTA
+            Dificuldade dificuldade = getDificuldadePorAtaque(escolhaAtaque);
+
+            // ⭐ OBTÉM PERGUNTA COM RESET (apenas quando todas foram usadas)
+            Pergunta pergunta = getPerguntaComReset(dificuldade);
+
+            if (pergunta == null) {
+                System.out.println("\n❌ Nenhuma pergunta disponível! Tente outra dificuldade ou use ESQUIVA.");
+                System.out.print("\nPressione ENTER para continuar...");
+                scanner.nextLine();
+                continue;
+            }
+
+            System.out.println("\n" + "=".repeat(50));
+            System.out.println("📚 PERGUNTA DE CAPOEIRA");
+            System.out.println("   Dificuldade: " + getNomeDificuldade(dificuldade));
+            System.out.println("=".repeat(50));
+            pergunta.exibir();
+
+            System.out.print("\n✏️  Sua resposta: ");
+            String resposta = scanner.nextLine().trim().toUpperCase();
+
+            boolean acertou = AvaliadorRespostas.avaliar(pergunta, resposta);
+
+            if (acertou) {
+                perguntasCertas++;
+
+                if (inimigoVaiEsquivar(escolhaAtaque, inimigo)) {
+                    executarEsquivaInimigo(inimigo, ehChefao);
+                    // ⭐ NÃO recupera Ginga quando o inimigo esquivou
+                } else {
+                    System.out.println("\n✅ CORRETO! Execute seu golpe!");
+                    int danoBase = executarAtaqueComDano(escolhaAtaque, capoeirista, inimigo);
+                    int danoFinal = calcularDanoEscalado(danoBase, dificuldade);
+                    System.out.println("💥 DANO: " + danoFinal);
+                    inimigo.tomarDano(danoFinal);
+
+                    // ⭐ SÓ RECUPERA GINGA SE ACERTOU E INIMIGO NÃO ESQUIVOU
+                    int recargaGinga;
+                    switch (escolhaAtaque) {
+                        case 1: recargaGinga = 15; break;
+                        case 2: recargaGinga = 10; break;
+                        case 3: recargaGinga = 5; break;
+                        default: recargaGinga = 10;
+                    }
+                    capoeirista.consumirEnergiaGinga(-recargaGinga);
+                }
+            } else {
+                perguntasErradas++;
+                contadorAtaquesBasicos = 0;
+                System.out.println("\n❌ ERRADO!");
+                System.out.println("   📖 Resposta correta: " + AvaliadorRespostas.getRespostaCorretaFormatada(pergunta));
+
+                int danoInimigo = calcularDanoInimigo(inimigo, ehChefao);
+                System.out.println("💢 " + inimigo.getNome() + " contra-ataca causando " + danoInimigo + " de dano!");
+                jogador.tomarDano(danoInimigo);
+
+                // ⭐ NÃO RECUPERA GINGA QUANDO ERRA
+            }
+
+            if (!inimigo.vivo()) {
+                System.out.println("\n💀 " + inimigo.getNome() + " FOI DERROTADO!");
+                processarVitoriaInimigo(ehChefao);
+                return true;
+            }
+
+            if (!jogador.vivo()) {
+                return false;
+            }
+
+            if (inimigo.vivo() && jogador.vivo()) {
+                System.out.print("\n⏭️  Pressione ENTER para próxima rodada...");
+                scanner.nextLine();
+            }
         }
 
-        double variacao = 0.85 + (random.nextDouble() * 0.3);
-        int danoFinal = (int)(danoBase * variacao);
-        return Math.max(5, danoFinal);
+        return jogador.vivo();
     }
 
     private void derrotaNaRoda() {
@@ -577,6 +677,22 @@ public class GerenciadorRodaCapoeira {
         }
 
         System.out.println("🥋 Mestres Derrotados: " + vitorias + "/9");
+
+        System.out.println("\n📚 ESTATÍSTICA DE PERGUNTAS:");
+        for (Dificuldade diff : Dificuldade.values()) {
+            List<Pergunta> todas = bancoPerguntas.getPerguntasPorDificuldade(PerTipo.CAPOEIRISTA, diff, 1);
+            int usadas = 0;
+            if (todas != null) {
+                for (Pergunta p : todas) {
+                    if (perguntasUsadasGlobal.contains(p.getId())) {
+                        usadas++;
+                    }
+                }
+            }
+            int resets = resetsPorDificuldade.get(diff);
+            System.out.println("   " + diff.getNome() + ": " + usadas + "/" + (todas != null ? todas.size() : 0) +
+                    " usadas | Resets: " + resets);
+        }
 
         Capoeirista c = (Capoeirista) jogador.getPersonagem();
         System.out.println("\n👤 SEU CAPOEIRISTA:");
