@@ -1,15 +1,25 @@
 package com.baquara.modelo;
 
-public class Guerreiro extends Personagem implements AtributoEspecial {
+import com.baquara.modelo.efeitos.EfeitoStatus;
+
+import java.util.*;
+
+public class Guerreiro extends Personagem implements AtributoEspecial, Entidade {
     private int espiritoLuta;
     private int espiritoLutaMaximo;
     private int comboAtual;
 
+    // ⭐ NOVOS CAMPOS PARA EFEITOS DE STATUS
+    private Map<Class<? extends EfeitoStatus>, EfeitoStatus> efeitos;
+
     public Guerreiro() {
-        super(PerTipo.GUERREIRO, "Guerreiro", 140, 28, 18);  // Defesa média: 18
+        super(PerTipo.GUERREIRO, "Guerreiro", 140, 28, 18);
         this.espiritoLutaMaximo = 100;
         this.espiritoLuta = 100;
         this.comboAtual = 0;
+
+        // ⭐ INICIALIZA O MAPA DE EFEITOS
+        this.efeitos = new HashMap<>();
     }
 
     public int getEspiritoLuta() { return espiritoLuta; }
@@ -44,6 +54,107 @@ public class Guerreiro extends Personagem implements AtributoEspecial {
         espiritoLuta = espiritoLutaMaximo;
         comboAtual = 0;
         System.out.println("💥 Espírito de Luta máximo: " + espiritoLutaMaximo + " | Restaurado!");
+    }
+
+    // ============ MÉTODOS DA INTERFACE ENTIDADE ============
+
+    @Override
+    public int getAtaque() {
+        return ataque;
+    }
+
+    @Override
+    public int getDefesa() {
+        return defesa;
+    }
+
+    @Override
+    public int getVida() {
+        return vida;
+    }
+
+    @Override
+    public int getVidaMax() {
+        return vidaMax;
+    }
+
+    @Override
+    public void setAtaque(int ataque) {
+        this.ataque = ataque;
+    }
+
+    @Override
+    public void setDefesa(int defesa) {
+        this.defesa = defesa;
+    }
+
+    @Override
+    public void setVida(int vida) {
+        this.vida = Math.max(0, Math.min(vida, vidaMax));
+    }
+
+    @Override
+    public void adicionarEfeito(EfeitoStatus efeito) {
+        Class<? extends EfeitoStatus> tipo = efeito.getClass();
+
+        if (efeitos.containsKey(tipo)) {
+            EfeitoStatus existente = efeitos.get(tipo);
+            existente.renovar();
+            System.out.println("🔄 " + nome + ": " + efeito.getNome() + " renovado!");
+        } else {
+            efeitos.put(tipo, efeito);
+            efeito.aplicar(this);
+            System.out.println("✨ " + nome + " recebeu efeito: " + efeito.getNome());
+        }
+    }
+
+    @Override
+    public void removerEfeito(Class<? extends EfeitoStatus> tipoEfeito) {
+        EfeitoStatus efeito = efeitos.remove(tipoEfeito);
+        if (efeito != null) {
+            efeito.remover(this);
+            System.out.println("⏰ " + nome + ": " + efeito.getNome() + " expirou!");
+        }
+    }
+
+    @Override
+    public boolean temEfeito(Class<? extends EfeitoStatus> tipoEfeito) {
+        return efeitos.containsKey(tipoEfeito) &&
+                efeitos.get(tipoEfeito).estaAtivo();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends EfeitoStatus> T getEfeito(Class<T> tipoEfeito) {
+        return (T) efeitos.get(tipoEfeito);
+    }
+
+    @Override
+    public void atualizarEfeitos() {
+        List<Class<? extends EfeitoStatus>> paraRemover = new ArrayList<>();
+
+        for (EfeitoStatus efeito : efeitos.values()) {
+            if (efeito.estaAtivo()) {
+                efeito.atualizar(this);
+                if (!efeito.reduzirDuracao()) {
+                    paraRemover.add(efeito.getClass());
+                }
+            } else {
+                paraRemover.add(efeito.getClass());
+            }
+        }
+
+        for (Class<? extends EfeitoStatus> tipo : paraRemover) {
+            removerEfeito(tipo);
+        }
+    }
+
+    public void limparEfeitos() {
+        for (EfeitoStatus efeito : efeitos.values()) {
+            efeito.remover(this);
+        }
+        efeitos.clear();
+        System.out.println("✨ Todos os efeitos de " + nome + " foram removidos!");
     }
 
     @Override
@@ -93,7 +204,15 @@ public class Guerreiro extends Personagem implements AtributoEspecial {
         if (comboAtual > 0) {
             System.out.println("   🔥 Combo: x" + comboAtual);
         }
+
+        // Mostra efeitos ativos
+        for (EfeitoStatus efeito : efeitos.values()) {
+            if (efeito.estaAtivo()) {
+                System.out.println("   " + efeito.getDescricao());
+            }
+        }
     }
+
     // ============ IMPLEMENTAÇÃO DE AtributoEspecial ============
 
     @Override

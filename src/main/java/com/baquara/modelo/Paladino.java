@@ -1,16 +1,25 @@
-// 📁 modelo/Paladino.java
 package com.baquara.modelo;
 
-public class Paladino extends Personagem implements AtributoEspecial {
+import com.baquara.modelo.efeitos.EfeitoStatus;
+
+import java.util.*;
+
+public class Paladino extends Personagem implements AtributoEspecial, Entidade {
     private int poderDivino;
     private int poderDivinoMaximo;
     private int feAbencoada;
 
+    // ⭐ NOVOS CAMPOS PARA EFEITOS DE STATUS
+    private Map<Class<? extends EfeitoStatus>, EfeitoStatus> efeitos;
+
     public Paladino() {
-        super(PerTipo.PALADINO, "Paladino", 150, 22, 25);  // Defesa alta: 25
+        super(PerTipo.PALADINO, "Paladino", 150, 22, 25);
         this.poderDivinoMaximo = 100;
         this.poderDivino = 100;
         this.feAbencoada = 0;
+
+        // ⭐ INICIALIZA O MAPA DE EFEITOS
+        this.efeitos = new HashMap<>();
     }
 
     public int getPoderDivino() { return poderDivino; }
@@ -47,6 +56,107 @@ public class Paladino extends Personagem implements AtributoEspecial {
         poderDivino = poderDivinoMaximo;
         feAbencoada += 2;
         System.out.println("🌟 Poder Divino máximo: " + poderDivinoMaximo + " | Completamente restaurado!");
+    }
+
+    // ============ MÉTODOS DA INTERFACE ENTIDADE ============
+
+    @Override
+    public int getAtaque() {
+        return ataque;
+    }
+
+    @Override
+    public int getDefesa() {
+        return defesa;
+    }
+
+    @Override
+    public int getVida() {
+        return vida;
+    }
+
+    @Override
+    public int getVidaMax() {
+        return vidaMax;
+    }
+
+    @Override
+    public void setAtaque(int ataque) {
+        this.ataque = ataque;
+    }
+
+    @Override
+    public void setDefesa(int defesa) {
+        this.defesa = defesa;
+    }
+
+    @Override
+    public void setVida(int vida) {
+        this.vida = Math.max(0, Math.min(vida, vidaMax));
+    }
+
+    @Override
+    public void adicionarEfeito(EfeitoStatus efeito) {
+        Class<? extends EfeitoStatus> tipo = efeito.getClass();
+
+        if (efeitos.containsKey(tipo)) {
+            EfeitoStatus existente = efeitos.get(tipo);
+            existente.renovar();
+            System.out.println("🔄 " + nome + ": " + efeito.getNome() + " renovado!");
+        } else {
+            efeitos.put(tipo, efeito);
+            efeito.aplicar(this);
+            System.out.println("✨ " + nome + " recebeu efeito: " + efeito.getNome());
+        }
+    }
+
+    @Override
+    public void removerEfeito(Class<? extends EfeitoStatus> tipoEfeito) {
+        EfeitoStatus efeito = efeitos.remove(tipoEfeito);
+        if (efeito != null) {
+            efeito.remover(this);
+            System.out.println("⏰ " + nome + ": " + efeito.getNome() + " expirou!");
+        }
+    }
+
+    @Override
+    public boolean temEfeito(Class<? extends EfeitoStatus> tipoEfeito) {
+        return efeitos.containsKey(tipoEfeito) &&
+                efeitos.get(tipoEfeito).estaAtivo();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends EfeitoStatus> T getEfeito(Class<T> tipoEfeito) {
+        return (T) efeitos.get(tipoEfeito);
+    }
+
+    @Override
+    public void atualizarEfeitos() {
+        List<Class<? extends EfeitoStatus>> paraRemover = new ArrayList<>();
+
+        for (EfeitoStatus efeito : efeitos.values()) {
+            if (efeito.estaAtivo()) {
+                efeito.atualizar(this);
+                if (!efeito.reduzirDuracao()) {
+                    paraRemover.add(efeito.getClass());
+                }
+            } else {
+                paraRemover.add(efeito.getClass());
+            }
+        }
+
+        for (Class<? extends EfeitoStatus> tipo : paraRemover) {
+            removerEfeito(tipo);
+        }
+    }
+
+    public void limparEfeitos() {
+        for (EfeitoStatus efeito : efeitos.values()) {
+            efeito.remover(this);
+        }
+        efeitos.clear();
+        System.out.println("✨ Todos os efeitos de " + nome + " foram removidos!");
     }
 
     @Override
@@ -97,7 +207,15 @@ public class Paladino extends Personagem implements AtributoEspecial {
         super.mostrarStatus();
         System.out.println("   🙏 Poder Divino: " + poderDivino + "/" + poderDivinoMaximo);
         System.out.println("   📿 Fé Abençoada: " + feAbencoada + " acúmulos");
+
+        // Mostra efeitos ativos
+        for (EfeitoStatus efeito : efeitos.values()) {
+            if (efeito.estaAtivo()) {
+                System.out.println("   " + efeito.getDescricao());
+            }
+        }
     }
+
     // ============ IMPLEMENTAÇÃO DE AtributoEspecial ============
 
     @Override

@@ -1,26 +1,31 @@
 package com.baquara.modelo;
 
-import java.util.Random;
+import com.baquara.modelo.efeitos.EfeitoStatus;
 
-public class Capoeirista extends Personagem implements AtributoEspecial {
+import java.util.*;
+
+public class Capoeirista extends Personagem implements AtributoEspecial, Entidade {
     private int energiaGinga;
     private int energiaMaxima;
     private int esquivasRestantes;
     private int esquivasMaximas;
-    private boolean esquivaAtiva;  // ⭐ NOVO: indica se o jogador tem uma esquiva ativa
+    private boolean esquivaAtiva;
     private Random random;
 
+    // ⭐ NOVOS CAMPOS PARA EFEITOS DE STATUS
+    private Map<Class<? extends EfeitoStatus>, EfeitoStatus> efeitos;
+
     private String[] titulos = {
-            "INICIANTE NA RODA",        // Estágio 1
-            "APRENDIZ DO BERIMBAU",      // Estágio 2
-            "DISCÍPULO DA GINGA",        // Estágio 3
-            "GUERREIRO DA CAPOEIRA",     // Estágio 4
-            "MESTRE DO JOGO",            // Estágio 5
-            "GUARDIÃO DA TRADIÇÃO",      // Estágio 6
-            "LENDA VIVA",                // Estágio 7
-            "ESPÍRITO ANCESTRAL",        // Estágio 8
-            "HERDEIRO DE ZUMBI",         // Estágio 9
-            "BESOURO DO BERIMBAU"        // Estágio 10
+            "INICIANTE NA RODA",
+            "APRENDIZ DO BERIMBAU",
+            "DISCÍPULO DA GINGA",
+            "GUERREIRO DA CAPOEIRA",
+            "MESTRE DO JOGO",
+            "GUARDIÃO DA TRADIÇÃO",
+            "LENDA VIVA",
+            "ESPÍRITO ANCESTRAL",
+            "HERDEIRO DE ZUMBI",
+            "BESOURO DO BERIMBAU"
     };
 
     public Capoeirista() {
@@ -29,17 +34,20 @@ public class Capoeirista extends Personagem implements AtributoEspecial {
         this.energiaGinga = 100;
         this.esquivasMaximas = 3;
         this.esquivasRestantes = 3;
-        this.esquivaAtiva = false;  // ⭐ INICIA SEM ESQUIVA ATIVA
+        this.esquivaAtiva = false;
         this.random = new Random();
+
+        // ⭐ INICIALIZA O MAPA DE EFEITOS
+        this.efeitos = new HashMap<>();
     }
 
-    // ============ GETTERS ============
+    // ============ GETTERS EXISTENTES ============
 
     public int getEnergiaGinga() { return energiaGinga; }
     public int getEnergiaMaxima() { return energiaMaxima; }
     public int getEsquivasRestantes() { return esquivasRestantes; }
     public int getEsquivasMaximas() { return esquivasMaximas; }
-    public boolean isEsquivaAtiva() { return esquivaAtiva; }  // ⭐ NOVO
+    public boolean isEsquivaAtiva() { return esquivaAtiva; }
 
     // ============ MÉTODOS DE GINGA ============
 
@@ -55,7 +63,6 @@ public class Capoeirista extends Personagem implements AtributoEspecial {
         return false;
     }
 
-    // ⭐ MÉTODO PARA USAR ESQUIVA (CONSOME UMA E ATIVA A PROTEÇÃO)
     public boolean usarEsquiva() {
         if (esquivasRestantes > 0) {
             esquivasRestantes--;
@@ -67,24 +74,14 @@ public class Capoeirista extends Personagem implements AtributoEspecial {
         return false;
     }
 
-    // ⭐ MÉTODO PARA TENTAR DESVIAR (CHAMADO QUANDO O JOGADOR ERRA)
     public boolean tentarDesviar(Inimigo inimigo, int danoQueSofreria) {
         if (!this.esquivaAtiva) {
-            return false;  // Não tem esquiva ativa
+            return false;
         }
-
-        // Desativa a esquiva (já foi usada)
         this.esquivaAtiva = false;
-
         return executarEsquiva(inimigo, danoQueSofreria);
     }
 
-    /**
-     * Executa a esquiva - BLOQUEIA o dano e causa contra-ataque
-     * @param inimigo O inimigo que atacaria
-     * @param danoQueSofreria O dano que seria causado (se houver)
-     * @return true se esquivou com sucesso
-     */
     private boolean executarEsquiva(Inimigo inimigo, int danoQueSofreria) {
         System.out.println("\n🌀 ESQUIVA DE CAPOEIRA! 🌀");
         System.out.println("   Você desviou do golpe inimigo com maestria!");
@@ -93,12 +90,10 @@ public class Capoeirista extends Personagem implements AtributoEspecial {
             System.out.println("   🛡️ Dano evitado: " + danoQueSofreria + " de dano!");
         }
 
-        // Contra-ataque garantido (100%)
         int contraAtaque = (ataque / 2) + random.nextInt(15) + 5;
         System.out.println("⚡ CONTRA-ATAQUE RÁPIDO! Causou " + contraAtaque + " de dano!");
         inimigo.tomarDano(contraAtaque);
 
-        // Recupera Ginga
         int gingaRecuperada = 15;
         energiaGinga = Math.min(energiaMaxima, energiaGinga + gingaRecuperada);
         System.out.println("🌀 +" + gingaRecuperada + " de Ginga recuperada!");
@@ -106,9 +101,6 @@ public class Capoeirista extends Personagem implements AtributoEspecial {
         return true;
     }
 
-    /**
-     * Versão para usar quando não há dano específico para bloquear
-     */
     public boolean executarEsquiva(Inimigo inimigo) {
         if (!this.esquivaAtiva) {
             return false;
@@ -119,7 +111,7 @@ public class Capoeirista extends Personagem implements AtributoEspecial {
 
     public void recarregarEsquivas() {
         esquivasRestantes = esquivasMaximas;
-        this.esquivaAtiva = false;  // ⭐ RESETA ESQUIVA ATIVA
+        this.esquivaAtiva = false;
     }
 
     public void recarregarTotalmente() {
@@ -128,11 +120,111 @@ public class Capoeirista extends Personagem implements AtributoEspecial {
         System.out.println("🌀 Ginga e esquivas totalmente restauradas!");
     }
 
-    // ⭐ RESETA APENAS AS ESQUIVAS (MANTÉM A GINGA)
     public void resetarEsquivas() {
         esquivasRestantes = esquivasMaximas;
         this.esquivaAtiva = false;
         System.out.println("🌀 Esquivas recarregadas: " + esquivasRestantes + "/" + esquivasMaximas);
+    }
+
+    // ============ MÉTODOS DA INTERFACE ENTIDADE ============
+
+    @Override
+    public int getAtaque() {
+        return ataque;
+    }
+
+    @Override
+    public int getDefesa() {
+        return defesa;
+    }
+
+    @Override
+    public int getVida() {
+        return vida;
+    }
+
+    @Override
+    public int getVidaMax() {
+        return vidaMax;
+    }
+
+    @Override
+    public void setAtaque(int ataque) {
+        this.ataque = ataque;
+    }
+
+    @Override
+    public void setDefesa(int defesa) {
+        this.defesa = defesa;
+    }
+
+    @Override
+    public void setVida(int vida) {
+        this.vida = Math.max(0, Math.min(vida, vidaMax));
+    }
+
+    @Override
+    public void adicionarEfeito(EfeitoStatus efeito) {
+        Class<? extends EfeitoStatus> tipo = efeito.getClass();
+
+        if (efeitos.containsKey(tipo)) {
+            EfeitoStatus existente = efeitos.get(tipo);
+            existente.renovar();
+            System.out.println("🔄 " + nome + ": " + efeito.getNome() + " renovado!");
+        } else {
+            efeitos.put(tipo, efeito);
+            efeito.aplicar(this);
+            System.out.println("✨ " + nome + " recebeu efeito: " + efeito.getNome());
+        }
+    }
+
+    @Override
+    public void removerEfeito(Class<? extends EfeitoStatus> tipoEfeito) {
+        EfeitoStatus efeito = efeitos.remove(tipoEfeito);
+        if (efeito != null) {
+            efeito.remover(this);
+            System.out.println("⏰ " + nome + ": " + efeito.getNome() + " expirou!");
+        }
+    }
+
+    @Override
+    public boolean temEfeito(Class<? extends EfeitoStatus> tipoEfeito) {
+        return efeitos.containsKey(tipoEfeito) &&
+                efeitos.get(tipoEfeito).estaAtivo();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends EfeitoStatus> T getEfeito(Class<T> tipoEfeito) {
+        return (T) efeitos.get(tipoEfeito);
+    }
+
+    @Override
+    public void atualizarEfeitos() {
+        List<Class<? extends EfeitoStatus>> paraRemover = new ArrayList<>();
+
+        for (EfeitoStatus efeito : efeitos.values()) {
+            if (efeito.estaAtivo()) {
+                efeito.atualizar(this);
+                if (!efeito.reduzirDuracao()) {
+                    paraRemover.add(efeito.getClass());
+                }
+            } else {
+                paraRemover.add(efeito.getClass());
+            }
+        }
+
+        for (Class<? extends EfeitoStatus> tipo : paraRemover) {
+            removerEfeito(tipo);
+        }
+    }
+
+    public void limparEfeitos() {
+        for (EfeitoStatus efeito : efeitos.values()) {
+            efeito.remover(this);
+        }
+        efeitos.clear();
+        System.out.println("✨ Todos os efeitos de " + nome + " foram removidos!");
     }
 
     // ============ EVOLUÇÃO ============
@@ -311,6 +403,13 @@ public class Capoeirista extends Personagem implements AtributoEspecial {
         System.out.println("   🔄 Esquivas: " + esquivasRestantes + "/" + esquivasMaximas);
         if (esquivaAtiva) {
             System.out.println("   🛡️ ESQUIVA ATIVA! Próximo ataque será desviado!");
+        }
+
+        // Mostra efeitos ativos
+        for (EfeitoStatus efeito : efeitos.values()) {
+            if (efeito.estaAtivo()) {
+                System.out.println("   " + efeito.getDescricao());
+            }
         }
     }
 }

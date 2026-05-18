@@ -1,20 +1,27 @@
-// 📁 modelo/Arcanista.java (CORRIGIDO)
 package com.baquara.modelo;
 
-import java.util.Random;
+import com.baquara.modelo.efeitos.EfeitoStatus;
 
-public class Arcanista extends Personagem implements AtributoEspecial {
+import java.util.*;
+
+public class Arcanista extends Personagem implements AtributoEspecial, Entidade {
     private int poderArcano;
     private int poderMaximo;
     private Random random;
     private String[] elementos;
 
+    // ⭐ NOVOS CAMPOS PARA EFEITOS DE STATUS
+    private Map<Class<? extends EfeitoStatus>, EfeitoStatus> efeitos;
+
     public Arcanista() {
-        super(PerTipo.ARCANISTA, "Arcanista", 95, 32, 8);  // Defesa muito baixa: 8
+        super(PerTipo.ARCANISTA, "Arcanista", 95, 32, 8);
         this.poderArcano = 100;
         this.poderMaximo = 100;
         this.random = new Random();
         this.elementos = new String[]{"🔥 Fogo", "❄️ Gelo", "⚡ Raio", "🌑 Sombra", "✨ Luz"};
+
+        // ⭐ INICIALIZA O MAPA DE EFEITOS
+        this.efeitos = new HashMap<>();
     }
 
     public int getPoderArcano() { return poderArcano; }
@@ -45,12 +52,113 @@ public class Arcanista extends Personagem implements AtributoEspecial {
         System.out.println("🔮 Poder Arcano recarregado: +" + recarga + " (" + poderArcano + "/" + poderMaximo + ")");
     }
 
+    @Override
     public void recarregarPorNivel(int novoNivel) {
         poderMaximo += 12;
         poderArcano = poderMaximo;
         System.out.println("🌟 Poder Arcano máximo: " + poderMaximo + " | Completamente restaurado!");
     }
 
+    // ============ MÉTODOS DA INTERFACE ENTIDADE ============
+
+    @Override
+    public int getAtaque() {
+        return ataque;
+    }
+
+    @Override
+    public int getDefesa() {
+        return defesa;
+    }
+
+    @Override
+    public int getVida() {
+        return vida;
+    }
+
+    @Override
+    public int getVidaMax() {
+        return vidaMax;
+    }
+
+    @Override
+    public void setAtaque(int ataque) {
+        this.ataque = ataque;
+    }
+
+    @Override
+    public void setDefesa(int defesa) {
+        this.defesa = defesa;
+    }
+
+    @Override
+    public void setVida(int vida) {
+        this.vida = Math.max(0, Math.min(vida, vidaMax));
+    }
+
+    @Override
+    public void adicionarEfeito(EfeitoStatus efeito) {
+        Class<? extends EfeitoStatus> tipo = efeito.getClass();
+
+        if (efeitos.containsKey(tipo)) {
+            EfeitoStatus existente = efeitos.get(tipo);
+            existente.renovar();
+            System.out.println("🔄 " + nome + ": " + efeito.getNome() + " renovado!");
+        } else {
+            efeitos.put(tipo, efeito);
+            efeito.aplicar(this);
+            System.out.println("✨ " + nome + " recebeu efeito: " + efeito.getNome());
+        }
+    }
+
+    @Override
+    public void removerEfeito(Class<? extends EfeitoStatus> tipoEfeito) {
+        EfeitoStatus efeito = efeitos.remove(tipoEfeito);
+        if (efeito != null) {
+            efeito.remover(this);
+            System.out.println("⏰ " + nome + ": " + efeito.getNome() + " expirou!");
+        }
+    }
+
+    @Override
+    public boolean temEfeito(Class<? extends EfeitoStatus> tipoEfeito) {
+        return efeitos.containsKey(tipoEfeito) &&
+                efeitos.get(tipoEfeito).estaAtivo();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends EfeitoStatus> T getEfeito(Class<T> tipoEfeito) {
+        return (T) efeitos.get(tipoEfeito);
+    }
+
+    @Override
+    public void atualizarEfeitos() {
+        List<Class<? extends EfeitoStatus>> paraRemover = new ArrayList<>();
+
+        for (EfeitoStatus efeito : efeitos.values()) {
+            if (efeito.estaAtivo()) {
+                efeito.atualizar(this);
+                if (!efeito.reduzirDuracao()) {
+                    paraRemover.add(efeito.getClass());
+                }
+            } else {
+                paraRemover.add(efeito.getClass());
+            }
+        }
+
+        for (Class<? extends EfeitoStatus> tipo : paraRemover) {
+            removerEfeito(tipo);
+        }
+    }
+
+    public void limparEfeitos() {
+        for (EfeitoStatus efeito : efeitos.values()) {
+            efeito.remover(this);
+        }
+        efeitos.clear();
+        System.out.println("✨ Todos os efeitos de " + nome + " foram removidos!");
+    }
 
     public void atacar(Personagem alvo) {
         String elemento = elementos[random.nextInt(elementos.length)];
@@ -136,7 +244,15 @@ public class Arcanista extends Personagem implements AtributoEspecial {
     public void mostrarStatus() {
         super.mostrarStatus();
         System.out.println("   🔮 Poder Arcano: " + poderArcano + "/" + poderMaximo);
+
+        // Mostra efeitos ativos
+        for (EfeitoStatus efeito : efeitos.values()) {
+            if (efeito.estaAtivo()) {
+                System.out.println("   " + efeito.getDescricao());
+            }
+        }
     }
+
     // ============ IMPLEMENTAÇÃO DE AtributoEspecial ============
 
     @Override
