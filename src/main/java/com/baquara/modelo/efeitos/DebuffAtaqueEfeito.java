@@ -2,7 +2,6 @@
 
 package com.baquara.modelo.efeitos;
 
-import com.baquara.modelo.EfeitoStatus;
 import com.baquara.modelo.Entidade;
 
 public class DebuffAtaqueEfeito extends EfeitoStatus {

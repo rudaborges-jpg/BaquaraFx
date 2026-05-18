@@ -2,7 +2,7 @@ package com.baquara.modelo;
 
 import com.baquara.habilidades.HabilidadeEspecial;
 
-public abstract class Personagem {
+public abstract class Personagem implements Entidade {
     protected String nome;
     protected PerTipo tipo;
     protected int vida;

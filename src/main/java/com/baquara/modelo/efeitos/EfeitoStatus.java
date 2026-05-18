@@ -1,9 +1,7 @@
-// 📁 modelo/EfeitoStatus.java
-package com.baquara.modelo;
+package com.baquara.modelo.efeitos;
 
-/**
- * Classe base para todos os efeitos de status (debuffs/buffs)
- */
+import com.baquara.modelo.Entidade;
+
 public abstract class EfeitoStatus {
     protected String nome;
     protected int duracaoRestante;

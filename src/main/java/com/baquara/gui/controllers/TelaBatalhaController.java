@@ -7,6 +7,7 @@ import com.baquara.modelo.*;
 import com.baquara.modelo.Pergunta.Dificuldade;
 import com.baquara.habilidades.HabilidadeEspecial;
 import com.baquara.modelo.efeitos.DebuffAtaqueEfeito;
+import com.baquara.modelo.efeitos.SangramentoEfeito;  // ⭐ NOVO IMPORT
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -92,6 +93,44 @@ public class TelaBatalhaController {
         sprites.put(PerTipo.SABIO, "📚");
         sprites.put(PerTipo.ARCANISTA, "🔮");
         sprites.put(PerTipo.CAPOEIRISTA, "🥋");
+    }
+
+    private void processarEfeitosContinuos() {
+        if (inimigoAtual == null || !inimigoAtual.vivo()) return;
+
+        // Verifica se o inimigo tem sangramento ativo
+        SangramentoEfeito sangramento = inimigoAtual.getEfeito(SangramentoEfeito.class);
+
+        if (sangramento != null && sangramento.estaAtivo()) {
+            adicionarDialogoNormal("🩸 " + inimigoAtual.getNome() + " está sangrando!");
+
+            // Salva a vida antes do sangramento
+            int vidaAntes = inimigoAtual.getVida();
+
+            // Aplica o sangramento (isso já imprime o dano dentro do método atualizar)
+            inimigoAtual.atualizarEfeitos();
+
+            int vidaDepois = inimigoAtual.getVida();
+            int danoSangramento = vidaAntes - vidaDepois;
+
+            if (danoSangramento > 0) {
+                danoTotalCausado += danoSangramento;
+                adicionarDialogoNormal("   💔 Dano por sangramento: " + danoSangramento);
+
+                // Atualiza a barra de vida do inimigo
+                atualizarStatusInimigo();
+                atualizarStatusDetalhadoInimigo();
+
+                // Verifica se o inimigo morreu pelo sangramento
+                if (!inimigoAtual.vivo()) {
+                    adicionarDialogoAcerto("\n💀 " + inimigoAtual.getNome() + " morreu devido ao sangramento!");
+                    return;
+                }
+            }
+        } else {
+            // Se não tem sangramento ativo, apenas atualiza outros efeitos (debuffs)
+            inimigoAtual.atualizarEfeitos();
+        }
     }
 
     public void setJogador(Jogador jogador) {
@@ -286,6 +325,12 @@ public class TelaBatalhaController {
 
         jogador.getPersonagem().curar(30);
         adicionarDialogoNormal("\n✨ +30 de vida recuperada pelo avanço de estágio!");
+
+        if (inimigoAtual != null) {
+            inimigoAtual.limparEfeitos();
+            adicionarDialogoNormal("✨ Efeitos de status (sangramento, debuffs) foram removidos!");
+        }
+
         adicionarDialogoNormal("\n🎵 Prepare-se para o próximo desafio...\n");
 
         carregarProximoInimigo();
@@ -472,6 +517,9 @@ public class TelaBatalhaController {
                 adicionarDialogoNormal("   ❤️ Vida +40 | ⚔️ Ataque +5 | 🛡️ Defesa +3");
             }
 
+            processarEfeitosContinuos();
+
+
             if (!inimigoAtual.vivo()) {
                 Estagio estagioAtualObj = estagios.get(estagioIndex);
                 String nomeEstagio = estagioAtualObj.getNome();
@@ -503,7 +551,6 @@ public class TelaBatalhaController {
             atualizarStatusDetalhadoInimigo();
 
             reduzirDebuffsInimigo();
-
             voltarAoMenu();
 
         } else {
@@ -531,6 +578,8 @@ public class TelaBatalhaController {
 
             atualizarStatusJogador();
             atualizarStatusDetalhadoJogador();
+
+            processarEfeitosContinuos();
 
             if (!jogador.vivo()) {
                 finalizarJogo(false);
@@ -634,6 +683,9 @@ public class TelaBatalhaController {
         atualizarBotaoHabilidade();
         atualizarStatusJogador();
 
+        processarEfeitosContinuos();
+
+
         if (!inimigoAtual.vivo()) {
             Estagio estagioAtualObj = estagios.get(estagioIndex);
 
@@ -687,22 +739,20 @@ public class TelaBatalhaController {
             }
             if (lblInimigoDefesa != null) {
                 lblInimigoDefesa.setText("🛡️ Defesa: " + inimigoAtual.getDefesa() + " (-" + percentualReducao + "% dano)");
+
+                StringBuilder efeitos = new StringBuilder();
+
+                SangramentoEfeito sangramento = inimigoAtual.getEfeito(SangramentoEfeito.class);
+                if (sangramento != null && sangramento.estaAtivo()) {
+                    efeitos.append("🩸 Sangramento (").append(sangramento.getDuracaoRestante()).append(" rodadas) ");
+                }
+
+                DebuffAtaqueEfeito debuff = inimigoAtual.getEfeito(DebuffAtaqueEfeito.class);
+                if (debuff != null && debuff.estaAtivo()) {
+                    efeitos.append("🔻 Ataque reduzido (").append(debuff.getDuracaoRestante()).append(" rodadas) ");
+                }
             }
         });
-    }
-
-    private void atualizarDebuffsInimigo() {
-        if (inimigoAtual != null) {
-            int ataqueAntes = inimigoAtual.getAtaque();
-            inimigoAtual.atualizarEfeitos();
-            int ataqueDepois = inimigoAtual.getAtaque();
-
-            if (ataqueAntes != ataqueDepois) {
-                adicionarDialogoNormal("🛡️ O debuff do " + inimigoAtual.getNome() + " expirou! Ataque voltou ao normal.");
-                atualizarStatusDetalhadoInimigo();
-                atualizarStatusInimigo();
-            }
-        }
     }
 
     private void adicionarDialogoNormal(String msg) {

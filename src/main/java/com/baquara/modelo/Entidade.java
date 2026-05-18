@@ -1,6 +1,8 @@
 // 📁 modelo/Entidade.java
 package com.baquara.modelo;
 
+import com.baquara.modelo.efeitos.EfeitoStatus;
+
 public interface Entidade {
     String getNome();
     int getAtaque();

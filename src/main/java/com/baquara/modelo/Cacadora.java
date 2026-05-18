@@ -1,5 +1,7 @@
 package com.baquara.modelo;
 
+import com.baquara.modelo.efeitos.EfeitoStatus;
+import com.baquara.modelo.efeitos.SangramentoEfeito;
 import java.util.Random;
 
 public class Cacadora extends Personagem implements AtributoEspecial {
@@ -55,6 +57,8 @@ public class Cacadora extends Personagem implements AtributoEspecial {
         System.out.println("\n🌿 " + nome + " usa CHUVA DE FLECHAS!");
 
         int custo = 35;
+        AtributoEspecial attr = (AtributoEspecial) this;
+
         if (!consumirPenetracao(custo)) {
             if (penetracao > 10) {
                 System.out.println("⚠️ Penetração baixa! Usando versão reduzida...");
@@ -75,14 +79,38 @@ public class Cacadora extends Personagem implements AtributoEspecial {
         }
 
         System.out.println("💥 Rajada de flechas causa " + dano + " de dano!");
+
+        // ⭐ Aplica o dano inicial
         alvo.tomarDano(dano);
 
-        int sangramento = 10 + (flechasPrecisas * 2);
-        System.out.println("🩸 Sangramento! +" + sangramento + " de dano adicional!");
-        alvo.tomarDano(sangramento);
+        // ⭐⭐⭐ APLICA O EFEITO DE SANGRAMENTO
+        int duracaoSangramento = 3;  // 3 rodadas
+        int danoSangramentoPorRodada = 10 + (flechasPrecisas * 2);
 
-        System.out.println("🏹 Flechas precisas: " + flechasPrecisas);
-        penetracao = Math.min(penetracaoMaxima, penetracao + 5);
+        System.out.println("\n🩸 SANGRAMENTO APLICADO!");
+        System.out.println("   ⏱️ Duração: " + duracaoSangramento + " rodadas");
+        System.out.println("   💔 Dano por rodada: " + danoSangramentoPorRodada);
+
+        // Verifica se o alvo já tem sangramento ativo
+        if (alvo.temEfeito(SangramentoEfeito.class)) {
+            SangramentoEfeito sangramentoExistente = alvo.getEfeito(SangramentoEfeito.class);
+            sangramentoExistente.renovar();
+            System.out.println("🔄 Sangramento renovado! Duração resetada.");
+        } else {
+            SangramentoEfeito sangramento = new SangramentoEfeito(duracaoSangramento, danoSangramentoPorRodada);
+            alvo.adicionarEfeito(sangramento);
+        }
+
+        System.out.println("🏹 Flechas precisas acumuladas: " + flechasPrecisas);
+
+        // ⭐ CRITÉRIO IMPORTANTE: O dano de sangramento NÃO recupera penetração
+        // Apenas o dano inicial do golpe recupera penetração
+
+        // Recupera penetração baseada no dano inicial (não no sangramento)
+        int recuperacao = 5;
+        if (critico) recuperacao = 8;
+        penetracao = Math.min(penetracaoMaxima, penetracao + recuperacao);
+        System.out.println("✨ +" + recuperacao + " de Penetração recuperada pelo acerto!");
     }
 
     @Override
@@ -140,5 +168,45 @@ public class Cacadora extends Personagem implements AtributoEspecial {
     @Override
     public void recarregarCompletamente() {
         penetracao = penetracaoMaxima;
+    }
+
+    @Override
+    public void setAtaque(int ataque) {
+
+    }
+
+    @Override
+    public void setDefesa(int defesa) {
+
+    }
+
+    @Override
+    public void setVida(int vida) {
+
+    }
+
+    @Override
+    public void adicionarEfeito(EfeitoStatus efeito) {
+
+    }
+
+    @Override
+    public void removerEfeito(Class<? extends EfeitoStatus> tipoEfeito) {
+
+    }
+
+    @Override
+    public boolean temEfeito(Class<? extends EfeitoStatus> tipoEfeito) {
+        return false;
+    }
+
+    @Override
+    public <T extends EfeitoStatus> T getEfeito(Class<T> tipoEfeito) {
+        return null;
+    }
+
+    @Override
+    public void atualizarEfeitos() {
+
     }
 }

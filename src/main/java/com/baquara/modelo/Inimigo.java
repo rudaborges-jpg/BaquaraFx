@@ -2,6 +2,8 @@
 
 package com.baquara.modelo;
 
+import com.baquara.modelo.efeitos.EfeitoStatus;
+
 import java.util.*;
 
 public class Inimigo implements Entidade {
