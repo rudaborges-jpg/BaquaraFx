@@ -7,7 +7,7 @@ public class ValoresHabilidade {
     public static final int CUSTO_PALADINO = 30;
     public static final int CUSTO_GUERREIRO = 40;
     public static final int CUSTO_CACADORA = 35;
-    public static final int CUSTO_SABIO = 30;
+    public static final int CUSTO_SABIO = 45;
     public static final int CUSTO_ARCANISTA = 50;
 
     // Recuperações das habilidades

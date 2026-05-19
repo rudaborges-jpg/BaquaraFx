@@ -1,3 +1,5 @@
+// 📁 habilidades/HabilidadeDestruicaoTotal.java
+// VERSÃO COM DANO MÍNIMO >= ATAQUE BÁSICO
 
 package com.baquara.habilidades;
 
@@ -18,10 +20,11 @@ public class HabilidadeDestruicaoTotal implements HabilidadeEspecial {
     private String ultimoElemento;
     private int estagioAtual;
 
-    // Constantes de balanceamento baseadas na VIDA do inimigo
-    private static final double DANO_OUTROS_MAX_PERCENT = 0.10;  // Outros elementos: máximo 10% da vida
-    private static final double DANO_RAIO_MIN_PERCENT = 0.20;   // Raio: mínimo 20% da vida
-    private static final double DANO_RAIO_MAX_PERCENT = 0.30;   // Raio: máximo 30% da vida (não mata em 1 hit)
+    // Constantes de balanceamento
+    private static final double DANO_RAIO_MIN_PERCENT = 0.22;   // Raio: mínimo 22% da vida
+    private static final double DANO_RAIO_MAX_PERCENT = 0.32;   // Raio: máximo 32% da vida
+    private static final double DANO_OUTROS_MIN_PERCENT = 0.12; // Outros: mínimo 12% da vida
+    private static final double DANO_OUTROS_MAX_PERCENT = 0.18; // Outros: máximo 18% da vida
     private static final double CHOQUE_RESIDUAL_PERCENT = 0.05; // +5% da vida de choque residual
 
     public HabilidadeDestruicaoTotal(Personagem usuario) {
@@ -40,53 +43,73 @@ public class HabilidadeDestruicaoTotal implements HabilidadeEspecial {
     }
 
     private void atualizarDescricao() {
-        // Calcula exemplos para mostrar na descrição
         int vidaExemplo = 160 + (estagioAtual - 1) * 100;
         if (estagioAtual == 10) vidaExemplo = 1500;
 
+        int danoOutrosMin = (int)(vidaExemplo * DANO_OUTROS_MIN_PERCENT);
         int danoOutrosMax = (int)(vidaExemplo * DANO_OUTROS_MAX_PERCENT);
         int danoRaioMin = (int)(vidaExemplo * DANO_RAIO_MIN_PERCENT);
         int danoRaioMax = (int)(vidaExemplo * DANO_RAIO_MAX_PERCENT);
-        int danoRaioTotalMax = (int)(vidaExemplo * (DANO_RAIO_MAX_PERCENT + CHOQUE_RESIDUAL_PERCENT));
 
-        this.descricao = "🌌 Libera poder arcano causando dano baseado na % de vida do inimigo!\n\n" +
+        this.descricao = "🌌 Libera poder arcano causando dano ELEVADO!\n\n" +
+                "   ⚡⚡⚡ SEMPRE MAIS FORTE QUE O ATAQUE BÁSICO! ⚡⚡⚡\n\n" +
                 "   📊 EXEMPLO (Estágio " + estagioAtual + " - Vida: " + vidaExemplo + "):\n" +
-                "   ⚡ RAIO: " + danoRaioMin + "-" + danoRaioMax + " de dano (+" + (int)(vidaExemplo * CHOQUE_RESIDUAL_PERCENT) + " choque)\n" +
-                "   🔥❄️🌑✨ OUTROS: até " + danoOutrosMax + " de dano\n\n" +
-                "   ⚡⚡⚡ EFEITOS POR ELEMENTO: ⚡⚡⚡\n" +
-                "   ⚡ RAIO: Dano TOTAL (20-30% vida) + Choque residual (+5% vida)\n" +
-                "   🔥 FOGO: Queimadura (+3% dano) + Sangramento (2% por 2 rodadas)\n" +
-                "   ❄️ GELO: Congelamento (-15% ataque por 2 rodadas)\n" +
-                "   🌑 SOMBRA: Dreno de vida (cura 30% do dano causado)\n" +
-                "   ✨ ENERGIA PURA: Recupera +15 Poder Arcano\n\n" +
+                "   ⚡ RAIO: " + danoRaioMin + "-" + danoRaioMax + " de dano (+5% choque)\n" +
+                "   🔥❄️🌑✨ OUTROS: " + danoOutrosMin + "-" + danoOutrosMax + " de dano\n\n" +
+                "   ⚡ EFEITOS POR ELEMENTO:\n" +
+                "   ⚡ RAIO: Dano TOTAL (22-32% vida) + Choque residual (+5%)\n" +
+                "   🔥 FOGO: Queimadura (+5% dano) + Sangramento (3% por 2 rodadas)\n" +
+                "   ❄️ GELO: Congelamento (-20% ataque por 2 rodadas)\n" +
+                "   🌑 SOMBRA: Dreno de vida (cura 40% do dano)\n" +
+                "   ✨ ENERGIA PURA: Recupera +20 Poder Arcano\n\n" +
                 "   💫 Custo: " + ValoresHabilidade.CUSTO_ARCANISTA + " de Poder Arcano\n" +
                 "   ⏰ Cooldown: 3 rodadas";
     }
 
     /**
-     * Calcula dano baseado na VIDA MÁXIMA do inimigo
-     * @param inimigo Alvo do dano
-     * @param ehRaio Se é raio ou outro elemento
-     * @return Dano calculado
+     * Calcula dano garantindo que seja maior que o ataque básico
      */
     private int calcularDanoPorVida(Inimigo inimigo, boolean ehRaio) {
         int vidaMax = inimigo.getVidaMax();
+        int ataqueBase = usuario.getAtaque();
+        int nivel = usuario.getNivel();
+
+        // Calcula dano do ataque básico para referência
+        int danoBasicoMax = calcularDanoBasicoMaximo(ataqueBase, nivel);
+
         int dano;
+        double percentual;
 
         if (ehRaio) {
-            // RAIO: entre 20% e 30% da vida
-            double percent = DANO_RAIO_MIN_PERCENT + (random.nextDouble() * (DANO_RAIO_MAX_PERCENT - DANO_RAIO_MIN_PERCENT));
-            dano = (int)(vidaMax * percent);
+            // RAIO: entre 22% e 32% da vida
+            percentual = DANO_RAIO_MIN_PERCENT + (random.nextDouble() * (DANO_RAIO_MAX_PERCENT - DANO_RAIO_MIN_PERCENT));
+            dano = (int)(vidaMax * percentual);
         } else {
-            // OUTROS ELEMENTOS: entre 5% e 10% da vida
-            double percent = 0.05 + (random.nextDouble() * (DANO_OUTROS_MAX_PERCENT - 0.05));
-            dano = (int)(vidaMax * percent);
+            // OUTROS: entre 12% e 18% da vida
+            percentual = DANO_OUTROS_MIN_PERCENT + (random.nextDouble() * (DANO_OUTROS_MAX_PERCENT - DANO_OUTROS_MIN_PERCENT));
+            dano = (int)(vidaMax * percentual);
         }
 
-        // Garante dano mínimo
-        dano = Math.max(ehRaio ? 20 : 8, dano);
+        // ⭐ GARANTE QUE O DANO É SEMPRE MAIOR QUE O ATAQUE BÁSICO MÁXIMO
+        if (dano <= danoBasicoMax) {
+            dano = danoBasicoMax + (int)(danoBasicoMax * 0.2); // 20% a mais que o ataque básico
+        }
+
+        // Garante dano mínimo absoluto
+        dano = Math.max(ehRaio ? 40 : 25, dano);
 
         return dano;
+    }
+
+    /**
+     * Calcula o dano máximo do ataque básico para comparação
+     */
+    private int calcularDanoBasicoMaximo(int ataqueBase, int nivel) {
+        // Considera pergunta DIFÍCIL (multiplicador 3) + estágio atual + variação máxima
+        int multiplicadorEstagio = Math.max(1, estagioAtual / 2);
+        int dano = ataqueBase * 3 * multiplicadorEstagio;
+        dano = (int)(dano * 1.15); // Variação máxima de +15%
+        return Math.min(80, dano); // Limite do ataque básico é 80
     }
 
     @Override
@@ -135,61 +158,55 @@ public class HabilidadeDestruicaoTotal implements HabilidadeEspecial {
             }
         }
 
-        // Escolhe elemento aleatório
         String elemento = elementos[random.nextInt(elementos.length)];
         ultimoElemento = elemento;
-
         boolean ehRaio = elemento.startsWith("⚡");
 
         int vidaMax = alvo.getVidaMax();
         int vidaAtual = alvo.getVida();
+        int danoBasicoMax = calcularDanoBasicoMaximo(usuario.getAtaque(), usuario.getNivel());
 
-        // ⭐ CALCULA DANO BASEADO NA VIDA DO INIMIGO
+        // Calcula dano
         int danoBase = calcularDanoPorVida(alvo, ehRaio);
         int danoFinal = danoBase;
-
-        // ⭐ BÔNUS DO RAIO (choque residual)
         int danoAdicional = 0;
+
         if (ehRaio) {
             danoAdicional = (int)(vidaMax * CHOQUE_RESIDUAL_PERCENT);
             danoFinal += danoAdicional;
         }
 
-        // ⭐ GARANTE QUE NÃO MATA EM 1 HIT (deixa pelo menos 10% de vida)
+        // Não mata em 1 hit
         if (danoFinal >= vidaAtual) {
-            danoFinal = (int)(vidaAtual * 0.9);
+            danoFinal = (int)(vidaAtual * 0.85);
             if (danoFinal < 5) danoFinal = vidaAtual - 1;
         }
 
         double percentualDano = (double) danoFinal / vidaMax * 100;
-        double percentualAdicional = ehRaio ? (double) danoAdicional / vidaMax * 100 : 0;
-        double vidaRestantePercentual = (double) (vidaAtual - danoFinal) / vidaMax * 100;
 
         System.out.println("\n" + "=".repeat(55));
         System.out.println("🌌 CATACLISMO ARCANO - Estágio " + estagioAtual + " 🌌");
         System.out.println("=".repeat(55));
         System.out.println("💙 Consumiu " + custo + " de Poder Arcano");
-        System.out.println("🎲 ELEMENTO SORTEADO: " + elemento);
+        System.out.println("🎲 ELEMENTO: " + elemento);
         System.out.println("📊 Vida do inimigo: " + vidaAtual + "/" + vidaMax);
+        System.out.println("⚔️ Ataque básico máximo: " + danoBasicoMax);
 
         if (ehRaio) {
             System.out.println("\n⚡⚡⚡ RAIO ARCANO! ⚡⚡⚡");
-            System.out.println("💥 Dano do raio: " + danoBase + String.format(" (%.1f%% da vida)", (double)danoBase/vidaMax*100));
-            System.out.println("⚡ Choque residual: +" + danoAdicional + String.format(" (%.1f%%)", percentualAdicional));
-            System.out.println("📊 DANO TOTAL: " + danoFinal + String.format(" (%.1f%% da vida)", percentualDano));
+            System.out.println("💥 Dano: " + danoBase + " (+" + danoAdicional + " choque) = " + danoFinal);
         } else {
             System.out.println("\n⚠️ Elemento: " + elemento.split(" ")[0]);
-            System.out.println("💥 Dano causado: " + danoFinal + String.format(" (%.1f%% da vida)", percentualDano));
+            System.out.println("💥 Dano: " + danoFinal);
         }
 
-        System.out.println("\n❤️ Vida restante: " + (vidaAtual - danoFinal) + String.format(" (%.1f%%)", vidaRestantePercentual));
+        System.out.println(String.format("📊 %.1f%% da vida do inimigo", percentualDano));
 
         alvo.tomarDano(danoFinal);
 
         // Aplica efeito elemental
         aplicarEfeitoElemental(elemento, alvo, danoFinal, vidaMax, ehRaio, attr);
 
-        // Recupera um pouco de poder arcano
         attr.recarregar(ValoresHabilidade.RECUPERACAO_ARCANISTA);
         System.out.println("\n✨ +" + ValoresHabilidade.RECUPERACAO_ARCANISTA + " de Poder Arcano recuperado!");
         System.out.println("📊 Poder Arcano: " + attr.getValorAtual() + "/" + attr.getValorMaximo());
@@ -203,22 +220,16 @@ public class HabilidadeDestruicaoTotal implements HabilidadeEspecial {
                                         AtributoEspecial attr) {
 
         System.out.println("\n" + "=".repeat(40));
-        System.out.println("⚡ EFEITO ESPECIAL: " + elemento.split(" ")[0] + " ⚡");
+        System.out.println("⚡ EFEITO: " + elemento.split(" ")[0] + " ⚡");
         System.out.println("=".repeat(40));
 
         if (elemento.startsWith("🔥")) {
-            // 🔥 FOGO: Queimadura + Sangramento (baseado na vida)
-            int danoQueimadura = (int)(vidaMax * 0.03);
-            if (danoQueimadura < 3) danoQueimadura = 3;
-            System.out.println("🔥🔥🔥 QUEIMADURA!");
-            System.out.println("   💥 Dano extra: +" + danoQueimadura);
+            int danoQueimadura = (int)(vidaMax * 0.05);
+            System.out.println("🔥 Queimadura! +" + danoQueimadura);
             alvo.tomarDano(danoQueimadura);
 
-            int danoSangramento = (int)(vidaMax * 0.02);
-            if (danoSangramento < 2) danoSangramento = 2;
-            System.out.println("🩸🩸🩸 SANGRAMENTO!");
-            System.out.println("   💔 " + danoSangramento + " de dano por 2 rodadas!");
-
+            int danoSangramento = (int)(vidaMax * 0.03);
+            System.out.println("🩸 Sangramento: " + danoSangramento + " por 2 rodadas!");
             if (!alvo.temEfeito(SangramentoEfeito.class)) {
                 alvo.adicionarEfeito(new SangramentoEfeito(2, danoSangramento));
             } else {
@@ -226,34 +237,21 @@ public class HabilidadeDestruicaoTotal implements HabilidadeEspecial {
             }
 
         } else if (elemento.startsWith("❄️")) {
-            // ❄️ GELO: Congelamento - reduz ataque
-            System.out.println("❄️❄️❄️ CONGELAMENTO!");
-            System.out.println("   🛡️ Ataque do inimigo reduzido em 15% por 2 rodadas!");
-            alvo.adicionarEfeito(new DebuffAtaqueEfeito(2, 0.85));
+            System.out.println("❄️ Congelamento! Ataque reduzido em 20% por 2 rodadas!");
+            alvo.adicionarEfeito(new DebuffAtaqueEfeito(2, 0.8));
 
         } else if (elemento.startsWith("⚡")) {
-            // ⚡ RAIO: Choque residual já aplicado no dano
-            System.out.println("⚡⚡⚡ CHOQUE RESIDUAL!");
-            System.out.println("   💫 Inimigo eletrocutado!");
-            System.out.println("   ⚡ O choque já foi aplicado no dano total!");
+            System.out.println("⚡ Choque residual aplicado!");
 
         } else if (elemento.startsWith("🌑")) {
-            // 🌑 SOMBRA: Dreno de vida (30% do dano causado)
-            int cura = (int)(danoFinal * 0.30);
-            if (cura < 5) cura = 5;
-            System.out.println("🌑🌑🌑 DRENO DE VIDA!");
-            System.out.println("   💚 Você drenou " + cura + " de vida do inimigo!");
-            System.out.println("   ❤️ +" + cura + " de vida recuperada!");
+            int cura = (int)(danoFinal * 0.40);
+            System.out.println("🌑 Dreno de vida! +" + cura);
             usuario.curar(cura);
 
         } else if (elemento.startsWith("✨")) {
-            // ✨ ENERGIA PURA: Recupera Poder Arcano
-            int recuperacao = 15;
-            System.out.println("✨✨✨ ENERGIA PURA!");
-            System.out.println("   ⚡ Você canaliza energia pura do caos!");
-            System.out.println("   💙 +" + recuperacao + " de Poder Arcano recuperado!");
+            int recuperacao = 20;
+            System.out.println("✨ Energia Pura! +" + recuperacao);
             attr.recarregar(recuperacao);
-            System.out.println("   📊 Poder Arcano agora: " + attr.getValorAtual() + "/" + attr.getValorMaximo());
         }
     }
 
