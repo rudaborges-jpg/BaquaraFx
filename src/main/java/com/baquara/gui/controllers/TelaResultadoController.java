@@ -43,30 +43,33 @@ public class TelaResultadoController {
     private RankingManager rankingManager;
     private boolean venceu;
 
-    // ⭐ NOVA FLAG: controla se o ranking já foi salvo
-    private boolean rankingJaSalvo = false;
-
-    public void setDados(Jogador jogador, Map<String, Object> estatisticas, boolean venceu) {
+    // ⭐⭐⭐ CONSTRUTOR PRINCIPAL: RECEBE O RANKING MANAGER JÁ COM OS DADOS SALVOS ⭐⭐⭐
+    public void setDados(Jogador jogador, Map<String, Object> estatisticas,
+                         boolean venceu, RankingManager rankingManager) {
         this.jogador = jogador;
         this.estatisticas = estatisticas;
         this.venceu = venceu;
-        this.rankingManager = new RankingManager();
+        this.rankingManager = rankingManager;
 
-        // ⭐ SÓ SALVA O RANKING UMA VEZ
-        if (!rankingJaSalvo) {
-            rankingManager.adicionarPontuacao(
-                    jogador.getNome(),
-                    jogador.getPersonagem().getNome(),
-                    (int) estatisticas.get("pontuacao"),
-                    (int) estatisticas.get("estagiosCompletados"),
-                    venceu,
-                    (String) estatisticas.get("modoJogo")
-            );
-            rankingJaSalvo = true;  // Marca que já salvou
-            System.out.println("🏆 Ranking salvo uma única vez!");
-        }
+        // ⭐⭐⭐ NÃO SALVA NADA AQUI! O RANKING JÁ FOI SALVO NA BATALHA ⭐⭐⭐
+        System.out.println("📊 Ranking já salvo na batalha. Exibindo resultados...");
 
         atualizarInterface();
+    }
+
+    // ⭐ MANTÉM COMPATIBILIDADE COM O CÓDIGO ANTIGO (FALLBACK)
+    public void setDados(Jogador jogador, Map<String, Object> estatisticas, boolean venceu) {
+        // Cria um novo RankingManager e SALVA (fallback para compatibilidade)
+        RankingManager temp = new RankingManager();
+        temp.adicionarPontuacao(
+                jogador.getNome(),
+                jogador.getPersonagem().getNome(),
+                (int) estatisticas.get("pontuacao"),
+                (int) estatisticas.get("estagiosCompletados"),
+                venceu,
+                (String) estatisticas.get("modoJogo")
+        );
+        setDados(jogador, estatisticas, venceu, temp);
     }
 
     @FXML
@@ -129,14 +132,13 @@ public class TelaResultadoController {
         }
     }
 
-    // ⭐ MOSTRA RANKING (sem salvar novamente)
     private void mostrarRanking() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/tela-ranking.fxml"));
             Parent root = loader.load();
 
             TelaRankingController controller = loader.getController();
-            // Passa os dados, mas o ranking já foi salvo antes
+            // ⭐ PASSA O RANKING MANAGER QUE JÁ TEM OS DADOS SALVOS
             controller.setDadosERanking(rankingManager, jogador, estatisticas, venceu);
 
             Stage stage = (Stage) btnVerRanking.getScene().getWindow();

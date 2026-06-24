@@ -1,6 +1,7 @@
 package com.baquara.gui.controllers;
 
 import com.baquara.controle.AvaliadorRespostas;
+import com.baquara.controle.RankingManager;
 import com.baquara.dados.BancoPerguntas;
 import com.baquara.modelo.*;
 import com.baquara.modelo.Pergunta.Dificuldade;
@@ -373,7 +374,6 @@ public class TelaCapoeiraController {
 
             int danoInimigo = (int)(calcularDanoInimigo() * 0.7);
 
-            // ⭐ TENTA USAR ESQUIVA SE TIVER ATIVA
             if (capoeirista.tentarDesviar(inimigoAtual, danoInimigo)) {
                 adicionarDialogoNormal("🌀 ESQUIVA BEM-SUCEDIDA! Você desviou do contra-ataque!");
             } else {
@@ -401,7 +401,6 @@ public class TelaCapoeiraController {
             inimigoAtual.tomarDano(dano);
             adicionarDialogoAcerto("✅ CORRETO! Causou " + dano + " de dano!");
 
-            // Recupera Ginga ao acertar
             int recuperacaoGinga;
             switch (tipoAtaqueSelecionado) {
                 case 1: recuperacaoGinga = 15; break;
@@ -423,7 +422,7 @@ public class TelaCapoeiraController {
                     adicionarDialogoAcerto("\n🎉 VITÓRIA! " + inimigoAtual.getNome() + " foi derrotado!");
                     estagioAtual++;
                     capoeirista.evoluirTitulo(estagioAtual + 1);
-                    capoeirista.resetarEsquivas();  // ⭐ RECARREGA ESQUIVAS
+                    capoeirista.resetarEsquivas();
                     atualizarStatusJogador();
 
                     if (estagioAtual >= nomesMestres.length) {
@@ -447,7 +446,6 @@ public class TelaCapoeiraController {
 
             int danoInimigo = calcularDanoInimigo();
 
-            // ⭐⭐⭐ TENTA USAR ESQUIVA (VERIFICA SE O JOGADOR ATIVOU ANTES)
             if (capoeirista.tentarDesviar(inimigoAtual, danoInimigo)) {
                 adicionarDialogoNormal("🌀 ESQUIVA BEM-SUCEDIDA! Você desviou do contra-ataque!");
             } else {
@@ -613,8 +611,36 @@ public class TelaCapoeiraController {
         });
     }
 
+    // ⭐⭐⭐ MÉTODO FINALIZAR JOGO - CORRIGIDO COM SALVAMENTO DO RANKING ⭐⭐⭐
     private void finalizarJogo(boolean vitoria) {
         pararTimer();
+
+        // ⭐⭐⭐ SALVA O RANKING AQUI (APENAS QUANDO A BATALHA TERMINA) ⭐⭐⭐
+        try {
+            RankingManager rankingManager = new RankingManager();
+
+            // Calcula estágios completados (9 mestres + Besouro se venceu)
+            int estagiosCompletados = estagioAtual;
+            if (vitoria && inimigoAtual instanceof BesouroManganga) {
+                estagiosCompletados = 10; // Completou todos os mestres + Besouro
+            }
+
+            // Só salva se a partida foi REALMENTE jogada
+            if (estagioAtual > 0 || vitoria) {
+                rankingManager.adicionarPontuacao(
+                        jogador.getNome(),
+                        capoeirista.getNome(),
+                        0, // Pontuação específica da capoeira (se tiver)
+                        estagiosCompletados,
+                        vitoria,
+                        "Roda de Capoeira"
+                );
+                System.out.println("🏆 Ranking da Capoeira salvo com sucesso!");
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao salvar ranking da Capoeira: " + e.getMessage());
+        }
+
         Platform.runLater(() -> {
             if (vitoria) {
                 adicionarDialogoAcerto("\n🏆🏆🏆 VOCÊ É UMA LENDA VIVA! 🏆🏆🏆");
@@ -634,7 +660,6 @@ public class TelaCapoeiraController {
     public void initialize() {
         txtDialogo.setStyle("-fx-font-size: 11px; -fx-background-color: #FFF8DC; -fx-text-fill: #000000; -fx-border-color: #FFD700; -fx-border-width: 2; -fx-border-radius: 5;");
 
-        // ⭐ GARANTE QUE OS PAINÉIS ESTEJAM VISÍVEIS
         painelDialogo.setVisible(true);
         painelDialogo.setManaged(true);
         painelAcoes.setVisible(true);
@@ -681,7 +706,6 @@ public class TelaCapoeiraController {
             }
         });
 
-        // ⭐⭐⭐ BOTÃO DE ESQUIVA - ATIVA A PROTEÇÃO PARA O PRÓXIMO ERRO
         btnEsquiva.setOnAction(e -> {
             if (inimigoAtual != null && inimigoAtual.vivo() && !aguardandoResposta) {
                 if (capoeirista.usarEsquiva()) {

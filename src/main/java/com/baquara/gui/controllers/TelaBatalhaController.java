@@ -2,6 +2,7 @@ package com.baquara.gui.controllers;
 
 import com.baquara.controle.AvaliadorRespostas;
 import com.baquara.controle.GerenciadorRotas;
+import com.baquara.controle.RankingManager;
 import com.baquara.dados.BancoPerguntas;
 import com.baquara.modelo.*;
 import com.baquara.modelo.Pergunta.Dificuldade;
@@ -14,11 +15,15 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.*;
@@ -101,11 +106,6 @@ public class TelaBatalhaController {
 
     // ==================== PROCESSAMENTO DE EFEITOS ====================
 
-    /**
-     * ⭐ PROCESSAMENTO DE INÍCIO DE RODADA
-     * Deve ser chamado ANTES do jogador escolher sua ação
-     * Aqui que o sangramento e outros efeitos causam dano!
-     */
     private void processarInicioRodada() {
         if (inimigoAtual == null || !inimigoAtual.vivo()) return;
 
@@ -113,7 +113,6 @@ public class TelaBatalhaController {
             adicionarDialogoNormal("\n🔥 INÍCIO DA RODADA - PROCESSANDO EFEITOS...");
         });
 
-        // Verifica se o inimigo tem sangramento ANTES de processar
         SangramentoEfeito sangramento = inimigoAtual.getEfeito(SangramentoEfeito.class);
         boolean tinhaSangramento = (sangramento != null && sangramento.estaAtivo());
 
@@ -127,21 +126,17 @@ public class TelaBatalhaController {
             animarIconeSangramento();
         }
 
-        // ⭐ ATUALIZA OS EFEITOS - É AQUI QUE O DANO É APLICADO!
         inimigoAtual.atualizarEfeitos();
 
-        // Verifica se o inimigo morreu pelo sangramento
         if (!inimigoAtual.vivo()) {
             adicionarDialogoAcerto("\n💀🩸 " + inimigoAtual.getNome() + " MORREU PELO SANGRAMENTO! 🩸💀");
             Platform.runLater(() -> {
                 lblInimigoSprite.setStyle("-fx-effect: dropshadow(gaussian, red, 20, 0.7, 0, 0);");
             });
 
-            // Atualiza status e finaliza se necessário
             atualizarStatusInimigoComAnimacao();
             atualizarStatusDetalhadoInimigo();
 
-            // Processa vitória do estágio
             Estagio estagioAtualObj = estagios.get(estagioIndex);
             String nomeEstagio = estagioAtualObj.getNome();
 
@@ -163,11 +158,9 @@ public class TelaBatalhaController {
             return;
         }
 
-        // Atualiza a interface com a nova vida
         atualizarStatusInimigo();
         atualizarStatusDetalhadoInimigo();
 
-        // Mostra quanto dano o sangramento causou
         if (tinhaSangramento) {
             SangramentoEfeito sangAtual = inimigoAtual.getEfeito(SangramentoEfeito.class);
             if (sangAtual != null && sangAtual.getDanoTotalCausado() > 0) {
@@ -175,7 +168,6 @@ public class TelaBatalhaController {
                         sangAtual.getDanoTotalCausado());
             }
 
-            // Mostra quantas rodadas faltam
             if (sangAtual != null && sangAtual.estaAtivo()) {
                 adicionarDialogoNormal("🩸 Sangramento ativo por mais " +
                         sangAtual.getDuracaoRestante() + " rodada(s)");
@@ -184,7 +176,6 @@ public class TelaBatalhaController {
             }
         }
 
-        // Processa outros efeitos (debuff de ataque, etc)
         DebuffAtaqueEfeito debuff = inimigoAtual.getEfeito(DebuffAtaqueEfeito.class);
         if (debuff != null && debuff.estaAtivo()) {
             adicionarDialogoNormal("🔻 " + inimigoAtual.getNome() + " está com ataque reduzido! (" +
@@ -471,9 +462,6 @@ public class TelaBatalhaController {
                 adicionarDialogoNormal("   ❤️ Vida +40 | ⚔️ Ataque +5 | 🛡️ Defesa +3");
             }
 
-            // ⭐ NÃO processa efeitos aqui - será feito no início da próxima rodada
-            // processarEfeitosEReduzirDebuffs(); ← REMOVIDO
-
             if (!inimigoAtual.vivo()) {
                 Estagio estagioAtualObj = estagios.get(estagioIndex);
                 String nomeEstagio = estagioAtualObj.getNome();
@@ -531,9 +519,6 @@ public class TelaBatalhaController {
 
             atualizarStatusJogador();
             atualizarStatusDetalhadoJogador();
-
-            // ⭐ NÃO processa efeitos aqui - será feito no início da próxima rodada
-            // processarEfeitosEReduzirDebuffs(); ← REMOVIDO
 
             if (!jogador.vivo()) {
                 finalizarJogo(false);
@@ -674,17 +659,12 @@ public class TelaBatalhaController {
         atualizarStatusDetalhadoJogador();
     }
 
-    /**
-     * ⭐ VOLTAR AO MENU - Processa o início da próxima rodada (sangramento)
-     */
     private void voltarAoMenu() {
         aguardandoResposta = false;
 
-        // ⭐⭐ PROCESSAR INÍCIO DA PRÓXIMA RODADA (efeitos como sangramento) ⭐⭐
         if (inimigoAtual != null && inimigoAtual.vivo()) {
             processarInicioRodada();
 
-            // Se o inimigo morreu pelo sangramento, não volta ao menu
             if (!inimigoAtual.vivo()) {
                 return;
             }
@@ -898,9 +878,6 @@ public class TelaBatalhaController {
         atualizarBotaoHabilidade();
         atualizarStatusJogador();
 
-        // ⭐ NÃO processa efeitos aqui - será feito no início da próxima rodada
-        // processarEfeitosEReduzirDebuffs(); ← REMOVIDO
-
         if (!inimigoAtual.vivo()) {
             Estagio estagioAtualObj = estagios.get(estagioIndex);
             if (estagioAtualObj.ehChefao()) {
@@ -921,9 +898,29 @@ public class TelaBatalhaController {
         voltarAoMenu();
     }
 
+    // ⭐⭐⭐ MÉTODO FINALIZAR JOGO - CORRIGIDO: SALVA O RANKING AQUI ⭐⭐⭐
     private void finalizarJogo(boolean vitoria) {
         Platform.runLater(() -> {
             try {
+                // ⭐⭐⭐ SALVA O RANKING APENAS UMA VEZ, QUANDO A BATALHA TERMINA ⭐⭐⭐
+                RankingManager rankingManager = new RankingManager();
+
+                // Só salva se a partida foi REALMENTE jogada (não apenas visualizada)
+                if (rodadaAtual > 0) {
+                    String modoJogo = "Batalha Normal - " + rotaAtual.getNomeRota();
+
+                    rankingManager.adicionarPontuacao(
+                            jogador.getNome(),
+                            jogador.getPersonagem().getNome(),
+                            pontuacaoTotal,
+                            estagioIndex,  // estágios completados
+                            vitoria,
+                            modoJogo
+                    );
+                    System.out.println("🏆 Ranking salvo com sucesso na finalização da batalha!");
+                }
+
+                // Prepara estatísticas
                 Map<String, Object> stats = new HashMap<>();
                 stats.put("pontuacao", pontuacaoTotal);
                 stats.put("rodadas", rodadaAtual);
@@ -934,13 +931,18 @@ public class TelaBatalhaController {
                 stats.put("habilidadesUsadas", habilidadesUsadas);
                 stats.put("estagiosCompletados", estagioIndex);
                 stats.put("modoJogo", "Batalha Normal - " + rotaAtual.getNomeRota());
-                javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/fxml/tela-resultado.fxml"));
-                javafx.scene.Parent root = loader.load();
+
+                // Abre tela de resultado passando o RankingManager com os dados já salvos
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/tela-resultado.fxml"));
+                Parent root = loader.load();
+
                 TelaResultadoController controller = loader.getController();
-                controller.setDados(jogador, stats, vitoria);
-                javafx.stage.Stage stage = (javafx.stage.Stage) btnAtacar.getScene().getWindow();
-                stage.setScene(new javafx.scene.Scene(root));
+                controller.setDados(jogador, stats, vitoria, rankingManager);
+
+                Stage stage = (Stage) btnAtacar.getScene().getWindow();
+                stage.setScene(new Scene(root));
                 stage.setTitle("Baquara - Resultado");
+
             } catch (Exception e) {
                 e.printStackTrace();
                 if (vitoria) {
