@@ -30,6 +30,9 @@ import java.util.*;
 
 public class TelaBatalhaController {
 
+    // ⭐⭐⭐ FLAG ESTÁTICA PARA GARANTIR QUE O RANKING SÓ SEJA SALVO UMA VEZ ⭐⭐⭐
+    private static boolean rankingJaSalvo = false;
+
     @FXML private Label lblJogadorNome;
     @FXML private Label lblJogadorNivel;
     @FXML private Label lblJogadorVida;
@@ -90,6 +93,7 @@ public class TelaBatalhaController {
     private int danoTotalCausado = 0;
     private int danoTotalRecebido = 0;
     private int rodadaAtual = 0;
+    private boolean jogoFinalizado = false; // ⭐ NOVA FLAG PARA EVITAR MÚLTIPLAS FINALIZAÇÕES
 
     private Set<Integer> perguntasUsadas = new HashSet<>();
     private Map<Dificuldade, List<Pergunta>> perguntasDisponiveis = new HashMap<>();
@@ -541,6 +545,10 @@ public class TelaBatalhaController {
         this.estagioIndex = 0;
         this.estagioAtualNumero = 1;
 
+        // ⭐ RESETA A FLAG ESTÁTICA QUANDO UMA NOVA PARTIDA COMEÇA
+        rankingJaSalvo = false;
+        jogoFinalizado = false;
+
         inicializarHabilidadeDoPersonagem();
         atualizarStatusJogador();
         atualizarStatusDetalhadoJogador();
@@ -898,26 +906,38 @@ public class TelaBatalhaController {
         voltarAoMenu();
     }
 
-    // ⭐⭐⭐ MÉTODO FINALIZAR JOGO - CORRIGIDO: SALVA O RANKING AQUI ⭐⭐⭐
+    // ⭐⭐⭐ MÉTODO FINALIZAR JOGO - CORRIGIDO COM FLAG ESTÁTICA ⭐⭐⭐
     private void finalizarJogo(boolean vitoria) {
+        // ⭐⭐⭐ IMPEDE MÚLTIPLAS CHAMADAS ⭐⭐⭐
+        if (jogoFinalizado) {
+            System.out.println("⚠️ Jogo já finalizado! Ignorando nova chamada.");
+            return;
+        }
+        jogoFinalizado = true;
+
         Platform.runLater(() -> {
             try {
-                // ⭐⭐⭐ SALVA O RANKING APENAS UMA VEZ, QUANDO A BATALHA TERMINA ⭐⭐⭐
-                RankingManager rankingManager = new RankingManager();
+                // ⭐⭐⭐ SALVA O RANKING APENAS UMA VEZ (FLAG ESTÁTICA) ⭐⭐⭐
+                if (!rankingJaSalvo) {
+                    RankingManager rankingManager = new RankingManager();
 
-                // Só salva se a partida foi REALMENTE jogada (não apenas visualizada)
-                if (rodadaAtual > 0) {
-                    String modoJogo = "Batalha Normal - " + rotaAtual.getNomeRota();
+                    // Só salva se a partida foi REALMENTE jogada
+                    if (rodadaAtual > 0) {
+                        String modoJogo = "Batalha Normal - " + rotaAtual.getNomeRota();
 
-                    rankingManager.adicionarPontuacao(
-                            jogador.getNome(),
-                            jogador.getPersonagem().getNome(),
-                            pontuacaoTotal,
-                            estagioIndex,  // estágios completados
-                            vitoria,
-                            modoJogo
-                    );
-                    System.out.println("🏆 Ranking salvo com sucesso na finalização da batalha!");
+                        rankingManager.adicionarPontuacao(
+                                jogador.getNome(),
+                                jogador.getPersonagem().getNome(),
+                                pontuacaoTotal,
+                                estagioIndex,  // estágios completados
+                                vitoria,
+                                modoJogo
+                        );
+                        rankingJaSalvo = true;  // ⭐ MARCA COMO JÁ SALVO
+                        System.out.println("🏆 Ranking salvo com sucesso na finalização da batalha!");
+                    }
+                } else {
+                    System.out.println("ℹ️ Ranking já foi salvo anteriormente. Ignorando...");
                 }
 
                 // Prepara estatísticas
@@ -937,7 +957,7 @@ public class TelaBatalhaController {
                 Parent root = loader.load();
 
                 TelaResultadoController controller = loader.getController();
-                controller.setDados(jogador, stats, vitoria, rankingManager);
+                controller.setDados(jogador, stats, vitoria, new RankingManager());
 
                 Stage stage = (Stage) btnAtacar.getScene().getWindow();
                 stage.setScene(new Scene(root));

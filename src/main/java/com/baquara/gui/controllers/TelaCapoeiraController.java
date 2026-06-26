@@ -7,11 +7,17 @@ import com.baquara.modelo.*;
 import com.baquara.modelo.Pergunta.Dificuldade;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -70,6 +76,20 @@ public class TelaCapoeiraController {
     private Thread timerThread;
     private int tempoMaximoAtual = 0;
 
+    // ⭐⭐ ESTATÍSTICAS PARA A TELA DE RESULTADO ⭐⭐
+    private int perguntasCertas = 0;
+    private int perguntasErradas = 0;
+    private int danoTotalCausado = 0;
+    private int danoTotalRecebido = 0;
+    private int rodadaAtual = 0;
+
+    // ⭐⭐ PONTUAÇÃO ACUMULADA ⭐⭐
+    private int pontuacaoTotal = 0;
+
+    // ⭐⭐ FLAGS PARA EVITAR DUPLICATAS ⭐⭐
+    private static boolean rankingCapoeiraJaSalvo = false;
+    private boolean jogoCapoeiraFinalizado = false;
+
     private String[] nomesMestres = {
             "MESTRE BIMBA", "MESTRE PASTINHA", "MESTRE JOÃO GRANDE",
             "MESTRE JOÃO PEQUENO", "MESTRE CANJIQUINHA", "MESTRE CAIÇARA",
@@ -84,6 +104,18 @@ public class TelaCapoeiraController {
         this.capoeirista = (Capoeirista) jogador.getPersonagem();
         this.bancoPerguntas = new BancoPerguntas();
         this.random = new Random();
+
+        // ⭐ RESETA AS FLAGS QUANDO UMA NOVA PARTIDA COMEÇA
+        rankingCapoeiraJaSalvo = false;
+        jogoCapoeiraFinalizado = false;
+
+        // Reseta estatísticas e pontuação
+        perguntasCertas = 0;
+        perguntasErradas = 0;
+        danoTotalCausado = 0;
+        danoTotalRecebido = 0;
+        rodadaAtual = 0;
+        pontuacaoTotal = 0;
 
         atualizarStatusJogador();
         adicionarDialogoNormal("🥋 " + capoeirista.getNome() + " entrou na RODA DE CAPOEIRA!");
@@ -210,6 +242,7 @@ public class TelaCapoeiraController {
 
         tipoAtaqueSelecionado = tipoAtaque;
         aguardandoResposta = true;
+        rodadaAtual++;
 
         final String nomeDificuldadeFinal = nomeDificuldade;
         final String nomeAtaqueFinal = nomeAtaque;
@@ -368,11 +401,13 @@ public class TelaCapoeiraController {
         boolean tempoEsgotado = resposta.equals("TEMPO_ESGOTADO");
 
         if (tempoEsgotado) {
+            perguntasErradas++;
             adicionarDialogoErro("\n⏰ TEMPO ESGOTADO! Você perdeu a chance de atacar!");
             adicionarDialogoErro("📖 Resposta correta: " +
                     AvaliadorRespostas.getRespostaCorretaFormatada(perguntaAtual));
 
             int danoInimigo = (int)(calcularDanoInimigo() * 0.7);
+            danoTotalRecebido += danoInimigo;
 
             if (capoeirista.tentarDesviar(inimigoAtual, danoInimigo)) {
                 adicionarDialogoNormal("🌀 ESQUIVA BEM-SUCEDIDA! Você desviou do contra-ataque!");
@@ -397,9 +432,17 @@ public class TelaCapoeiraController {
         aguardandoResposta = false;
 
         if (correta) {
+            perguntasCertas++;
             int dano = calcularDano(tipoAtaqueSelecionado);
+            danoTotalCausado += dano;
             inimigoAtual.tomarDano(dano);
             adicionarDialogoAcerto("✅ CORRETO! Causou " + dano + " de dano!");
+
+            // ⭐⭐ ADICIONA PONTOS POR ACERTO ⭐⭐
+            int pontosGanhos = 50 + (tipoAtaqueSelecionado * 25);
+            pontuacaoTotal += pontosGanhos;
+            jogador.addPontuacao(pontosGanhos);
+            adicionarDialogoNormal("🏆 +" + pontosGanhos + " pontos!");
 
             int recuperacaoGinga;
             switch (tipoAtaqueSelecionado) {
@@ -414,11 +457,23 @@ public class TelaCapoeiraController {
 
             if (!inimigoAtual.vivo()) {
                 if (inimigoAtual instanceof BesouroManganga) {
+                    // ⭐⭐ BÔNUS POR DERROTAR O BESOURO ⭐⭐
+                    int bonusBesouro = 500;
+                    pontuacaoTotal += bonusBesouro;
+                    jogador.addPontuacao(bonusBesouro);
+                    adicionarDialogoAcerto("👑 BÔNUS POR DERROTAR O BESOURO: +" + bonusBesouro + " pontos!");
+
                     adicionarDialogoAcerto("\n🏆🏆🏆 VOCÊ DERROTOU O BESOURO MANGANGÁ!");
                     adicionarDialogoAcerto("👑 Você se tornou uma LENDA DA CAPOEIRA!");
                     finalizarJogo(true);
                     return;
                 } else {
+                    // ⭐⭐ BÔNUS POR DERROTAR UM MESTRE ⭐⭐
+                    int bonusMestre = (estagioAtual + 1) * 50;
+                    pontuacaoTotal += bonusMestre;
+                    jogador.addPontuacao(bonusMestre);
+                    adicionarDialogoAcerto("🏆 Bônus por derrotar " + inimigoAtual.getNome() + ": +" + bonusMestre + " pontos!");
+
                     adicionarDialogoAcerto("\n🎉 VITÓRIA! " + inimigoAtual.getNome() + " foi derrotado!");
                     estagioAtual++;
                     capoeirista.evoluirTitulo(estagioAtual + 1);
@@ -440,11 +495,19 @@ public class TelaCapoeiraController {
             }
 
         } else {
+            perguntasErradas++;
+
+            // ⭐⭐ PENALIDADE POR ERRO (perde pontos) ⭐⭐
+            int penalidade = 20;
+            pontuacaoTotal = Math.max(0, pontuacaoTotal - penalidade);
+            adicionarDialogoErro("💔 -" + penalidade + " pontos por erro!");
+
             adicionarDialogoErro("❌ ERRADO!");
             adicionarDialogoErro("📖 Resposta correta: " +
                     AvaliadorRespostas.getRespostaCorretaFormatada(perguntaAtual));
 
             int danoInimigo = calcularDanoInimigo();
+            danoTotalRecebido += danoInimigo;
 
             if (capoeirista.tentarDesviar(inimigoAtual, danoInimigo)) {
                 adicionarDialogoNormal("🌀 ESQUIVA BEM-SUCEDIDA! Você desviou do contra-ataque!");
@@ -611,48 +674,102 @@ public class TelaCapoeiraController {
         });
     }
 
-    // ⭐⭐⭐ MÉTODO FINALIZAR JOGO - CORRIGIDO COM SALVAMENTO DO RANKING ⭐⭐⭐
+    // ⭐⭐⭐ MÉTODO FINALIZAR JOGO - COM PONTUAÇÃO ⭐⭐⭐
     private void finalizarJogo(boolean vitoria) {
         pararTimer();
 
-        // ⭐⭐⭐ SALVA O RANKING AQUI (APENAS QUANDO A BATALHA TERMINA) ⭐⭐⭐
-        try {
-            RankingManager rankingManager = new RankingManager();
+        if (jogoCapoeiraFinalizado) {
+            System.out.println("⚠️ Jogo da Capoeira já finalizado! Ignorando nova chamada.");
+            return;
+        }
+        jogoCapoeiraFinalizado = true;
 
-            // Calcula estágios completados (9 mestres + Besouro se venceu)
-            int estagiosCompletados = estagioAtual;
-            if (vitoria && inimigoAtual instanceof BesouroManganga) {
-                estagiosCompletados = 10; // Completou todos os mestres + Besouro
-            }
+        // ⭐⭐⭐ SALVA O RANKING COM A PONTUAÇÃO CALCULADA ⭐⭐⭐
+        if (!rankingCapoeiraJaSalvo) {
+            try {
+                RankingManager rankingManager = new RankingManager();
 
-            // Só salva se a partida foi REALMENTE jogada
-            if (estagioAtual > 0 || vitoria) {
+                int estagiosCompletados = estagioAtual;
+                if (vitoria && inimigoAtual instanceof BesouroManganga) {
+                    estagiosCompletados = 10;
+                }
+
+                // ⭐⭐ GARANTE QUE A PONTUAÇÃO NÃO SEJA ZERO ⭐⭐
+                int pontuacaoFinal = pontuacaoTotal;
+                if (pontuacaoFinal <= 0 && estagiosCompletados > 0) {
+                    // Fallback: calcula pontuação mínima baseada nos estágios
+                    pontuacaoFinal = estagiosCompletados * 50;
+                }
+
+                System.out.println("📊 Salvando ranking da Capoeira:");
+                System.out.println("   👤 Jogador: " + jogador.getNome());
+                System.out.println("   🥋 Personagem: " + capoeirista.getNome());
+                System.out.println("   🏆 Pontuação: " + pontuacaoFinal);
+                System.out.println("   📌 Estágios: " + estagiosCompletados + "/10");
+                System.out.println("   🏅 Vitória: " + vitoria);
+
                 rankingManager.adicionarPontuacao(
                         jogador.getNome(),
                         capoeirista.getNome(),
-                        0, // Pontuação específica da capoeira (se tiver)
+                        pontuacaoFinal,
                         estagiosCompletados,
                         vitoria,
                         "Roda de Capoeira"
                 );
+                rankingCapoeiraJaSalvo = true;
                 System.out.println("🏆 Ranking da Capoeira salvo com sucesso!");
+            } catch (Exception e) {
+                System.err.println("Erro ao salvar ranking da Capoeira: " + e.getMessage());
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            System.err.println("Erro ao salvar ranking da Capoeira: " + e.getMessage());
+        } else {
+            System.out.println("ℹ️ Ranking da Capoeira já foi salvo anteriormente. Ignorando...");
         }
 
+        // ⭐⭐⭐ ABRE A TELA DE RESULTADO ⭐⭐⭐
         Platform.runLater(() -> {
-            if (vitoria) {
-                adicionarDialogoAcerto("\n🏆🏆🏆 VOCÊ É UMA LENDA VIVA! 🏆🏆🏆");
-                adicionarDialogoAcerto("👑 O BERIMBAU CANTA SEU NOME!");
-            } else {
-                adicionarDialogoErro("\n💀 VOCÊ CAIU NA RODA...");
-                adicionarDialogoErro("🎵 A capoeira continua viva!");
+            try {
+                Map<String, Object> stats = new HashMap<>();
+                stats.put("pontuacao", pontuacaoTotal);
+                stats.put("rodadas", rodadaAtual);
+                stats.put("acertos", perguntasCertas);
+                stats.put("erros", perguntasErradas);
+                stats.put("danoCausado", danoTotalCausado);
+                stats.put("danoRecebido", danoTotalRecebido);
+                stats.put("habilidadesUsadas", 0);
+
+                int estagiosCompletados = estagioAtual;
+                if (vitoria && inimigoAtual instanceof BesouroManganga) {
+                    estagiosCompletados = 10;
+                }
+                stats.put("estagiosCompletados", estagiosCompletados);
+                stats.put("modoJogo", "Roda de Capoeira");
+
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/tela-resultado.fxml"));
+                Parent root = loader.load();
+
+                TelaResultadoController controller = loader.getController();
+                controller.setDados(jogador, stats, vitoria, new RankingManager());
+
+                Stage stage = (Stage) btnBasico.getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.setTitle("Baquara - Resultado");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.err.println("Erro ao abrir tela de resultado: " + e.getMessage());
+                if (vitoria) {
+                    adicionarDialogoAcerto("\n🏆🏆🏆 VOCÊ É UMA LENDA VIVA! 🏆🏆🏆");
+                    adicionarDialogoAcerto("👑 O BERIMBAU CANTA SEU NOME!");
+                } else {
+                    adicionarDialogoErro("\n💀 VOCÊ CAIU NA RODA...");
+                    adicionarDialogoErro("🎵 A capoeira continua viva!");
+                }
+                btnBasico.setDisable(true);
+                btnDificil.setDisable(true);
+                btnCombinado.setDisable(true);
+                btnEsquiva.setDisable(true);
             }
-            btnBasico.setDisable(true);
-            btnDificil.setDisable(true);
-            btnCombinado.setDisable(true);
-            btnEsquiva.setDisable(true);
         });
     }
 
