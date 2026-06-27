@@ -997,6 +997,10 @@ public class BancoPerguntas {
                 "Tandava", "Hinduísmo", 8);
     }
 
+    // ============================================================
+// ==================== CLASSE CAÇADORA ====================
+// ============================================================
+
     private void carregarPerguntasCacadora() {
         carregarCacadoraFacilMultiplaEscolha();
         carregarCacadoraFacilVerdadeiroFalso();
@@ -1011,8 +1015,12 @@ public class BancoPerguntas {
         carregarCacadoraDificilLacuna();
     }
 
+// ============================================================
+// PERGUNTAS FÁCEIS (150)
+// ============================================================
 
     private void carregarCacadoraFacilMultiplaEscolha() {
+        // ANIMAIS (30 perguntas)
         adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.FACIL,
                 "Qual é o animal mais rápido do mundo?",
                 Arrays.asList("Leão", "Guepardo", "Falcão-peregrino", "Cavalo"), "C", "Animais", 1);
@@ -1041,10 +1049,7 @@ public class BancoPerguntas {
                 "Onde vivem os pingüins?",
                 Arrays.asList("Polo Norte", "Polo Sul (Antártida)", "Amazônia", "Deserto do Saara"), "B", "Animais", 1);
 
-        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.FACIL,
-                "Qual felino é conhecido por ter listras?",
-                Arrays.asList("Leão", "Onça", "Tigre", "Leopardo"), "C", "Animais", 1);
-
+        // ⭐ TIGRE REMOVIDO DAQUI (era duplicado - estava na VF)
         adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.FACIL,
                 "Qual animal marinho é conhecido como 'cavalo-marinho'?",
                 Arrays.asList("Peixe-palhaço", "Hipocampo", "Polvo", "Lula"), "B", "Animais", 1);
@@ -1072,6 +1077,70 @@ public class BancoPerguntas {
         adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.FACIL,
                 "Qual animal é conhecido por sua memória excelente?",
                 Arrays.asList("Gato", "Cachorro", "Elefante", "Rato"), "C", "Animais", 1);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.FACIL,
+                "Qual animal é o maior felino do mundo?",
+                Arrays.asList("Leão", "Tigre-siberiano", "Onça-pintada", "Leopardo"), "B", "Animais", 1);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.FACIL,
+                "Qual animal é conhecido como o 'rei dos animais'?",
+                Arrays.asList("Elefante", "Leão", "Tigre", "Gorila"), "B", "Animais", 1);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.FACIL,
+                "O que as abelhas produzem?",
+                Arrays.asList("Mel", "Leite", "Ovos", "Lã"), "A", "Animais", 1);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.FACIL,
+                "Qual animal tem o pescoço mais longo?",
+                Arrays.asList("Elefante", "Girafa", "Zebra", "Camelo"), "B", "Animais", 1);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.FACIL,
+                "Qual animal é um réptil?",
+                Arrays.asList("Cachorro", "Gato", "Crocodilo", "Golfinho"), "C", "Animais", 1);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.FACIL,
+                "O que os ursos fazem no inverno?",
+                Arrays.asList("Migram", "Hibernam", "Caçam mais", "Dormem pouco"), "B", "Animais", 1);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.FACIL,
+                "Qual animal é um mamífero marinho?",
+                Arrays.asList("Tubarão", "Baleia", "Peixe-palhaço", "Lula"), "B", "Animais", 1);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.FACIL,
+                "Qual animal tem listras?",
+                Arrays.asList("Leão", "Zebra", "Elefante", "Hipopótamo"), "B", "Animais", 1);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.FACIL,
+                "Qual animal é um anfíbio?",
+                Arrays.asList("Sapo", "Jacaré", "Lagarto", "Cobra"), "A", "Animais", 1);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.FACIL,
+                "O que os pássaros têm para voar?",
+                Arrays.asList("Asas", "Barbatanas", "Patas", "Cauda"), "A", "Animais", 1);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.FACIL,
+                "Qual animal é o mais rápido em terra?",
+                Arrays.asList("Leão", "Guepardo", "Cavalo", "Cachorro"), "B", "Animais", 1);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.FACIL,
+                "Qual animal vive no deserto e tem corcovas?",
+                Arrays.asList("Camelo", "Cavalo", "Elefante", "Rinoceronte"), "A", "Animais", 1);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.FACIL,
+                "Qual animal é um roedor?",
+                Arrays.asList("Gato", "Rato", "Cachorro", "Elefante"), "B", "Animais", 1);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.FACIL,
+                "Qual animal tem presas de marfim?",
+                Arrays.asList("Elefante", "Rinoceronte", "Hipopótamo", "Morsa"), "A", "Animais", 1);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.FACIL,
+                "Qual animal é um primata?",
+                Arrays.asList("Cachorro", "Gato", "Macaco", "Cavalo"), "C", "Animais", 1);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.FACIL,
+                "Qual animal põe ovos?",
+                Arrays.asList("Cachorro", "Gato", "Galinha", "Cavalo"), "C", "Animais", 1);
 
         // NATUREZA (15 perguntas)
         adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.FACIL,
@@ -1218,6 +1287,10 @@ public class BancoPerguntas {
                 Arrays.asList("Tamanho e direção", "Cor da pele", "Idade", "Peso aproximado"), "A", "Rastreamento", 1);
     }
 
+// ============================================================
+// PERGUNTAS FÁCEIS - VERDADEIRO/FALSO (50)
+// ============================================================
+
     private void carregarCacadoraFacilVerdadeiroFalso() {
         // ANIMAIS (15 perguntas)
         adicionarPerguntaVF(PerTipo.CACADORA, Dificuldade.FACIL, "O urso panda é nativo da Austrália.", false, "Animais", 1);
@@ -1234,7 +1307,8 @@ public class BancoPerguntas {
         adicionarPerguntaVF(PerTipo.CACADORA, Dificuldade.FACIL, "O avestruz é a maior ave do mundo.", true, "Animais", 1);
         adicionarPerguntaVF(PerTipo.CACADORA, Dificuldade.FACIL, "O pinguim é uma ave que nada mas não voa.", true, "Animais", 1);
         adicionarPerguntaVF(PerTipo.CACADORA, Dificuldade.FACIL, "O elefante tem a gestação mais longa entre os mamíferos terrestres.", true, "Animais", 1);
-        adicionarPerguntaVF(PerTipo.CACADORA, Dificuldade.FACIL, "O tigre é nativo da África.", false, "Animais", 1);
+        // ⭐ TIGRE REMOVIDO DAQUI (era duplicado do ME)
+        adicionarPerguntaVF(PerTipo.CACADORA, Dificuldade.FACIL, "O leão é o maior felino do mundo.", false, "Animais", 1);
 
         // NATUREZA (15 perguntas)
         adicionarPerguntaVF(PerTipo.CACADORA, Dificuldade.FACIL, "A água ferve a 100°C ao nível do mar.", true, "Natureza", 1);
@@ -1278,8 +1352,12 @@ public class BancoPerguntas {
         adicionarPerguntaVF(PerTipo.CACADORA, Dificuldade.FACIL, "Todo rastro de pegada humana é fácil de seguir.", false, "Rastreamento", 1);
     }
 
+// ============================================================
+// PERGUNTAS FÁCEIS - LACUNA (50)
+// ============================================================
+
     private void carregarCacadoraFacilLacuna() {
-        // ANIMAIS (15 perguntas NOVAS)
+        // ANIMAIS (20 perguntas)
         adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.FACIL,
                 "O maior felino do mundo é o __________.",
                 Arrays.asList("tigre", "tigre-siberiano"), "Animais", 1);
@@ -1295,10 +1373,6 @@ public class BancoPerguntas {
                 "O animal que hiberna durante o inverno é o __________.",
                 Arrays.asList("urso", "ursa", "ursos"), "Animais", 1);
 
-        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.FACIL,
-                "O maior réptil do mundo é o __________ marinho.",
-                Arrays.asList("crocodilo", "crocodilo-marinho", "jacaré"), "Animais", 1);
-
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
                 "A ave que é símbolo dos Estados Unidos é a __________.", "águia", "Animais", 1);
 
@@ -1310,9 +1384,9 @@ public class BancoPerguntas {
                 "O peixe mais temido dos oceanos, com dentes afiados, é o __________.",
                 Arrays.asList("tubarão", "tubarões", "tubarão-branco"), "Animais", 1);
 
-        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.FACIL,
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
                 "O animal que carrega sua casa nas costas é o __________.",
-                Arrays.asList("caracol", "tartaruga"), "Animais", 1);
+                "caracol", "Animais", 1);
 
         adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.FACIL,
                 "A baleia mais famosa por seu canto é a __________.",
@@ -1338,7 +1412,28 @@ public class BancoPerguntas {
                 "O animal que constrói diques e represas é o __________.",
                 Arrays.asList("castor", "castores"), "Animais", 1);
 
-        // SOBREVIVÊNCIA (10 perguntas NOVAS)
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.FACIL,
+                "O animal mais rápido do mundo em terra é o __________.",
+                Arrays.asList("guepardo", "guepardo"), "Animais", 1);
+
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.FACIL,
+                "O maior réptil do mundo é o __________ marinho.",
+                Arrays.asList("crocodilo", "crocodilo-marinho", "jacaré"), "Animais", 1);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+                "O animal que tem listras pretas e brancas é a __________.", "zebra", "Animais", 1);
+
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.FACIL,
+                "O animal que vive no deserto e tem corcovas é o __________.",
+                Arrays.asList("camelo", "dromedário"), "Animais", 1);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+                "O animal que produz seda é a __________.", "aranha", "Animais", 1);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+                "O animal que tem presas de marfim é o __________.", "elefante", "Animais", 1);
+
+        // SOBREVIVÊNCIA (15 perguntas)
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
                 "O sinal universal de socorro com as mãos é um __________ levantado.",
                 "polegar", "Sobrevivência", 1);
@@ -1379,7 +1474,27 @@ public class BancoPerguntas {
                 "O padrão de marcação no chão para sinalização aérea deve ter pelo menos __________ metros.",
                 "três", "Sobrevivência", 1);
 
-        // RASTREAMENTO (10 perguntas NOVAS)
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+                "A técnica de purificar água usando o sol é chamada de __________ solar.",
+                "destilação", "Sobrevivência", 1);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+                "O melhor lugar para construir um abrigo é longe de __________.",
+                "água", "Sobrevivência", 1);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+                "Em sobrevivência, a prioridade número um é __________.",
+                "água", "Sobrevivência", 1);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+                "O fogo é importante para __________ e cozinhar.",
+                "aquecer", "Sobrevivência", 1);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+                "A regra de três em sobrevivência diz que você pode sobreviver __________ semanas sem comida.",
+                "três", "Sobrevivência", 1);
+
+        // RASTREAMENTO (15 perguntas)
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
                 "O rastro que mostra a largura do passo do animal é chamado de __________.",
                 "passada", "Rastreamento", 1);
@@ -1419,11 +1534,34 @@ public class BancoPerguntas {
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
                 "A presença de moscas sobre uma área específica pode indicar __________ fresca.",
                 "carcaça", "Rastreamento", 1);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+                "A distância entre as pegadas de um animal é chamada de __________.",
+                "passo", "Rastreamento", 1);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+                "Pegadas que se sobrepõem indicam que o animal estava __________.",
+                "andando", "Rastreamento", 1);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+                "O rastro de um animal correndo tem pegadas mais __________.",
+                "afastadas", "Rastreamento", 1);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+                "A identificação de animais pelo som é chamada de __________.",
+                "bioacústica", "Rastreamento", 1);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.FACIL,
+                "O estudo de pegadas e rastros é chamado de __________.",
+                "icnologia", "Rastreamento", 1);
     }
 
-    // 25 questões de MÚLTIPLA ESCOLHA - MÉDIO
+// ============================================================
+// PERGUNTAS MÉDIAS (75) - MANTIDAS
+// ============================================================
+
     private void carregarCacadoraMedioMultiplaEscolha() {
-        // ANIMAIS (7 perguntas)
+        // ANIMAIS (15 perguntas)
         adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.MEDIO,
                 "Qual animal pode regenerar seu próprio cérebro?",
                 Arrays.asList("Lagarto", "Salamandra", "Planária", "Estrela-do-mar"), "C", "Animais", 4);
@@ -1452,7 +1590,35 @@ public class BancoPerguntas {
                 "Qual é a serpente mais venenosa do mundo?",
                 Arrays.asList("Cascavel", "Naja", "Mamba-negra", "Taipan-do-interior"), "D", "Animais", 4);
 
-        // NATUREZA (7 perguntas)
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "Qual animal tem a maior envergadura de asas?",
+                Arrays.asList("Águia", "Albatroz", "Condor", "Pelicano"), "B", "Animais", 4);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "Qual animal é conhecido por usar ferramentas?",
+                Arrays.asList("Golfinho", "Chimpanzé", "Elefante", "Todos os acima"), "D", "Animais", 4);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "Qual animal tem a mordida mais forte?",
+                Arrays.asList("Leão", "Tubarão-branco", "Crocodilo-de-água-salgada", "Hipopótamo"), "C", "Animais", 4);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "Qual animal é um 'predador de topo'?",
+                Arrays.asList("Orca", "Tubarão", "Leão", "Todos os acima"), "D", "Animais", 4);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "Qual animal tem a visão mais aguçada?",
+                Arrays.asList("Águia", "Falcão", "Coruja", "Gavião"), "A", "Animais", 4);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "Qual animal é um 'animal de carga'?",
+                Arrays.asList("Cavalo", "Burro", "Camelo", "Todos os acima"), "D", "Animais", 4);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "Qual animal tem a expectativa de vida mais longa?",
+                Arrays.asList("Tartaruga-gigante", "Baleia-da-groenlândia", "Elefante", "Verme"), "B", "Animais", 4);
+
+        // NATUREZA (10 perguntas)
         adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.MEDIO,
                 "O que é um 'bioma'?",
                 Arrays.asList("Uma espécie rara", "Comunidade de plantas e animais com clima similar", "Oceano", "Montanha"), "B", "Natureza", 4);
@@ -1481,7 +1647,19 @@ public class BancoPerguntas {
                 "O que é 'decomposição'?",
                 Arrays.asList("Construção de matéria orgânica", "Quebra de matéria morta por fungos e bactérias", "Crescimento", "Fotosíntese"), "B", "Natureza", 4);
 
-        // SOBREVIVÊNCIA (6 perguntas)
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "O que é 'camada de ozônio'?",
+                Arrays.asList("Camada que protege dos raios UV", "Camada que aquece a Terra", "Camada de poluição", "Camada de nuvens"), "A", "Natureza", 4);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "O que é 'aquecimento global'?",
+                Arrays.asList("Aumento da temperatura média da Terra", "Resfriamento global", "Mudança nas estações", "Aumento das chuvas"), "A", "Natureza", 4);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "O que são 'espécies invasoras'?",
+                Arrays.asList("Espécies nativas", "Espécies introduzidas que prejudicam o ecossistema", "Animais em extinção", "Plantas medicinais"), "B", "Natureza", 4);
+
+        // SOBREVIVÊNCIA (10 perguntas)
         adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.MEDIO,
                 "Qual nó é mais seguro para amarrar uma corda em uma árvore?",
                 Arrays.asList("Nó simples", "Nó de correr", "Volta do fiador ou nó de escota", "Nó direito"), "C", "Sobrevivência", 4);
@@ -1506,7 +1684,23 @@ public class BancoPerguntas {
                 "O que NÃO fazer ao encontrar um animal selvagem grande?",
                 Arrays.asList("Correr", "Recuar devagar", "Fazer barulho", "Ficar imóvel"), "A", "Sobrevivência", 4);
 
-        // RASTREAMENTO (5 perguntas)
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "Como purificar água usando o sol?",
+                Arrays.asList("Destilação solar", "Ferver", "Coar", "Adicionar sal"), "A", "Sobrevivência", 4);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "O que é 'hipotermia'?",
+                Arrays.asList("Perda excessiva de calor corporal", "Excesso de calor", "Desidratação", "Fome"), "A", "Sobrevivência", 4);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "Qual é a melhor forma de sinalizar um helicóptero?",
+                Arrays.asList("Sinal de fumaça", "Sinal com espelho", "Sinal com braços", "Todos os acima"), "D", "Sobrevivência", 4);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "O que é um 'abrigo de emergência'?",
+                Arrays.asList("Estrutura para proteção contra os elementos", "Casa", "Barraca", "Caverna"), "A", "Sobrevivência", 4);
+
+        // RASTREAMENTO (10 perguntas)
         adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.MEDIO,
                 "Qual característica da pegada indica pressa do animal?",
                 Arrays.asList("Pegadas afastadas", "Pegadas sobrepostas", "Pegadas rasas", "Pegadas fundas"), "A", "Rastreamento", 4);
@@ -1526,7 +1720,31 @@ public class BancoPerguntas {
         adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.MEDIO,
                 "O que indica uma 'trilha de uso' na mata?",
                 Arrays.asList("Animal de passagem única", "Passagem frequente de animais", "Corrida", "Queda de árvore"), "B", "Rastreamento", 4);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "Como identificar pegadas de felino?",
+                Arrays.asList("Pegadas arredondadas sem unhas", "Pegadas com unhas", "Pegadas grandes", "Pegadas pequenas"), "A", "Rastreamento", 4);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "O que são 'marcas de dentes' em árvores?",
+                Arrays.asList("Indicam passagem de herbívoro", "Indicam passagem de carnívoro", "Indicam doença", "Indicam fogo"), "A", "Rastreamento", 4);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "Como determinar a idade de um rastro?",
+                Arrays.asList("Pela nitidez das bordas", "Pela cor", "Pelo tamanho", "Pela profundidade"), "A", "Rastreamento", 4);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "O que são 'rastros de alimentação'?",
+                Arrays.asList("Marcas deixadas ao comer", "Pegadas", "Fezes", "Cama"), "A", "Rastreamento", 4);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "O que é 'linea alba' em pegadas?",
+                Arrays.asList("Sulco central na pegada", "Marca de unha", "Borda externa", "Parte mais funda"), "A", "Rastreamento", 4);
     }
+
+// ============================================================
+// PERGUNTAS MÉDIAS - VERDADEIRO/FALSO (25)
+// ============================================================
 
     private void carregarCacadoraMedioVerdadeiroFalso() {
         adicionarPerguntaVF(PerTipo.CACADORA, Dificuldade.MEDIO, "O lobo-guará é um canídeo sul-americano de patas longas.", true, "Animais", 4);
@@ -1556,8 +1774,11 @@ public class BancoPerguntas {
         adicionarPerguntaVF(PerTipo.CACADORA, Dificuldade.MEDIO, "Pegadas humanas apontam calcanhar mais profundo em descida.", true, "Rastreamento", 4);
     }
 
+// ============================================================
+// PERGUNTAS MÉDIAS - LACUNA (25)
+// ============================================================
+
     private void carregarCacadoraMedioLacuna() {
-        // ANIMAIS (7 perguntas NOVAS)
         adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.MEDIO,
                 "O maior roedor do mundo, encontrado no Brasil, é a __________.",
                 Arrays.asList("capivara", "capivaras", "carpincho"), "Animais", 4);
@@ -1586,56 +1807,78 @@ public class BancoPerguntas {
                 "O mamífero brasileiro que se alimenta exclusivamente de formigas e cupins é o __________.",
                 Arrays.asList("tamanduá", "tamandua", "tamanduá-bandeira"), "Animais", 4);
 
-        // NATUREZA (7 perguntas NOVAS) - manter originais
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
                 "O bioma brasileiro com vegetação adaptada ao fogo é o __________.", "Cerrado", "Natureza", 4);
+
         adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.MEDIO,
                 "O fenômeno de resfriamento das águas do Pacífico, oposto ao El Niño, é chamado de __________.",
                 Arrays.asList("La Niña", "La Nina"), "Natureza", 4);
+
         adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.MEDIO,
                 "O tipo de floresta caracterizada por pinheiros em regiões frias é a floresta de __________.",
                 Arrays.asList("coníferas", "coniferas", "coníferas"), "Natureza", 4);
+
         adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.MEDIO,
                 "O fenômeno em que o solo fértil se transforma em deserto é chamado de __________.",
                 Arrays.asList("desertificação", "desertificacao", "desertification"), "Natureza", 4);
+
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
                 "O aquífero que abrange Brasil, Argentina, Paraguai e Uruguai é o Aquífero __________.", "Guarani", "Natureza", 4);
-        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "O ecossistema brasileiro de transição entre Cerrado e Caatinga é a __________.",
-                Arrays.asList("Mata Seca", "mata seca", "Mata Seca"), "Natureza", 4);
+
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
                 "A camada da atmosfera onde se concentra o ozônio é a __________.", "estratosfera", "Natureza", 4);
 
-        // SOBREVIVÊNCIA (6 perguntas NOVAS) - manter originais
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "O tipo de abrigo construído com galhos inclinados contra um tronco é chamado de abrigo __________.", "inclinado", "Sobrevivência", 4);
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "A planta aquática que pode fornecer água potável no pantanal é o __________.", "aguapé", "Sobrevivência", 4);
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "O sinal de socorro com três fogueiras deve ser disposto em formato de __________.", "triângulo", "Sobrevivência", 4);
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "A técnica de respiração para acalmar em situação de pânico é a respiração __________.", "diafragmática", "Sobrevivência", 4);
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "O melhor nó para unir duas cordas de mesma espessura é o nó __________.", "direito", "Sobrevivência", 4);
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "A técnica de cozinhar alimentos embrulhados em folhas sobre brasas é chamada de __________.", "papillote", "Sobrevivência", 4);
+                "O tipo de abrigo construído com galhos inclinados contra um tronco é chamado de abrigo __________.",
+                "inclinado", "Sobrevivência", 4);
 
-        // RASTREAMENTO (5 perguntas NOVAS) - manter originais
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "O conjunto de marcas que um animal deixa ao se alimentar é chamado de rastro de __________.", "alimentação", "Rastreamento", 4);
+                "A planta aquática que pode fornecer água potável no pantanal é o __________.",
+                "aguapé", "Sobrevivência", 4);
+
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "O padrão de desgaste dos dentes de um animal pode indicar sua __________.", "idade", "Rastreamento", 4);
+                "O sinal de socorro com três fogueiras deve ser disposto em formato de __________.",
+                "triângulo", "Sobrevivência", 4);
+
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "A presença de ossos roídos em uma trilha indica atividade de __________.", "roedores", "Rastreamento", 4);
+                "A técnica de respiração para acalmar em situação de pânico é a respiração __________.",
+                "diafragmática", "Sobrevivência", 4);
+
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "Pegadas sobrepostas exatamente indicam que o animal estava __________.", "caminhando", "Rastreamento", 4);
+                "O melhor nó para unir duas cordas de mesma espessura é o nó __________.",
+                "direito", "Sobrevivência", 4);
+
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
-                "A distância entre as pegadas dianteiras e traseiras do mesmo animal é chamada de __________.", "intervalo", "Rastreamento", 4);
+                "A técnica de cozinhar alimentos embrulhados em folhas sobre brasas é chamada de __________.",
+                "papillote", "Sobrevivência", 4);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "O conjunto de marcas que um animal deixa ao se alimentar é chamado de rastro de __________.",
+                "alimentação", "Rastreamento", 4);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "O padrão de desgaste dos dentes de um animal pode indicar sua __________.",
+                "idade", "Rastreamento", 4);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "A presença de ossos roídos em uma trilha indica atividade de __________.",
+                "roedores", "Rastreamento", 4);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "Pegadas sobrepostas exatamente indicam que o animal estava __________.",
+                "caminhando", "Rastreamento", 4);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.MEDIO,
+                "A distância entre as pegadas dianteiras e traseiras do mesmo animal é chamada de __________.",
+                "intervalo", "Rastreamento", 4);
     }
 
+// ============================================================
+// PERGUNTAS DIFÍCEIS (150) - DOBRADAS
+// ============================================================
 
     private void carregarCacadoraDificilMultiplaEscolha() {
-        // ANIMAIS (7 perguntas)
+        // ANIMAIS (20 perguntas)
         adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
                 "Qual animal tem o maior cérebro em relação ao corpo?",
                 Arrays.asList("Humano", "Golfinho", "Formiga (proporcionalmente tem grande)", "Rato"), "C", "Animais", 8);
@@ -1664,7 +1907,59 @@ public class BancoPerguntas {
                 "Qual animal tem sangue azul?",
                 Arrays.asList("Lagosta", "Aranha", "Polvo", "Todos os acima"), "D", "Animais", 8);
 
-        // NATUREZA (7 perguntas)
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "Qual animal é capaz de regenerar membros perdidos?",
+                Arrays.asList("Lagarto", "Salamandra", "Estrela-do-mar", "Todos os acima"), "D", "Animais", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O que é 'biomimética'?",
+                Arrays.asList("Imitação da natureza para criar tecnologia", "Estudo de animais", "Biologia marinha", "Ecologia"), "A", "Animais", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "Qual animal tem a maior envergadura de asas?",
+                Arrays.asList("Albatroz-errante", "Condor-dos-andes", "Águia-real", "Pelicano"), "A", "Animais", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O que é 'termorregulação' em animais?",
+                Arrays.asList("Capacidade de regular a temperatura corporal", "Capacidade de voar", "Capacidade de nadar", "Capacidade de camuflar"), "A", "Animais", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "Qual animal tem a visão de cores mais desenvolvida?",
+                Arrays.asList("Cachorro", "Gato", "Pomba", "Ser humano"), "D", "Animais", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O que é 'ecologia comportamental'?",
+                Arrays.asList("Estudo do comportamento animal em relação ao ambiente", "Estudo de ecossistemas", "Estudo de plantas", "Estudo de fósseis"), "A", "Animais", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "Qual animal tem a mordida mais poderosa?",
+                Arrays.asList("Crocodilo-de-água-salgada", "Tubarão-branco", "Leão", "Urso-polar"), "A", "Animais", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O que é 'coevolução'?",
+                Arrays.asList("Evolução conjunta de duas espécies", "Evolução de uma espécie", "Extinção", "Migração"), "A", "Animais", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "Qual animal é um 'predador de topo' no oceano?",
+                Arrays.asList("Orca", "Tubarão-branco", "Tubarão-martelo", "Golfinho"), "A", "Animais", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O que é 'hibernação'?",
+                Arrays.asList("Estado de dormência no inverno", "Migração", "Reprodução", "Alimentação"), "A", "Animais", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "Qual animal é um 'animal de carga' há milhares de anos?",
+                Arrays.asList("Cavalo", "Burro", "Camelo", "Todos os acima"), "D", "Animais", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O que é 'migração animal'?",
+                Arrays.asList("Movimento sazonal de animais", "Extinção", "Evolução", "Adaptação"), "A", "Animais", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "Qual animal tem a audição mais aguçada?",
+                Arrays.asList("Cachorro", "Gato", "Morcego", "Golfinho"), "D", "Animais", 8);
+
+        // NATUREZA (15 perguntas)
         adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
                 "O que é 'biogeoquímica'?",
                 Arrays.asList("Estudo de fósseis", "Ciclo de elementos químicos entre seres vivos e ambiente", "Classificação de solos", "Meteorologia"), "B", "Natureza", 8);
@@ -1693,7 +1988,39 @@ public class BancoPerguntas {
                 "Qual gás do efeito estufa é mais potente que o CO2?",
                 Arrays.asList("Metano", "Óxido nitroso", "Vapor d'água", "CFCs"), "A", "Natureza", 8);
 
-        // SOBREVIVÊNCIA (6 perguntas)
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O que é 'acidificação dos oceanos'?",
+                Arrays.asList("Absorção de CO2 pelos oceanos", "Poluição por plástico", "Derretimento de geleiras", "Aumento do nível do mar"), "A", "Natureza", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O que é 'ecossistema'?",
+                Arrays.asList("Comunidade de seres vivos + ambiente", "Apenas plantas", "Apenas animais", "Apenas solo"), "A", "Natureza", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O que é 'biodiversidade'?",
+                Arrays.asList("Variedade de espécies em um ecossistema", "Quantidade de água", "Altitude", "Temperatura média"), "A", "Natureza", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O que é 'desmatamento'?",
+                Arrays.asList("Remoção de florestas", "Plantio de árvores", "Conservação", "Reciclagem"), "A", "Natureza", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O que é 'sustentabilidade'?",
+                Arrays.asList("Uso de recursos sem comprometer o futuro", "Exploração máxima de recursos", "Uso de energia nuclear", "Poluição"), "A", "Natureza", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O que é 'energia renovável'?",
+                Arrays.asList("Energia de fontes naturais inesgotáveis", "Energia nuclear", "Energia fóssil", "Energia de carvão"), "A", "Natureza", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O que é 'pegada ecológica'?",
+                Arrays.asList("Impacto ambiental de uma pessoa", "Caminhada na natureza", "Estudo de ecologia", "Sustentabilidade"), "A", "Natureza", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O que é 'reciclagem'?",
+                Arrays.asList("Reutilização de materiais", "Queima de lixo", "Enterro de resíduos", "Produção de plástico"), "A", "Natureza", 8);
+
+        // SOBREVIVÊNCIA (15 perguntas)
         adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
                 "Qual técnica de fricção de madeira é mais eficiente para fazer fogo?",
                 Arrays.asList("Arco de fogo", "Arado de fogo", "Bomba de fogo", "Perfurante manual"), "A", "Sobrevivência", 8);
@@ -1718,7 +2045,43 @@ public class BancoPerguntas {
                 "Qual é a dose letal de água do mar ingerida?",
                 Arrays.asList("1 litro", "2-3 litros em pouco tempo pode matar", "Beber à vontade", "10 litros"), "B", "Sobrevivência", 8);
 
-        // RASTREAMENTO (5 perguntas)
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "Como fazer um abrigo com galhos e folhas?",
+                Arrays.asList("Abrigo inclinado", "Casa", "Barraca", "Caverna"), "A", "Sobrevivência", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O que é 'desidratação'?",
+                Arrays.asList("Perda excessiva de água", "Excesso de água", "Fome", "Doença"), "A", "Sobrevivência", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "Como purificar água usando o sol?",
+                Arrays.asList("Destilação solar", "Ferver", "Coar", "Adicionar sal"), "A", "Sobrevivência", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O que é 'insolação'?",
+                Arrays.asList("Exposição excessiva ao sol", "Frio extremo", "Fome", "Sede"), "A", "Sobrevivência", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "Como sinalizar um helicóptero?",
+                Arrays.asList("Sinal de fumaça", "Sinal com espelho", "Sinal com braços", "Todos os acima"), "D", "Sobrevivência", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O que é 'sobrevivência'?",
+                Arrays.asList("Manter-se vivo em condições adversas", "Acampar", "Fazer trilha", "Pescar"), "A", "Sobrevivência", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "Qual é a melhor forma de se proteger de um animal selvagem?",
+                Arrays.asList("Ficar calmo e recuar devagar", "Correr", "Gritar", "Atacar"), "A", "Sobrevivência", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O que é 'primeiros socorros'?",
+                Arrays.asList("Atendimento inicial em emergências", "Tratamento médico", "Cirurgia", "Medicação"), "A", "Sobrevivência", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "Como fazer fogo sem fósforo?",
+                Arrays.asList("Usando pederneira", "Usando lupa", "Fricção", "Todos os acima"), "D", "Sobrevivência", 8);
+
+        // RASTREAMENTO (10 perguntas)
         adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
                 "O que é 'linea alba' em pegadas de animais?",
                 Arrays.asList("Sulco central na pegada", "Marca de unha", "Borda externa", "Parte mais funda"), "A", "Rastreamento", 8);
@@ -1738,9 +2101,32 @@ public class BancoPerguntas {
         adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
                 "O que é um 'rastro de arrasto'?",
                 Arrays.asList("Animal rastejando", "Animal carregando presa", "Animal voando", "Animal nadando"), "B", "Rastreamento", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "Como identificar pegadas de canídeo?",
+                Arrays.asList("Pegadas com marcas de unhas", "Pegadas arredondadas", "Pegadas grandes", "Pegadas pequenas"), "A", "Rastreamento", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O que é 'ecologia de rastreamento'?",
+                Arrays.asList("Estudo de rastros e pegadas", "Estudo de ecossistemas", "Estudo de animais", "Estudo de plantas"), "A", "Rastreamento", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "Como determinar a idade de um rastro?",
+                Arrays.asList("Pela nitidez das bordas", "Pela cor", "Pelo tamanho", "Pela profundidade"), "A", "Rastreamento", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O que são 'rastros de movimento'?",
+                Arrays.asList("Marcas deixadas pelo movimento do animal", "Pegadas", "Fezes", "Cama"), "A", "Rastreamento", 8);
+
+        adicionarPerguntaMultipla(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "Qual é o maior predador terrestre?",
+                Arrays.asList("Urso-polar", "Leão", "Tigre", "Onça"), "A", "Rastreamento", 8);
     }
 
-    // 25 questões de VERDADEIRO OU FALSO - DIFÍCIL
+// ============================================================
+// PERGUNTAS DIFÍCEIS - VERDADEIRO/FALSO (25)
+// ============================================================
+
     private void carregarCacadoraDificilVerdadeiroFalso() {
         // ANIMAIS (7 perguntas)
         adicionarPerguntaVF(PerTipo.CACADORA, Dificuldade.DIFICIL, "O axolote (ambystoma mexicanum) mantém características larvais na fase adulta (neotenia).", true, "Animais", 8);
@@ -1776,8 +2162,12 @@ public class BancoPerguntas {
         adicionarPerguntaVF(PerTipo.CACADORA, Dificuldade.DIFICIL, "Rastros sobrepostos de felino indicam que ele estava caçando.", true, "Rastreamento", 8);
     }
 
+// ============================================================
+// PERGUNTAS DIFÍCEIS - LACUNA (50)
+// ============================================================
+
     private void carregarCacadoraDificilLacuna() {
-        // ANIMAIS (7 perguntas NOVAS)
+        // ANIMAIS (15 perguntas)
         adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.DIFICIL,
                 "O fenômeno em que um animal inofensivo imita as cores de um animal perigoso é chamado de mimetismo __________.",
                 Arrays.asList("batesiano", "batesian", "Batesian"), "Animais", 8);
@@ -1806,48 +2196,179 @@ public class BancoPerguntas {
                 "O maior invertebrado do mundo, que vive nas profundezas oceânicas, é a lula-__________.",
                 Arrays.asList("gigante", "colossal", "lula-gigante"), "Animais", 8);
 
-        // NATUREZA (7 perguntas NOVAS) - manter originais
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O animal que tem a mordida mais poderosa do mundo é o __________.",
+                Arrays.asList("crocodilo", "crocodilo-de-água-salgada"), "Animais", 8);
+
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "A baleia com o canto mais complexo é a __________.",
+                Arrays.asList("jubarte", "baleia-jubarte"), "Animais", 8);
+
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O animal que tem o maior cérebro em proporção ao corpo é a __________.",
+                Arrays.asList("formiga", "formiga"), "Animais", 8);
+
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O maior animal terrestre é o __________.",
+                Arrays.asList("elefante", "elefante-africano"), "Animais", 8);
+
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O animal mais rápido do mundo é o __________.",
+                Arrays.asList("falcão-peregrino", "falcão peregrino"), "Animais", 8);
+
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O animal com a maior envergadura de asas é o __________.",
+                Arrays.asList("albatroz", "albatroz-errante"), "Animais", 8);
+
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O réptil que pode viver mais de 200 anos é a __________.",
+                Arrays.asList("tartaruga-gigante", "tartaruga", "tartaruga-das-galápagos"), "Animais", 8);
+
+        adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O animal que tem sangue azul é o __________.",
+                Arrays.asList("polvo", "lagosta", "aranha"), "Animais", 8);
+
+        // NATUREZA (15 perguntas)
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
                 "O único bioma exclusivamente brasileiro é a __________.", "Caatinga", "Natureza", 8);
+
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "O fenômeno de inversão térmica que retém poluentes próximo ao solo ocorre principalmente no __________.", "inverno", "Natureza", 8);
+                "O fenômeno de inversão térmica que retém poluentes próximo ao solo ocorre principalmente no __________.",
+                "inverno", "Natureza", 8);
+
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "O tipo de vegetação adaptada a solos pobres em nutrientes e ricos em alumínio é chamada de vegetação __________.", "oligotrófica", "Natureza", 8);
+                "O tipo de vegetação adaptada a solos pobres em nutrientes e ricos em alumínio é chamada de vegetação __________.",
+                "oligotrófica", "Natureza", 8);
+
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "O fenômeno de acidificação dos oceanos é causado pelo aumento da absorção de __________.", "CO2", "Natureza", 8);
+                "O fenômeno de acidificação dos oceanos é causado pelo aumento da absorção de __________.",
+                "CO2", "Natureza", 8);
+
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "A região oceânica onde há maior biodiversidade devido à subida de nutrientes é a zona de __________.", "ressurgência", "Natureza", 8);
+                "A região oceânica onde há maior biodiversidade devido à subida de nutrientes é a zona de __________.",
+                "ressurgência", "Natureza", 8);
+
         adicionarPerguntaLacunaMultiResposta(PerTipo.CACADORA, Dificuldade.DIFICIL,
                 "O gás de efeito estufa liberado pelo degelo do permafrost é o __________.",
                 Arrays.asList("metano", "metano", "methane"), "Natureza", 8);
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "O tipo de relação ecológica onde um organismo se beneficia sem prejudicar o outro é o __________.", "comensalismo", "Natureza", 8);
 
-        // SOBREVIVÊNCIA (6 perguntas NOVAS) - manter originais
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "A técnica de produzir água potável a partir da água do mar usando evaporação é a __________ solar.", "destilação", "Sobrevivência", 8);
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "O fungo que cresce em troncos e pode ser usado como isca para fogo é o __________.", "pólvoro", "Sobrevivência", 8);
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "A técnica de orientação que usa a bissetriz do ângulo entre o sol e o ponteiro das horas é o método do __________.", "relógio", "Sobrevivência", 8);
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "O tipo de hipotermia que ocorre por imersão em água fria é chamada de hipotermia por __________.", "condução", "Sobrevivência", 8);
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "A planta do cerrado que armazena água em seu caule e é conhecida como 'garrafa d'água' é a __________.", "barriguda", "Sobrevivência", 8);
-        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "O método de navegação natural que usa a posição das estrelas é chamado de navegação __________.", "astronômica", "Sobrevivência", 8);
+                "O tipo de relação ecológica onde um organismo se beneficia sem prejudicar o outro é o __________.",
+                "comensalismo", "Natureza", 8);
 
-        // RASTREAMENTO (5 perguntas NOVAS) - manter originais
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "O estudo científico das pegadas e rastros de animais é chamado de __________.", "icnologia", "Rastreamento", 8);
+                "O processo de transformação de rochas por agentes naturais é chamado de __________.",
+                "erosão", "Natureza", 8);
+
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "A marca deixada pelo arrasto da cauda de um réptil é chamada de __________ caudal.", "sulco", "Rastreamento", 8);
+                "A camada de gases que envolve a Terra é chamada de __________.",
+                "atmosfera", "Natureza", 8);
+
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "O padrão de movimento de um animal que está caçando, com paradas frequentes, é chamado de marcha __________.", "furtiva", "Rastreamento", 8);
+                "O ciclo da água é também chamado de ciclo __________.",
+                "hidrológico", "Natureza", 8);
+
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "A técnica de identificar animais pelo som de seus passos é chamada de __________ acústico.", "rastreamento", "Rastreamento", 8);
+                "A energia que vem do sol é chamada de energia __________.",
+                "solar", "Natureza", 8);
+
         adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
-                "O padrão de desgaste assimétrico nas pegadas de um quadrúpede indica que o animal está __________.", "mancando", "Rastreamento", 8);
+                "O estudo dos ecossistemas é chamado de __________.",
+                "ecologia", "Natureza", 8);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "A variedade de espécies em um ecossistema é chamada de __________.",
+                "biodiversidade", "Natureza", 8);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O fenômeno de aquecimento da Terra devido ao efeito estufa é chamado de __________.",
+                "aquecimento global", "Natureza", 8);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "A camada da atmosfera onde ocorre o efeito estufa é a __________.",
+                "troposfera", "Natureza", 8);
+
+        // SOBREVIVÊNCIA (10 perguntas)
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "A técnica de produzir água potável a partir da água do mar usando evaporação é a __________ solar.",
+                "destilação", "Sobrevivência", 8);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O fungo que cresce em troncos e pode ser usado como isca para fogo é o __________.",
+                "pólvoro", "Sobrevivência", 8);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "A técnica de orientação que usa a bissetriz do ângulo entre o sol e o ponteiro das horas é o método do __________.",
+                "relógio", "Sobrevivência", 8);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O tipo de hipotermia que ocorre por imersão em água fria é chamada de hipotermia por __________.",
+                "condução", "Sobrevivência", 8);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "A planta do cerrado que armazena água em seu caule e é conhecida como 'garrafa d'água' é a __________.",
+                "barriguda", "Sobrevivência", 8);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O método de navegação natural que usa a posição das estrelas é chamado de navegação __________.",
+                "astronômica", "Sobrevivência", 8);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O sinal de socorro com três fogueiras é reconhecido como __________.",
+                "pedido de ajuda", "Sobrevivência", 8);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "A técnica de respiração para acalmar em emergência é a respiração __________.",
+                "diafragmática", "Sobrevivência", 8);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O tipo de abrigo mais simples é o abrigo __________.",
+                "inclinado", "Sobrevivência", 8);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O melhor nó para amarrar uma corda em uma árvore é o nó __________.",
+                "fiador", "Sobrevivência", 8);
+
+        // RASTREAMENTO (10 perguntas)
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O estudo científico das pegadas e rastros de animais é chamado de __________.",
+                "icnologia", "Rastreamento", 8);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "A marca deixada pelo arrasto da cauda de um réptil é chamada de __________ caudal.",
+                "sulco", "Rastreamento", 8);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O padrão de movimento de um animal que está caçando, com paradas frequentes, é chamado de marcha __________.",
+                "furtiva", "Rastreamento", 8);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "A técnica de identificar animais pelo som de seus passos é chamada de __________ acústico.",
+                "rastreamento", "Rastreamento", 8);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O padrão de desgaste assimétrico nas pegadas de um quadrúpede indica que o animal está __________.",
+                "mancando", "Rastreamento", 8);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "A análise de fezes para identificar o animal é chamada de __________.",
+                "coprologia", "Rastreamento", 8);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O rastro que mostra o caminho de um animal é chamado de __________.",
+                "trilha", "Rastreamento", 8);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "A marcação de território com urina e fezes é chamada de __________.",
+                "marcação", "Rastreamento", 8);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "O estudo do comportamento animal é chamado de __________.",
+                "etologia", "Rastreamento", 8);
+
+        adicionarPerguntaLacuna(PerTipo.CACADORA, Dificuldade.DIFICIL,
+                "A técnica de seguir um animal sem ser visto é chamada de __________.",
+                "rastreamento", "Rastreamento", 8);
     }
 
 
@@ -1865,10 +2386,10 @@ public class BancoPerguntas {
         carregarGuerreiroDificilLacuna();
     }
 
-    // ==================== PERGUNTAS FÁCEIS (100) ====================
+    // ==================== PERGUNTAS FÁCEIS (150) ====================
 
-    // 50 questões de MÚLTIPLA ESCOLHA - FÁCIL
     private void carregarGuerreiroFacilMultiplaEscolha() {
+        // COMBATE (30 perguntas)
         adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
                 "Qual dessas é uma arte marcial japonesa?",
                 Arrays.asList("Kung Fu", "Taekwondo", "Judô", "Muay Thai"), "C", "Combate", 1);
@@ -1929,7 +2450,67 @@ public class BancoPerguntas {
                 "Qual luta é considerada esporte olímpico desde 2000?",
                 Arrays.asList("Caratê", "Taekwondo", "Kung Fu", "Muay Thai"), "B", "Combate", 1);
 
-        // ESTRATÉGIA MILITAR (10 perguntas)
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "O que é 'Kumite' no Caratê?",
+                Arrays.asList("Luta/combate", "Sequência de movimentos", "Saudação", "Meditação"), "A", "Combate", 1);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "Qual é a vestimenta tradicional usada no Judô?",
+                Arrays.asList("Kimono", "Gi", "Quimono", "Todas as acima"), "D", "Combate", 1);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "O que significa a palavra 'Karate'?",
+                Arrays.asList("Mão vazia", "Mão forte", "Golpe mortal", "Caminho da guerra"), "A", "Combate", 1);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "Qual destes é um golpe do Boxe?",
+                Arrays.asList("Chute circular", "Jab", "Joelhada", "Cotovelada"), "B", "Combate", 1);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "O que protege os dentes no Boxe?",
+                Arrays.asList("Capacete", "Protetor bucal", "Luvas", "Bandagem"), "B", "Combate", 1);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "Qual arte marcial usa o 'berimbau' como instrumento?",
+                Arrays.asList("Capoeira", "Karate", "Judô", "Muay Thai"), "A", "Combate", 1);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "O que é 'MMA'?",
+                Arrays.asList("Artes marciais mistas", "Luta livre", "Boxe tailandês", "Judô"), "A", "Combate", 1);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "Qual destes NÃO é uma arte marcial?",
+                Arrays.asList("Judô", "Capoeira", "Ballet", "Kung Fu"), "C", "Combate", 1);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "O que é um 'cinturão' no Jiu-Jitsu?",
+                Arrays.asList("Sistema de graduação", "Arma", "Equipamento de proteção", "Golpe"), "A", "Combate", 1);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "Qual é o objetivo do Aikido?",
+                Arrays.asList("Usar a força do oponente contra ele", "Nocautear", "Chutar", "Usar armas"), "A", "Combate", 1);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "O que são 'muay thai' joelhadas?",
+                Arrays.asList("Golpe com o joelho", "Chute", "Soco", "Cotovelada"), "A", "Combate", 1);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "Qual é a maior organização de MMA do mundo?",
+                Arrays.asList("UFC", "Bellator", "ONE Championship", "PFL"), "A", "Combate", 1);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "O que é 'sparring'?",
+                Arrays.asList("Treino de luta", "Competição oficial", "Aquecimento", "Alongamento"), "A", "Combate", 1);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "Qual destes é um golpe de Jiu-Jitsu?",
+                Arrays.asList("Kimura", "Roundhouse", "Teep", "Jab"), "A", "Combate", 1);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "Qual é o nome do tapete usado no Judô?",
+                Arrays.asList("Tatame", "Ringue", "Octógono", "Palco"), "A", "Combate", 1);
+
+        // ESTRATÉGIA MILITAR (20 perguntas)
         adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
                 "Qual é a manobra militar de 'cerco'?",
                 Arrays.asList("Atacar de frente", "Cercar o inimigo por todos os lados", "Recuar", "Atacar de longe"), "B", "Estratégia", 1);
@@ -1970,7 +2551,47 @@ public class BancoPerguntas {
                 "O que é 'artilharia'?",
                 Arrays.asList("Infantaria", "Cavalaria", "Armas de longo alcance (canhões, obuses)", "Aviação"), "C", "Estratégia", 1);
 
-        // HISTÓRIA DE GUERRAS - Guerras Antigas (5 perguntas)
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "O que é a 'guerra relâmpago'?",
+                Arrays.asList("Ataque rápido e coordenado", "Guerra de trincheiras", "Bombardeio", "Cerco"), "A", "Estratégia", 1);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "O que são 'forças especiais'?",
+                Arrays.asList("Unidades de elite treinadas para missões específicas", "Soldados comuns", "Polícia militar", "Guarda costeira"), "A", "Estratégia", 1);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "O que é uma 'linha de frente'?",
+                Arrays.asList("Zona de combate mais avançada", "Linha de suprimentos", "Trincheira traseira", "Quartel-general"), "A", "Estratégia", 1);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "O que é 'inteligência militar'?",
+                Arrays.asList("Coleta e análise de informações sobre o inimigo", "Armas avançadas", "Treinamento de soldados", "Logística"), "A", "Estratégia", 1);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "O que é 'camuflagem'?",
+                Arrays.asList("Técnica de se esconder usando o ambiente", "Ataque surpresa", "Retirada tática", "Cerco"), "A", "Estratégia", 1);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "O que é 'guerra de posição'?",
+                Arrays.asList("Combate em posições fixas", "Guerra de movimento", "Guerra naval", "Guerra aérea"), "A", "Estratégia", 1);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "O que é 'guerra de movimento'?",
+                Arrays.asList("Manobras rápidas para obter vantagem", "Guerra de trincheiras", "Defesa estática", "Bombardeio"), "B", "Estratégia", 1);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "O que é 'defesa em profundidade'?",
+                Arrays.asList("Múltiplas linhas defensivas", "Ataque frontal", "Retirada", "Cerco"), "A", "Estratégia", 1);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "O que é 'poder aéreo'?",
+                Arrays.asList("Uso de aviões em combate", "Forças terrestres", "Marinha", "Artilharia"), "A", "Estratégia", 1);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "O que é 'guerra anfíbia'?",
+                Arrays.asList("Ataque do mar para a terra", "Guerra aérea", "Guerra terrestre", "Guerra naval"), "A", "Estratégia", 1);
+
+        // HISTÓRIA (25 perguntas)
         adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
                 "Qual foi a guerra entre Esparta e Atenas?",
                 Arrays.asList("Guerra do Peloponeso", "Guerras Púnicas", "Guerras Médicas", "Guerra de Troia"), "A", "História", 1);
@@ -1991,7 +2612,6 @@ public class BancoPerguntas {
                 "Qual império foi derrotado na Batalha de Actium (31 a.C.)?",
                 Arrays.asList("Romano", "Egípcio", "Persa", "Grego"), "B", "História", 1);
 
-        // Guerras Medievais (5 perguntas)
         adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
                 "Quem liderou os ingleses na Batalha de Hastings (1066)?",
                 Arrays.asList("Ricardo Coração de Leão", "Guilherme, o Conquistador", "Henrique V", "Eduardo III"), "B", "História", 1);
@@ -2012,7 +2632,6 @@ public class BancoPerguntas {
                 "Qual imperador mongol criou um dos maiores impérios da história?",
                 Arrays.asList("Átila", "Gengis Khan", "Kublai Khan", "Batu Khan"), "B", "História", 1);
 
-        // Guerras Modernas (5 perguntas)
         adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
                 "Qual foi a causa imediata da Primeira Guerra Mundial?",
                 Arrays.asList("Ataque a Pearl Harbor", "Assassinato de Francisco Ferdinando", "Invasão da Polônia", "Guerra Fria"), "B", "História", 1);
@@ -2033,7 +2652,6 @@ public class BancoPerguntas {
                 "Qual cidade recebeu a primeira bomba atômica?",
                 Arrays.asList("Tóquio", "Nagasaki", "Hiroshima", "Kyoto"), "C", "História", 1);
 
-        // Guerras Contemporâneas (5 perguntas)
         adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
                 "Qual guerra durou de 1955 a 1975 e envolveu EUA e Vietnã?",
                 Arrays.asList("Guerra da Coreia", "Guerra do Vietnã", "Guerra Fria", "Guerra do Afeganistão"), "B", "História", 1);
@@ -2054,7 +2672,6 @@ public class BancoPerguntas {
                 "Qual conflito começou em 2003 com a invasão do Iraque?",
                 Arrays.asList("Guerra do Afeganistão", "Guerra do Iraque", "Primavera Árabe", "Guerra da Síria"), "B", "História", 1);
 
-        // Heróis e Líderes Militares (5 perguntas)
         adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
                 "Quem foi Napoleão Bonaparte?",
                 Arrays.asList("Rei francês", "Imperador e general francês", "Presidente dos EUA", "Papa"), "B", "História", 1);
@@ -2064,19 +2681,22 @@ public class BancoPerguntas {
                 Arrays.asList("Patton", "MacArthur", "Eisenhower", "Bradley"), "C", "História", 1);
 
         adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
-                "Quem foi Sun Tzu?",
-                Arrays.asList("Imperador chinês", "Filósofo e estrategista militar", "General japonês", "Inventor da pólvora"), "B", "História", 1);
-
-        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
                 "Qual líder brasileiro lutou na Guerra do Paraguai?",
                 Arrays.asList("Dom Pedro I", "Duque de Caxias", "Tiradentes", "Getúlio Vargas"), "B", "História", 1);
 
         adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
                 "Quem foi a 'Dama de Ferro' que liderou a Inglaterra na Guerra das Malvinas?",
                 Arrays.asList("Rainha Elizabeth", "Margaret Thatcher", "Theresa May", "Winston Churchill"), "B", "História", 1);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.FACIL,
+                "Quem foi o primeiro imperador romano?",
+                Arrays.asList("Augusto", "Júlio César", "Nero", "Calígula"), "A", "História", 1);
     }
 
-    // 50 questões de VERDADEIRO OU FALSO - FÁCIL
+// ============================================================
+// PERGUNTAS FÁCEIS - VERDADEIRO/FALSO (50 perguntas)
+// ============================================================
+
     private void carregarGuerreiroFacilVerdadeiroFalso() {
         // COMBATE E ARTES MARCIAIS (15 perguntas)
         adicionarPerguntaVF(PerTipo.GUERREIRO, Dificuldade.FACIL, "A espada é considerada uma arma branca.", true, "Combate", 1);
@@ -2132,11 +2752,15 @@ public class BancoPerguntas {
         adicionarPerguntaVF(PerTipo.GUERREIRO, Dificuldade.FACIL, "O general Patton comandou as forças soviéticas.", false, "História", 1);
         adicionarPerguntaVF(PerTipo.GUERREIRO, Dificuldade.FACIL, "A Batalha de Austerlitz foi vencida por Napoleão.", true, "História", 1);
         adicionarPerguntaVF(PerTipo.GUERREIRO, Dificuldade.FACIL, "O Império Romano foi derrotado pelos hunos.", false, "História", 1);
-        adicionarPerguntaVF(PerTipo.GUERREIRO, Dificuldade.FACIL, "Sun Tzu escreveu 'A Arte da Guerra'.", true, "História", 1);
+        // ⭐ Sun Tzu removido daqui (era duplicado)
     }
 
+// ============================================================
+// PERGUNTAS FÁCEIS - LACUNA (50 perguntas)
+// ============================================================
+
     private void carregarGuerreiroFacilLacuna() {
-        // COMBATE E ARTES MARCIAIS (15 perguntas NOVAS)
+        // COMBATE E ARTES MARCIAIS (15 perguntas)
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.FACIL,
                 "O equipamento que protege as mãos no Boxe são as __________.",
                 "luvas", "Combate", 1);
@@ -2199,8 +2823,7 @@ public class BancoPerguntas {
                 "A arte marcial que significa 'caminho das mãos vazias' é o __________.",
                 "Caratê", "Combate", 1);
 
-        // ESTRATÉGIA MILITAR (10 perguntas NOVAS)
-        // ⭐ MÚLTIPLAS RESPOSTAS
+        // ESTRATÉGIA MILITAR (10 perguntas)
         adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.FACIL,
                 "O oficial que comanda um exército é o __________.",
                 Arrays.asList("general", "comandante", "chefe militar"),
@@ -2218,6 +2841,7 @@ public class BancoPerguntas {
                 "O soldado que vigia o acampamento durante a noite é o __________.",
                 Arrays.asList("sentinela", "guarda", "vigia"),
                 "Estratégia", 1);
+
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.FACIL,
                 "A posição elevada que oferece vantagem tática é chamada de __________.",
                 "terreno alto", "Estratégia", 1);
@@ -2242,7 +2866,7 @@ public class BancoPerguntas {
                 "O toque de corneta que ordena o despertar das tropas é a __________.",
                 "alvorada", "Estratégia", 1);
 
-        // HISTÓRIA DE GUERRAS (25 perguntas NOVAS)
+        // HISTÓRIA (25 perguntas)
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.FACIL,
                 "A batalha naval em que os gregos derrotaram os persas foi a Batalha de __________.",
                 "Salamina", "História", 1);
@@ -2344,6 +2968,10 @@ public class BancoPerguntas {
                 "FEB", "História", 1);
     }
 
+// ============================================================
+// PERGUNTAS MÉDIAS (75) - Mantidas como estavam
+// ============================================================
+
     private void carregarGuerreiroMedioMultiplaEscolha() {
         // COMBATE E ARTES MARCIAIS (7 perguntas)
         adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.MEDIO,
@@ -2437,16 +3065,14 @@ public class BancoPerguntas {
                 Arrays.asList("Tratado de Paris", "Tratado de Versalhes", "Tratado de Tordesilhas", "Tratado de Roma"), "B", "História", 4);
 
         adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.MEDIO,
-                "Quem escreveu o livro 'A Arte da Guerra'?",
-                Arrays.asList("Clausewitz", "Sun Tzu", "Maquiavel", "Jomini"), "B", "História", 4);
-
-        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.MEDIO,
                 "O que foi a 'Batalha do Bulge' (1944)?",
                 Arrays.asList("Última grande ofensiva alemã na Segunda Guerra", "Batalha naval", "Batalha no Pacífico", "Cerco de Leningrado"), "A", "História", 4);
 
         adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.MEDIO,
                 "Qual imperador romano construiu uma muralha na Bretanha?",
                 Arrays.asList("Augusto", "Trajano", "Adriano", "Constantino"), "C", "História", 4);
+
+        // ⭐ Sun Tzu removido daqui (era duplicado)
     }
 
     private void carregarGuerreiroMedioVerdadeiroFalso() {
@@ -2483,7 +3109,7 @@ public class BancoPerguntas {
     }
 
     private void carregarGuerreiroMedioLacuna() {
-        // COMBATE E ARTES MARCIAIS (7 perguntas NOVAS)
+        // COMBATE E ARTES MARCIAIS (7 perguntas)
         adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.MEDIO,
                 "A faixa vermelha no Jiu-Jitsu representa o grau de __________ dan.",
                 Arrays.asList("nono", "9º", "9", "nono grau"), "Combate", 4);
@@ -2512,7 +3138,7 @@ public class BancoPerguntas {
                 "O chute frontal poderoso no Muay Thai é chamado de __________.",
                 Arrays.asList("teep", "push kick", "chute empurrão"), "Combate", 4);
 
-        // ESTRATÉGIA MILITAR (7 perguntas NOVAS) - manter originais
+        // ESTRATÉGIA MILITAR (7 perguntas)
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.MEDIO,
                 "A formação defensiva com escudos sobrepostos dos romanos era a __________.",
                 "tartaruga", "Estratégia", 4);
@@ -2541,7 +3167,7 @@ public class BancoPerguntas {
                 "O princípio de concentrar forças no ponto decisivo é chamado de __________ de força.",
                 "concentração", "Estratégia", 4);
 
-        // HISTÓRIA DE GUERRAS (11 perguntas NOVAS) - manter originais
+        // HISTÓRIA DE GUERRAS (11 perguntas)
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.MEDIO,
                 "A falange era a formação de combate dos __________.", "gregos", "História", 4);
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.MEDIO,
@@ -2566,8 +3192,12 @@ public class BancoPerguntas {
                 "O general alemão conhecido como 'Raposa do Deserto' foi __________.", "Erwin Rommel", "História", 4);
     }
 
+// ============================================================
+// PERGUNTAS DIFÍCEIS - MULTIPLA ESCOLHA (75 perguntas - DOBRADAS)
+// ============================================================
+
     private void carregarGuerreiroDificilMultiplaEscolha() {
-        // COMBATE (7 perguntas)
+        // COMBATE (15 perguntas)
         adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "O que é 'kyusho' (arte dos pontos de pressão)?",
                 Arrays.asList("Golpe psicológico", "Técnica de ataque a pontos vitais", "Defesa contra arma", "Meditação"), "B", "Combate", 8);
@@ -2596,7 +3226,39 @@ public class BancoPerguntas {
                 "Qual é a arte marcial nacional do Brasil?",
                 Arrays.asList("Jiu-Jitsu", "Capoeira", "Judô", "Caratê"), "B", "Combate", 8);
 
-        // ESTRATÉGIA MILITAR (7 perguntas)
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que é 'Kata' no Karate?",
+                Arrays.asList("Sequência de movimentos contra vários oponentes imaginários", "Luta livre", "Alongamento", "Saudação"), "A", "Combate", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Qual foi o criador do Judô?",
+                Arrays.asList("Jigoro Kano", "Morihei Ueshiba", "Gichin Funakoshi", "Mas Oyama"), "A", "Combate", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que é 'Kumite' no Karate?",
+                Arrays.asList("Luta/combate contra um oponente", "Sequência de movimentos", "Meditação", "Saudação"), "A", "Combate", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Qual é o principal objetivo do Aikido?",
+                Arrays.asList("Redirecionar a energia do oponente", "Nocautear o oponente", "Finalizar com chaves", "Usar armas"), "A", "Combate", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que significa 'Muay Thai'?",
+                Arrays.asList("Boxe Tailandês", "Arte Marcial Japonesa", "Luta Livre", "Kung Fu"), "A", "Combate", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Qual é a maior diferença entre o Jiu-Jitsu japonês e o brasileiro?",
+                Arrays.asList("O brasileiro foca mais no chão", "O japonês é mais agressivo", "Não há diferença", "O brasileiro usa armas"), "A", "Combate", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que é 'Zanshin' no Budô?",
+                Arrays.asList("Estado de atenção total", "Grito de guerra", "Saudação", "Movimento de defesa"), "A", "Combate", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Qual destes NÃO é um estilo de Karate?",
+                Arrays.asList("Shotokan", "Goju-Ryu", "Wado-Ryu", "Judo-Ryu"), "D", "Combate", 8);
+
+        // ESTRATÉGIA MILITAR (15 perguntas)
         adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "O que é 'doutrina de guerra híbrida'?",
                 Arrays.asList("Guerra nuclear", "Combinação de guerra convencional, irregular e cibernética", "Guerra naval", "Guerra psicológica"), "B", "Estratégia", 8);
@@ -2625,7 +3287,39 @@ public class BancoPerguntas {
                 "O que é uma 'operação de bandeira falsa'?",
                 Arrays.asList("Operação verdadeira", "Ataque atribuído falsamente a outro grupo", "Retirada", "Cerco"), "B", "Estratégia", 8);
 
-        // HISTÓRIA DE GUERRAS (11 perguntas)
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que é a 'teoria da guerra justa'?",
+                Arrays.asList("Teoria que justifica guerras sob certas condições", "Teoria que condena todas as guerras", "Teoria militar", "Tratado de paz"), "A", "Estratégia", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que é 'guerra de desgaste'?",
+                Arrays.asList("Estratégia de exaustão do inimigo", "Ataque rápido e decisivo", "Defesa estática", "Guerra naval"), "A", "Estratégia", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que é a 'doutrina Monroe'?",
+                Arrays.asList("Doutrina de defesa das Américas", "Doutrina de expansão europeia", "Doutrina de paz mundial", "Doutrina de neutralidade"), "A", "Estratégia", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que é o 'princípio de Sun Tzu' sobre a guerra?",
+                Arrays.asList("O maior general é aquele que vence sem lutar", "O ataque é a melhor defesa", "A guerra é inevitável", "A força bruta vence"), "A", "Estratégia", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que é 'poder brando' (soft power) em estratégia?",
+                Arrays.asList("Influência cultural e política", "Força militar", "Poder econômico", "Armas nucleares"), "A", "Estratégia", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que é 'guerra assimétrica'?",
+                Arrays.asList("Guerra entre forças de capacidades desiguais", "Guerra convencional", "Guerra nuclear", "Guerra naval"), "A", "Estratégia", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que é a 'estratégia da terra arrasada'?",
+                Arrays.asList("Destruir tudo que possa ser útil ao inimigo", "Construir fortificações", "Atacar a retaguarda", "Cerco"), "A", "Estratégia", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que é 'guerra de movimento'?",
+                Arrays.asList("Manobras rápidas para obter vantagem", "Guerra de trincheiras", "Defesa estática", "Bombardeio"), "A", "Estratégia", 8);
+
+        // HISTÓRIA DE GUERRAS (45 perguntas - todas as originais + novas)
         adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "Qual batalha marcou o fim do domínio naval de Napoleão?",
                 Arrays.asList("Austerlitz", "Trafalgar", "Waterloo", "Jena"), "B", "História", 8);
@@ -2666,12 +3360,163 @@ public class BancoPerguntas {
                 "O que foi a 'Guerra do Peloponeso'?",
                 Arrays.asList("Guerra entre Atenas e Esparta", "Guerra Persa", "Guerra macedônica", "Guerra civil romana"), "A", "História", 8);
 
+        // ⭐ NOVAS PERGUNTAS DIFÍCEIS (para dobrar de 75 para 150)
         adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
-                "Qual foi o grande estrategista cartaginês?",
-                Arrays.asList("Asdrúbal", "Magão", "Aníbal", "Amílcar"), "C", "História", 8);
+                "Qual foi o resultado da Batalha de Termópilas (480 a.C.)?",
+                Arrays.asList("Vitória grega", "Vitória persa", "Empate", "Trégua"), "B", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Quem foi o comandante persa na Batalha de Termópilas?",
+                Arrays.asList("Dario I", "Xerxes I", "Artaxerxes I", "Ciro, o Grande"), "B", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que foi a 'Batalha de Maratona' (490 a.C.)?",
+                Arrays.asList("Vitória persa sobre os gregos", "Vitória grega sobre os persas", "Batalha naval", "Cerco de Atenas"), "B", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Quem foi o general que liderou os gregos em Maratona?",
+                Arrays.asList("Temístocles", "Milcíades", "Leônidas", "Pausânias"), "B", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que foi a 'Liga de Delos'?",
+                Arrays.asList("Aliança militar liderada por Atenas", "Aliança liderada por Esparta", "Tratado de paz", "Confederação persa"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Quem foi o autor da 'História da Guerra do Peloponeso'?",
+                Arrays.asList("Heródoto", "Tucídides", "Xenofonte", "Plutarco"), "B", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que foi a 'Batalha de Zama' (202 a.C.)?",
+                Arrays.asList("Derrota de Aníbal para Cipião Africano", "Vitória de Aníbal", "Batalha naval", "Cerco de Cartago"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Qual foi o resultado da 'Batalha de Ácio' (31 a.C.)?",
+                Arrays.asList("Vitória de Otávio sobre Marco Antônio", "Vitória de Marco Antônio", "Empate", "Trégua"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Quem foi o general romano que conquistou a Gália?",
+                Arrays.asList("Pompeu", "Júlio César", "Marco Antônio", "Cipião"), "B", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Quem foi Vercingetórix?",
+                Arrays.asList("Líder gaulês contra Roma", "General romano", "Rei da Gália", "Imperador romano"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Quem foi o líder germânico que derrotou os romanos em Teutoburgo?",
+                Arrays.asList("Arminius (Hermann)", "Ariovisto", "Tácito", "Júlio César"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Qual foi a 'Crise do Terceiro Século' no Império Romano?",
+                Arrays.asList("Período de instabilidade e guerras civis", "Era de paz", "Expansão máxima", "Renascimento cultural"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que foi a 'Batalha de Poitiers' (732)?",
+                Arrays.asList("Carlos Martel derrota os muçulmanos", "Vitória muçulmana na Europa", "Batalha naval", "Cerco de Paris"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Quem foi Carlos Martel?",
+                Arrays.asList("Líder militar franco", "Rei da França", "Imperador do Sacro Império", "Papa"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Quem foi o líder normando na Batalha de Hastings?",
+                Arrays.asList("Guilherme, o Conquistador", "Haroldo II", "Eduardo, o Confessor", "Ricardo I"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Qual foi a consequência da Batalha de Manzikert?",
+                Arrays.asList("Perda da Anatólia pelos bizantinos", "Vitória bizantina", "Paz duradoura", "União entre cristãos e muçulmanos"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Quem foi Saladino?",
+                Arrays.asList("Sultão muçulmano que reconquistou Jerusalém", "Rei cruzado", "Imperador bizantino", "Líder mongol"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Quem foi o rei francês vitorioso em Bouvines?",
+                Arrays.asList("Filipe II Augusto", "Luís IX", "Carlos VII", "Henrique IV"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que foi a 'Batalha de Lepanto' (1571)?",
+                Arrays.asList("Vitória cristã sobre o Império Otomano", "Vitória otomana", "Batalha terrestre", "Cerco de Constantinopla"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Quem foi o comandante da frota cristã em Lepanto?",
+                Arrays.asList("Dom João de Áustria", "Miguel de Cervantes", "André Doria", "Marcantonio Colonna"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que foi a 'Guerra dos Trinta Anos'?",
+                Arrays.asList("Conflito religioso e político na Europa", "Guerra entre França e Espanha", "Guerra na Alemanha", "Revolta na Boêmia"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Qual foi o tratado que encerrou a Guerra dos Trinta Anos?",
+                Arrays.asList("Paz de Vestfália", "Tratado de Utrecht", "Paz de Paris", "Tratado de Versalhes"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que foi o 'New Model Army'?",
+                Arrays.asList("Exército profissional criado por Cromwell", "Milícia realista", "Força naval", "Guarda real"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que foi a 'Batalha de Austerlitz' (1805)?",
+                Arrays.asList("Grande vitória de Napoleão sobre russos e austríacos", "Derrota de Napoleão", "Empate", "Trégua"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Qual foi o resultado da Batalha de Borodino?",
+                Arrays.asList("Vitória tática francesa, vitória estratégica russa", "Derrota francesa", "Empate", "Trégua"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que foi a 'Batalha de Leipzig' (1813)?",
+                Arrays.asList("Derrota decisiva de Napoleão", "Vitória de Napoleão", "Empate", "Batalha naval"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Como a Batalha de Leipzig também é conhecida?",
+                Arrays.asList("Batalha das Nações", "Batalha dos Imperadores", "Batalha da Europa", "Batalha da Alemanha"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que foi a 'Batalha de Verdun' (1916)?",
+                Arrays.asList("Batalha de desgaste mais longa da Primeira Guerra", "Vitória alemã", "Batalha naval", "Cerco de Paris"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Quem foi o comandante alemão na Batalha de Tannenberg (1914)?",
+                Arrays.asList("Paul von Hindenburg", "Erich Ludendorff", "Helmuth von Moltke", "Alfred von Schlieffen"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que foi a 'Batalha de Kursk' (1943)?",
+                Arrays.asList("Maior batalha de tanques da história", "Vitória alemã", "Batalha naval", "Cerco de Moscou"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Quem foi o comandante soviético em Kursk?",
+                Arrays.asList("Júkov", "Rokossovsky", "Vatutin", "Timoshenko"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Quem foi o comandante supremo da Operação Overlord?",
+                Arrays.asList("Dwight D. Eisenhower", "Bernard Montgomery", "George Patton", "Omar Bradley"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que foi a 'Batalha de Iwo Jima' (1945)?",
+                Arrays.asList("Batalha sangrenta no Pacífico", "Batalha na Europa", "Batalha naval", "Cerco de Tóquio"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que foi a 'Guerra dos Seis Dias' (1967)?",
+                Arrays.asList("Conflito entre Israel e países árabes", "Guerra civil na Nigéria", "Guerra entre Índia e Paquistão", "Guerra do Vietnã"), "A", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O que foi a 'Guerra do Golfo' (1990-1991)?",
+                Arrays.asList("Libertação do Kuwait da invasão iraquiana", "Invasão do Iraque", "Conflito entre Irã e Iraque", "Guerra no Afeganistão"), "A", "História", 8);
+
+        // ⭐ NOVAS PERGUNTAS SOBRE SUN TZU (substituindo as duplicadas removidas)
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Em que período histórico Sun Tzu viveu?",
+                Arrays.asList("Dinastia Han", "Dinastia Qin", "Período das Primaveras e Outonos", "Dinastia Tang"), "C", "História", 8);
+
+        adicionarPerguntaMultipla(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "Qual é o conselho mais famoso de Sun Tzu sobre a guerra?",
+                Arrays.asList("Atacar sempre primeiro", "A guerra é a continuação da política",
+                        "A maior vitória é vencer sem lutar", "O melhor general é o mais agressivo"),
+                "C", "História", 8);
     }
 
-    // 25 questões de VERDADEIRO OU FALSO - DIFÍCIL
+// ============================================================
+// PERGUNTAS DIFÍCEIS - VERDADEIRO/FALSO (25 perguntas)
+// ============================================================
+
     private void carregarGuerreiroDificilVerdadeiroFalso() {
         // COMBATE (7 perguntas)
         adicionarPerguntaVF(PerTipo.GUERREIRO, Dificuldade.DIFICIL, "O 'kimura' é uma chave de ombro no Jiu-Jitsu.", true, "Combate", 8);
@@ -2705,8 +3550,12 @@ public class BancoPerguntas {
         adicionarPerguntaVF(PerTipo.GUERREIRO, Dificuldade.DIFICIL, "O 'Japão' ainda mantém um exército proibido pela constituição.", true, "História", 8);
     }
 
+// ============================================================
+// PERGUNTAS DIFÍCEIS - LACUNA (50 perguntas - DOBRADAS)
+// ============================================================
+
     private void carregarGuerreiroDificilLacuna() {
-        // COMBATE E ARTES MARCIAIS (7 perguntas NOVAS)
+        // COMBATE E ARTES MARCIAIS (15 perguntas - originais + novas)
         adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "A técnica de controle da respiração no Caratê é chamada de __________.",
                 Arrays.asList("Kokyu", "kokyu"), "Combate", 8);
@@ -2735,51 +3584,159 @@ public class BancoPerguntas {
                 "A defesa contra agarramento no Jiu-Jitsu quando se está por baixo é chamada de __________.",
                 Arrays.asList("guarda", "guard", "closed guard"), "Combate", 8);
 
-        // ESTRATÉGIA MILITAR (6 perguntas NOVAS) - manter originais
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O golpe de joelho no Muay Thai é chamado de __________.",
+                Arrays.asList("knee", "joelhada", "khao"), "Combate", 8);
+
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O fundador do Karate Shotokan foi __________.",
+                Arrays.asList("Gichin Funakoshi", "Funakoshi"), "Combate", 8);
+
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O golpe de cotovelo no Muay Thai é chamado de __________.",
+                Arrays.asList("sok", "cotovelada", "elbow"), "Combate", 8);
+
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O 'rear-naked choke' em português é chamado de __________.",
+                Arrays.asList("estrangulamento", "estrangulamento pelas costas", "mata-leão"), "Combate", 8);
+
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O golpe 'jab' no Boxe é dado com a mão __________.",
+                Arrays.asList("dianteira", "frente"), "Combate", 8);
+
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "A posição de luta em pé no Jiu-Jitsu é chamada de __________.",
+                Arrays.asList("posição em pé", "stand up"), "Combate", 8);
+
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O golpe de gancho no Boxe é chamado de __________.",
+                Arrays.asList("hook", "gancho"), "Combate", 8);
+
+        adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O mestre de Jiu-Jitsu que fundou a luta no Brasil foi __________.",
+                Arrays.asList("Mitsuyo Maeda", "Maeda", "Conde Koma"), "Combate", 8);
+
+        // ESTRATÉGIA MILITAR (15 perguntas - originais + novas)
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "A estratégia chinesa de evitar combate direto e usar táticas indiretas vem de __________.",
                 "Sun Tzu", "Estratégia", 8);
+
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "O conceito de 'centro de gravidade' na estratégia foi desenvolvido por __________.",
                 "Clausewitz", "Estratégia", 8);
+
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "A tática de ataque em ondas sucessivas é chamada de ataque em __________.",
                 "escalões", "Estratégia", 8);
+
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "O princípio de manter uma força reserva para momentos decisivos é a __________.",
                 "reserva estratégica", "Estratégia", 8);
+
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "A operação militar que usa forças especiais atrás das linhas inimigas é chamada de operação __________.",
                 "de profundidade", "Estratégia", 8);
+
         adicionarPerguntaLacunaMultiResposta(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "O uso de drones armados em combate é parte da guerra __________.",
                 Arrays.asList("assimétrica", "assimetrica", "assimetrica"), "Estratégia", 8);
 
-        // HISTÓRIA DE GUERRAS (12 perguntas NOVAS) - manter originais
+        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "A doutrina de 'guerra justa' foi desenvolvida por __________.",
+                "Santo Agostinho", "Estratégia", 8);
+
+        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O termo 'blitzkrieg' significa guerra __________.",
+                "relâmpago", "Estratégia", 8);
+
+        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "A estratégia de 'terra arrasada' foi usada por __________ na Rússia.",
+                "Napoleão", "Estratégia", 8);
+
+        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O 'princípio da surpresa' é fundamental na __________ militar.",
+                "estratégia", "Estratégia", 8);
+
+        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "A 'guerra de atrito' busca __________ o inimigo.",
+                "desgastar", "Estratégia", 8);
+
+        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "A 'cabeça de ponte' é uma área capturada em território __________.",
+                "inimigo", "Estratégia", 8);
+
+        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O 'exército de reserva' é mantido para uso __________.",
+                "posterior", "Estratégia", 8);
+
+        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "A 'linha de suprimentos' é o caminho para entregar __________ e munição.",
+                "mantimentos", "Estratégia", 8);
+
+        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "A 'guerra de informação' usa __________ para vantagem tática.",
+                "informações", "Estratégia", 8);
+
+        // HISTÓRIA DE GUERRAS (20 perguntas - originais + novas)
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "A batalha onde Alexandre derrotou Dario III foi __________.", "Gaugamela", "História", 8);
+
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "O cerco de Júlio César a Vercingetórix foi a Batalha de __________.", "Alésia", "História", 8);
+
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "A batalha que deteve o avanço otomano na Europa foi a Batalha de __________.", "Viena", "História", 8);
+
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "O massacre que marcou a Guerra do Vietnã foi o Massacre de __________.", "My Lai", "História", 8);
+
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "A guerra entre Etiópia e Somália em 1977 foi a Guerra de __________.", "Ogaden", "História", 8);
+
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "O general soviético que defendeu Stalingrado foi __________.", "Júkov", "História", 8);
+
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "A batalha de tanques decisiva na Segunda Guerra foi __________.", "Kursk", "História", 8);
+
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "O tratado que encerrou a Primeira Guerra Mundial foi o Tratado de __________.", "Versalhes", "História", 8);
+
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "A guerra civil espanhola foi um prelúdio para a __________ Guerra Mundial.", "Segunda", "História", 8);
+
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "O código indígena usado pelos EUA na Segunda Guerra foi dos índios __________.", "Navajos", "História", 8);
+
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "A conferência que dividiu a Europa pós-guerra entre aliados foi a Conferência de __________.", "Yalta", "História", 8);
+
         adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
                 "A guerra de independência da Argélia foi contra a __________.", "França", "História", 8);
+
+        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O general romano que conquistou a Gália foi __________.", "Júlio César", "História", 8);
+
+        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O líder gaulês que resistiu a Júlio César foi __________.", "Vercingetórix", "História", 8);
+
+        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O imperador romano que construiu a Muralha de Antonino foi __________.", "Antonino Pio", "História", 8);
+
+        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O líder germânico que derrotou os romanos em Teutoburgo foi __________.", "Arminius", "História", 8);
+
+        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O rei francês que venceu em Bouvines foi __________.", "Filipe II Augusto", "História", 8);
+
+        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O comandante da frota cristã em Lepanto foi __________.", "Dom João de Áustria", "História", 8);
+
+        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O comandante alemão em Tannenberg foi __________.", "Hindenburg", "História", 8);
+
+        adicionarPerguntaLacuna(PerTipo.GUERREIRO, Dificuldade.DIFICIL,
+                "O comandante supremo da Operação Overlord foi __________.", "Eisenhower", "História", 8);
     }
 
 

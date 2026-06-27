@@ -16,11 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class TelaCapoeiraController {
 
@@ -70,23 +66,30 @@ public class TelaCapoeiraController {
     private int tipoAtaqueSelecionado = 0;
     private boolean aguardandoResposta = false;
 
+    // Flag: inimigo aprendeu o padrão de ginga básica
+    private boolean inimigoAprendeuPadrao = false;
+
     private Dificuldade dificuldadePerguntaAtual;
 
     // Timer
     private Thread timerThread;
     private int tempoMaximoAtual = 0;
 
-    // ⭐⭐ ESTATÍSTICAS PARA A TELA DE RESULTADO ⭐⭐
+    // Estatísticas
     private int perguntasCertas = 0;
     private int perguntasErradas = 0;
     private int danoTotalCausado = 0;
     private int danoTotalRecebido = 0;
     private int rodadaAtual = 0;
-
-    // ⭐⭐ PONTUAÇÃO ACUMULADA ⭐⭐
     private int pontuacaoTotal = 0;
 
-    // ⭐⭐ FLAGS PARA EVITAR DUPLICATAS ⭐⭐
+    // ⭐⭐⭐ SISTEMA DE PERGUNTAS GLOBAL ⭐⭐⭐
+    private Set<Integer> perguntasUsadasGlobal = new HashSet<>();
+    private Map<Dificuldade, Integer> totalPerguntasPorDificuldade = new HashMap<>();
+    private Map<Dificuldade, Integer> resetsPorDificuldade = new HashMap<>();
+    private boolean bancoInicializado = false;
+
+    // Flags para evitar duplicatas
     private static boolean rankingCapoeiraJaSalvo = false;
     private boolean jogoCapoeiraFinalizado = false;
 
@@ -99,17 +102,51 @@ public class TelaCapoeiraController {
     private int[] vidasMestres = {160, 260, 360, 460, 560, 660, 760, 860, 960};
     private int[] ataquesMestres = {36, 42, 48, 54, 60, 66, 72, 78, 84};
 
+    // Frases do inimigo
+    private String[] frasesAprendeuPadrao = {
+            "Já decorei seus passos!",
+            "Só sabe fazer isso?",
+            "Previsível demais!",
+            "Vai repetir isso de novo?",
+            "Eu já vi esse golpe antes!",
+            "Assim você não me pega!",
+            "Cadê a criatividade?",
+            "Isso é tudo que você sabe?",
+            "Sua ginga não me engana mais!",
+            "Você precisa de novos movimentos!"
+    };
+
+    private String[] frasesQuebrouPadrao = {
+            "O quê? Um golpe diferente?",
+            "Isso não estava no script!",
+            "Você me surpreendeu!",
+            "Inovação? Finalmente!",
+            "Interessante...",
+            "Você aprendeu algo novo?",
+            "Esse golpe é perigoso!",
+            "Malandro! Mudou o jogo!"
+    };
+
+    // ==================== INICIALIZAÇÃO ====================
+
     public void setJogador(Jogador jogador) {
         this.jogador = jogador;
         this.capoeirista = (Capoeirista) jogador.getPersonagem();
         this.bancoPerguntas = new BancoPerguntas();
         this.random = new Random();
 
-        // ⭐ RESETA AS FLAGS QUANDO UMA NOVA PARTIDA COMEÇA
+        // ⭐ INICIALIZA O BANCO DE PERGUNTAS GLOBAL (apenas uma vez)
+        if (!bancoInicializado) {
+            inicializarBancoPerguntasGlobal();
+            bancoInicializado = true;
+        }
+
+        // Reseta flags de combate (mas NÃO as perguntas!)
         rankingCapoeiraJaSalvo = false;
         jogoCapoeiraFinalizado = false;
+        inimigoAprendeuPadrao = false;
+        contadorAtaquesBasicos = 0;
 
-        // Reseta estatísticas e pontuação
         perguntasCertas = 0;
         perguntasErradas = 0;
         danoTotalCausado = 0;
@@ -120,10 +157,142 @@ public class TelaCapoeiraController {
         atualizarStatusJogador();
         adicionarDialogoNormal("🥋 " + capoeirista.getNome() + " entrou na RODA DE CAPOEIRA!");
         adicionarDialogoNormal("🎵 O berimbau toca... a roda vai começar!");
+
+        mostrarEstatisticasPerguntas();
     }
 
     public void iniciarRoda() {
         proximoMestre();
+    }
+
+    // ==================== SISTEMA DE PERGUNTAS GLOBAL ====================
+
+    private void inicializarBancoPerguntasGlobal() {
+        for (Dificuldade diff : Dificuldade.values()) {
+            List<Pergunta> perguntas = bancoPerguntas.getPerguntasPorDificuldade(
+                    PerTipo.CAPOEIRISTA, diff, 1);
+
+            if (perguntas != null) {
+                totalPerguntasPorDificuldade.put(diff, perguntas.size());
+            } else {
+                totalPerguntasPorDificuldade.put(diff, 0);
+            }
+            resetsPorDificuldade.put(diff, 0);
+        }
+
+        perguntasUsadasGlobal.clear();
+
+        System.out.println("\n📚 RODA DE CAPOEIRA - Banco de perguntas carregado:");
+        for (Dificuldade diff : Dificuldade.values()) {
+            System.out.println("   " + diff.getNome() + ": " +
+                    totalPerguntasPorDificuldade.get(diff) + " perguntas");
+        }
+        System.out.println("\n✨ O banco reinicia APENAS quando TODAS as perguntas de uma dificuldade forem usadas!\n");
+    }
+
+    private void mostrarEstatisticasPerguntas() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n📊 PERGUNTAS DISPONÍVEIS:\n");
+        for (Dificuldade diff : Dificuldade.values()) {
+            int total = totalPerguntasPorDificuldade.getOrDefault(diff, 0);
+            int usadas = 0;
+            if (total > 0) {
+                List<Pergunta> perguntas = bancoPerguntas.getPerguntasPorDificuldade(
+                        PerTipo.CAPOEIRISTA, diff, 1);
+                if (perguntas != null) {
+                    for (Pergunta p : perguntas) {
+                        if (perguntasUsadasGlobal.contains(p.getId())) {
+                            usadas++;
+                        }
+                    }
+                }
+            }
+            int restantes = total - usadas;
+            String emoji = restantes > 0 ? "✅" : "🔄";
+            sb.append("   " + emoji + " " + diff.getNome() + ": " +
+                    restantes + "/" + total + " restantes" +
+                    (restantes == 0 && total > 0 ? " (resetará na próxima)" : ""));
+            if (resetsPorDificuldade.getOrDefault(diff, 0) > 0) {
+                sb.append(" | Resets: " + resetsPorDificuldade.get(diff));
+            }
+            sb.append("\n");
+        }
+        adicionarDialogoNormal(sb.toString());
+    }
+
+    private Pergunta getPerguntaComResetGlobal(Dificuldade dificuldade) {
+        List<Pergunta> todasPerguntas = bancoPerguntas.getPerguntasPorDificuldade(
+                PerTipo.CAPOEIRISTA, dificuldade, 1);
+
+        if (todasPerguntas == null || todasPerguntas.isEmpty()) {
+            System.out.println("❌ Nenhuma pergunta disponível para " + dificuldade.getNome());
+            return null;
+        }
+
+        List<Pergunta> naoUsadas = new ArrayList<>();
+        for (Pergunta p : todasPerguntas) {
+            if (!perguntasUsadasGlobal.contains(p.getId())) {
+                naoUsadas.add(p);
+            }
+        }
+
+        // ⭐ SE ACABARAM TODAS AS PERGUNTAS, RESETA!
+        if (naoUsadas.isEmpty()) {
+            int resetNumero = resetsPorDificuldade.getOrDefault(dificuldade, 0) + 1;
+            resetsPorDificuldade.put(dificuldade, resetNumero);
+
+            String msg = "\n" + "=".repeat(60) + "\n" +
+                    "🔄 RESET DO BANCO DE PERGUNTAS! 🔄\n" +
+                    "   Dificuldade: " + dificuldade.getNome() + "\n" +
+                    "   Você já usou TODAS as " + totalPerguntasPorDificuldade.get(dificuldade) +
+                    " perguntas desta dificuldade!\n" +
+                    "   Reset #" + resetNumero + " - Reiniciando o ciclo...\n" +
+                    "=".repeat(60);
+            adicionarDialogoNormal(msg);
+            System.out.println(msg);
+
+            for (Pergunta p : todasPerguntas) {
+                perguntasUsadasGlobal.remove(p.getId());
+            }
+
+            naoUsadas = new ArrayList<>(todasPerguntas);
+        }
+
+        Pergunta escolhida = naoUsadas.get(random.nextInt(naoUsadas.size()));
+        perguntasUsadasGlobal.add(escolhida.getId());
+
+        int restantes = naoUsadas.size() - 1;
+        int total = totalPerguntasPorDificuldade.get(dificuldade);
+        int resets = resetsPorDificuldade.get(dificuldade);
+
+        String stats = "\n📊 " + dificuldade.getNome() + ": " +
+                restantes + "/" + total + " restantes" +
+                (resets > 0 ? " | Resets: " + resets : "");
+        adicionarDialogoNormal(stats);
+
+        return escolhida;
+    }
+
+    // ==================== MÉTODOS DE COMBATE ====================
+
+    private boolean inimigoVaiDesviarDaGingaBasica() {
+        if (inimigoAprendeuPadrao) {
+            String frase = frasesAprendeuPadrao[random.nextInt(frasesAprendeuPadrao.length)];
+            adicionarDialogoErro("🔄 " + inimigoAtual.getNome() + ": '" + frase + "'");
+            return true;
+        }
+        return false;
+    }
+
+    private void resetarPadraoDoInimigo() {
+        if (inimigoAprendeuPadrao) {
+            inimigoAprendeuPadrao = false;
+            contadorAtaquesBasicos = 0;
+            String frase = frasesQuebrouPadrao[random.nextInt(frasesQuebrouPadrao.length)];
+            adicionarDialogoAcerto("💥 " + inimigoAtual.getNome() + ": '" + frase + "'");
+            adicionarDialogoNormal("🌀 O inimigo foi surpreendido! Padrão de ginga resetado!");
+            lblInimigoNome.setStyle("-fx-text-fill: #FFFFFF;");
+        }
     }
 
     private void proximoMestre() {
@@ -142,22 +311,36 @@ public class TelaCapoeiraController {
 
         inimigoAtual = new Inimigo(nome, nivel, vida, ataque, defesa);
 
+        // Reseta flags de combate (mas NÃO as perguntas!)
+        inimigoAprendeuPadrao = false;
+        contadorAtaquesBasicos = 0;
+        lblInimigoNome.setStyle("-fx-text-fill: #FFFFFF;");
+
         atualizarStatusInimigo();
         adicionarDialogoNormal("\n📜 ESTÁGIO " + (estagioAtual + 1) + "/9");
         adicionarDialogoNormal("👥 " + nome + " entra na roda!");
         adicionarDialogoNormal("⚔️ Prepare-se para o jogo!");
 
-        contadorAtaquesBasicos = 0;
+        mostrarEstatisticasPerguntas();
         limparPergunta();
     }
 
     private void enfrentarBesouro() {
         inimigoAtual = new BesouroManganga();
+
+        inimigoAprendeuPadrao = false;
+        contadorAtaquesBasicos = 0;
+        lblInimigoNome.setStyle("-fx-text-fill: #FFFFFF;");
+
         atualizarStatusInimigo();
         adicionarDialogoNormal("\n🦗 BESOURO MANGANGÁ APARECEU!");
         adicionarDialogoNormal("'FECHADO! NINGUÉM ME SEGURA!'");
+
+        mostrarEstatisticasPerguntas();
         limparPergunta();
     }
+
+    // ==================== MÉTODOS DE INTERFACE ====================
 
     private void limparPergunta() {
         pararTimer();
@@ -230,11 +413,9 @@ public class TelaCapoeiraController {
             nomeDificuldade += " 🔥 CHEFÃO! 🔥";
         }
 
-        perguntaAtual = bancoPerguntas.getPerguntaAleatoriaPorDificuldade(
-                PerTipo.CAPOEIRISTA,
-                dificuldade,
-                estagioAtual + 1
-        );
+        // ⭐ USA O SISTEMA DE PERGUNTAS GLOBAL
+        perguntaAtual = getPerguntaComResetGlobal(dificuldade);
+
         if (perguntaAtual == null) {
             adicionarDialogoNormal("❌ Erro ao carregar pergunta!");
             return;
@@ -336,6 +517,8 @@ public class TelaCapoeiraController {
         timerThread.start();
     }
 
+    // ==================== CONFIGURAÇÃO DE PERGUNTAS ====================
+
     private void configurarMultiplaEscolha(PerguntaMultiplaEscolha pergunta) {
         var opcoes = pergunta.getOpcoes();
 
@@ -393,6 +576,8 @@ public class TelaCapoeiraController {
         });
     }
 
+    // ==================== AVALIAÇÃO DE RESPOSTA ====================
+
     private void avaliarResposta(String resposta) {
         if (!aguardandoResposta) return;
 
@@ -431,73 +616,103 @@ public class TelaCapoeiraController {
         boolean correta = AvaliadorRespostas.avaliar(perguntaAtual, resposta);
         aguardandoResposta = false;
 
+        boolean ehGingaBasica = (tipoAtaqueSelecionado == 1);
+
         if (correta) {
             perguntasCertas++;
-            int dano = calcularDano(tipoAtaqueSelecionado);
-            danoTotalCausado += dano;
-            inimigoAtual.tomarDano(dano);
-            adicionarDialogoAcerto("✅ CORRETO! Causou " + dano + " de dano!");
 
-            // ⭐⭐ ADICIONA PONTOS POR ACERTO ⭐⭐
-            int pontosGanhos = 50 + (tipoAtaqueSelecionado * 25);
-            pontuacaoTotal += pontosGanhos;
-            jogador.addPontuacao(pontosGanhos);
-            adicionarDialogoNormal("🏆 +" + pontosGanhos + " pontos!");
+            boolean inimigoDesviou = false;
 
-            int recuperacaoGinga;
-            switch (tipoAtaqueSelecionado) {
-                case 1: recuperacaoGinga = 15; break;
-                case 2: recuperacaoGinga = 10; break;
-                default: recuperacaoGinga = 5; break;
-            }
-            capoeirista.recarregar(recuperacaoGinga);
-            adicionarDialogoNormal("🌀 +" + recuperacaoGinga + " de Ginga recuperada!");
+            if (ehGingaBasica) {
+                contadorAtaquesBasicos++;
 
-            atualizarStatusJogador();
+                if (contadorAtaquesBasicos >= 3) {
+                    inimigoAprendeuPadrao = true;
+                    String frase = frasesAprendeuPadrao[random.nextInt(frasesAprendeuPadrao.length)];
+                    adicionarDialogoErro("🔄 " + inimigoAtual.getNome() + " APRENDEU SEU PADRÃO!");
+                    adicionarDialogoErro("   💬 '" + frase + "'");
+                    adicionarDialogoErro("⚠️ " + inimigoAtual.getNome() + " vai DESVIAR de TODAS as suas gingas básicas!");
+                    adicionarDialogoErro("   🎯 Use um ataque diferente para quebrar o padrão!");
+                    lblInimigoNome.setStyle("-fx-text-fill: #FF6B6B; -fx-font-weight: bold;");
+                }
 
-            if (!inimigoAtual.vivo()) {
-                if (inimigoAtual instanceof BesouroManganga) {
-                    // ⭐⭐ BÔNUS POR DERROTAR O BESOURO ⭐⭐
-                    int bonusBesouro = 500;
-                    pontuacaoTotal += bonusBesouro;
-                    jogador.addPontuacao(bonusBesouro);
-                    adicionarDialogoAcerto("👑 BÔNUS POR DERROTAR O BESOURO: +" + bonusBesouro + " pontos!");
+                if (inimigoAprendeuPadrao) {
+                    inimigoDesviou = true;
+                    adicionarDialogoErro("\n🔄 " + inimigoAtual.getNome() + " DESVIOU da sua Ginga Básica!");
+                    adicionarDialogoErro("   🎯 Ele já aprendeu seu padrão! Use um golpe diferente!");
 
-                    adicionarDialogoAcerto("\n🏆🏆🏆 VOCÊ DERROTOU O BESOURO MANGANGÁ!");
-                    adicionarDialogoAcerto("👑 Você se tornou uma LENDA DA CAPOEIRA!");
-                    finalizarJogo(true);
-                    return;
-                } else {
-                    // ⭐⭐ BÔNUS POR DERROTAR UM MESTRE ⭐⭐
-                    int bonusMestre = (estagioAtual + 1) * 50;
-                    pontuacaoTotal += bonusMestre;
-                    jogador.addPontuacao(bonusMestre);
-                    adicionarDialogoAcerto("🏆 Bônus por derrotar " + inimigoAtual.getNome() + ": +" + bonusMestre + " pontos!");
-
-                    adicionarDialogoAcerto("\n🎉 VITÓRIA! " + inimigoAtual.getNome() + " foi derrotado!");
-                    estagioAtual++;
-                    capoeirista.evoluirTitulo(estagioAtual + 1);
-                    capoeirista.resetarEsquivas();
                     atualizarStatusJogador();
-
-                    if (estagioAtual >= nomesMestres.length) {
-                        enfrentarBesouro();
-                    } else {
-                        proximoMestre();
-                    }
                     limparPergunta();
                     return;
                 }
+            } else {
+                resetarPadraoDoInimigo();
             }
 
-            if (tipoAtaqueSelecionado != 1) {
-                contadorAtaquesBasicos = 0;
+            if (!inimigoDesviou) {
+                int dano = calcularDano(tipoAtaqueSelecionado);
+                danoTotalCausado += dano;
+                inimigoAtual.tomarDano(dano);
+                adicionarDialogoAcerto("✅ CORRETO! Causou " + dano + " de dano!");
+
+                int pontosGanhos = 50 + (tipoAtaqueSelecionado * 25);
+                pontuacaoTotal += pontosGanhos;
+                jogador.addPontuacao(pontosGanhos);
+                adicionarDialogoNormal("🏆 +" + pontosGanhos + " pontos!");
+
+                int recuperacaoGinga;
+                switch (tipoAtaqueSelecionado) {
+                    case 1: recuperacaoGinga = 15; break;
+                    case 2: recuperacaoGinga = 10; break;
+                    default: recuperacaoGinga = 5; break;
+                }
+                capoeirista.recarregar(recuperacaoGinga);
+                adicionarDialogoNormal("🌀 +" + recuperacaoGinga + " de Ginga recuperada!");
+
+                atualizarStatusJogador();
+
+                if (!inimigoAtual.vivo()) {
+                    if (inimigoAtual instanceof BesouroManganga) {
+                        int bonusBesouro = 500;
+                        pontuacaoTotal += bonusBesouro;
+                        jogador.addPontuacao(bonusBesouro);
+                        adicionarDialogoAcerto("👑 BÔNUS POR DERROTAR O BESOURO: +" + bonusBesouro + " pontos!");
+
+                        adicionarDialogoAcerto("\n🏆🏆🏆 VOCÊ DERROTOU O BESOURO MANGANGÁ!");
+                        adicionarDialogoAcerto("👑 Você se tornou uma LENDA DA CAPOEIRA!");
+                        finalizarJogo(true);
+                        return;
+                    } else {
+                        int bonusMestre = (estagioAtual + 1) * 50;
+                        pontuacaoTotal += bonusMestre;
+                        jogador.addPontuacao(bonusMestre);
+                        adicionarDialogoAcerto("🏆 Bônus por derrotar " + inimigoAtual.getNome() + ": +" + bonusMestre + " pontos!");
+
+                        adicionarDialogoAcerto("\n🎉 VITÓRIA! " + inimigoAtual.getNome() + " foi derrotado!");
+                        estagioAtual++;
+                        capoeirista.evoluirTitulo(estagioAtual + 1);
+                        capoeirista.resetarEsquivas();
+                        atualizarStatusJogador();
+
+                        // NÃO RESETA AS PERGUNTAS! Só as flags de combate
+                        inimigoAprendeuPadrao = false;
+                        contadorAtaquesBasicos = 0;
+                        lblInimigoNome.setStyle("-fx-text-fill: #FFFFFF;");
+
+                        if (estagioAtual >= nomesMestres.length) {
+                            enfrentarBesouro();
+                        } else {
+                            proximoMestre();
+                        }
+                        limparPergunta();
+                        return;
+                    }
+                }
             }
 
         } else {
             perguntasErradas++;
 
-            // ⭐⭐ PENALIDADE POR ERRO (perde pontos) ⭐⭐
             int penalidade = 20;
             pontuacaoTotal = Math.max(0, pontuacaoTotal - penalidade);
             adicionarDialogoErro("💔 -" + penalidade + " pontos por erro!");
@@ -506,14 +721,22 @@ public class TelaCapoeiraController {
             adicionarDialogoErro("📖 Resposta correta: " +
                     AvaliadorRespostas.getRespostaCorretaFormatada(perguntaAtual));
 
-            int danoInimigo = calcularDanoInimigo();
-            danoTotalRecebido += danoInimigo;
-
-            if (capoeirista.tentarDesviar(inimigoAtual, danoInimigo)) {
-                adicionarDialogoNormal("🌀 ESQUIVA BEM-SUCEDIDA! Você desviou do contra-ataque!");
+            if (ehGingaBasica && inimigoAprendeuPadrao) {
+                adicionarDialogoErro("🔄 " + inimigoAtual.getNome() + " já conhece seu padrão! Desvio automático!");
             } else {
-                adicionarDialogoErro("💢 " + inimigoAtual.getNome() + " contra-ataca causando " + danoInimigo + " de dano!");
-                jogador.tomarDano(danoInimigo);
+                int danoInimigo = calcularDanoInimigo();
+                danoTotalRecebido += danoInimigo;
+
+                if (capoeirista.tentarDesviar(inimigoAtual, danoInimigo)) {
+                    adicionarDialogoNormal("🌀 ESQUIVA BEM-SUCEDIDA! Você desviou do contra-ataque!");
+                } else {
+                    adicionarDialogoErro("💢 " + inimigoAtual.getNome() + " contra-ataca causando " + danoInimigo + " de dano!");
+                    jogador.tomarDano(danoInimigo);
+                }
+            }
+
+            if (!ehGingaBasica) {
+                resetarPadraoDoInimigo();
             }
 
             atualizarStatusJogador();
@@ -530,10 +753,11 @@ public class TelaCapoeiraController {
         limparPergunta();
     }
 
+    // ==================== CÁLCULOS ====================
+
     private int calcularDano(int tipoAtaque) {
         int danoBase;
         int ataque = capoeirista.getAtaque();
-        int nivel = estagioAtual + 1;
 
         int bonusDificuldade = 0;
         switch (dificuldadePerguntaAtual) {
@@ -590,6 +814,8 @@ public class TelaCapoeiraController {
         return Math.max(5, dano);
     }
 
+    // ==================== DIÁLOGOS ====================
+
     private void adicionarDialogoNormal(String msg) {
         Platform.runLater(() -> {
             String atual = txtDialogo.getText();
@@ -636,6 +862,8 @@ public class TelaCapoeiraController {
         });
     }
 
+    // ==================== STATUS ====================
+
     private void atualizarStatusJogador() {
         Platform.runLater(() -> {
             lblJogadorNome.setText(capoeirista.getNome());
@@ -674,7 +902,8 @@ public class TelaCapoeiraController {
         });
     }
 
-    // ⭐⭐⭐ MÉTODO FINALIZAR JOGO - COM PONTUAÇÃO ⭐⭐⭐
+    // ==================== FINALIZAR JOGO ====================
+
     private void finalizarJogo(boolean vitoria) {
         pararTimer();
 
@@ -684,7 +913,7 @@ public class TelaCapoeiraController {
         }
         jogoCapoeiraFinalizado = true;
 
-        // ⭐⭐⭐ SALVA O RANKING COM A PONTUAÇÃO CALCULADA ⭐⭐⭐
+        // ⭐ SALVA O RANKING APENAS UMA VEZ
         if (!rankingCapoeiraJaSalvo) {
             try {
                 RankingManager rankingManager = new RankingManager();
@@ -694,10 +923,8 @@ public class TelaCapoeiraController {
                     estagiosCompletados = 10;
                 }
 
-                // ⭐⭐ GARANTE QUE A PONTUAÇÃO NÃO SEJA ZERO ⭐⭐
                 int pontuacaoFinal = pontuacaoTotal;
                 if (pontuacaoFinal <= 0 && estagiosCompletados > 0) {
-                    // Fallback: calcula pontuação mínima baseada nos estágios
                     pontuacaoFinal = estagiosCompletados * 50;
                 }
 
@@ -722,11 +949,9 @@ public class TelaCapoeiraController {
                 System.err.println("Erro ao salvar ranking da Capoeira: " + e.getMessage());
                 e.printStackTrace();
             }
-        } else {
-            System.out.println("ℹ️ Ranking da Capoeira já foi salvo anteriormente. Ignorando...");
         }
 
-        // ⭐⭐⭐ ABRE A TELA DE RESULTADO ⭐⭐⭐
+        // ⭐ ABRE A TELA DE RESULTADO
         Platform.runLater(() -> {
             try {
                 Map<String, Object> stats = new HashMap<>();
@@ -773,6 +998,8 @@ public class TelaCapoeiraController {
         });
     }
 
+    // ==================== INITIALIZE ====================
+
     @FXML
     public void initialize() {
         txtDialogo.setStyle("-fx-font-size: 11px; -fx-background-color: #FFF8DC; -fx-text-fill: #000000; -fx-border-color: #FFD700; -fx-border-width: 2; -fx-border-radius: 5;");
@@ -787,13 +1014,7 @@ public class TelaCapoeiraController {
         btnBasico.setOnAction(e -> {
             if (inimigoAtual != null && inimigoAtual.vivo() && !aguardandoResposta) {
                 adicionarDialogoNormal("🔄 GINGA BÁSICA!");
-                contadorAtaquesBasicos++;
-                if (contadorAtaquesBasicos >= 3) {
-                    adicionarDialogoErro("⚠️ Inimigo aprendeu seu padrão! Esquiva automática!");
-                    contadorAtaquesBasicos = 0;
-                } else {
-                    carregarPergunta(1);
-                }
+                carregarPergunta(1);
             }
         });
 
