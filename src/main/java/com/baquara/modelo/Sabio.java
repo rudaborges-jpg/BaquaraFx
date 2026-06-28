@@ -13,7 +13,7 @@ public class Sabio extends Personagem implements AtributoEspecial, Entidade {
     private Map<Class<? extends EfeitoStatus>, EfeitoStatus> efeitos;
 
     public Sabio() {
-        super(PerTipo.SABIO, "Sábio", 100, 25, 14);
+        super(PerTipo.SABIO, "Sábio", 110, 25, 14);
         this.manaMaxima = 100;
         this.mana = 100;
         this.conhecimento = 0;

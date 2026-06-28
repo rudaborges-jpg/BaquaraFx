@@ -13,7 +13,7 @@ public class Guerreiro extends Personagem implements AtributoEspecial, Entidade 
     private Map<Class<? extends EfeitoStatus>, EfeitoStatus> efeitos;
 
     public Guerreiro() {
-        super(PerTipo.GUERREIRO, "Guerreiro", 140, 28, 18);
+        super(PerTipo.GUERREIRO, "Guerreiro", 140, 27, 21);
         this.espiritoLutaMaximo = 100;
         this.espiritoLuta = 100;
         this.comboAtual = 0;

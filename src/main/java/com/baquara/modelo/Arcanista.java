@@ -14,7 +14,7 @@ public class Arcanista extends Personagem implements AtributoEspecial, Entidade 
     private Map<Class<? extends EfeitoStatus>, EfeitoStatus> efeitos;
 
     public Arcanista() {
-        super(PerTipo.ARCANISTA, "Arcanista", 95, 32, 8);
+        super(PerTipo.ARCANISTA, "Arcanista", 105, 29, 10);
         this.poderArcano = 100;
         this.poderMaximo = 100;
         this.random = new Random();

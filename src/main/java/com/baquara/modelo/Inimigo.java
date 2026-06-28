@@ -19,29 +19,50 @@ public class Inimigo implements Entidade {
     // Sistema genérico de efeitos de status
     private Map<Class<? extends EfeitoStatus>, EfeitoStatus> efeitos;
 
-    // Construtor principal - TUDO é calculado baseado no nível
     public Inimigo(String nome, int nivel) {
         this.nome = nome;
         this.nivel = nivel;
 
-        // Fórmulas de progressão baseadas no nível (1 a 10)
-        this.vidaMax = 60 + (nivel * 100);
+        // ⭐ DIFICULDADE PROGRESSIVA - AUMENTO DE VIDA E ATAQUE
+        double multiplicadorVida = 1.0;
+        double multiplicadorAtaque = 1.0;
+
+        if (nivel <= 3) {
+            multiplicadorVida = 1.15;   // +15% nos primeiros estágios
+            multiplicadorAtaque = 1.15;
+        } else if (nivel <= 6) {
+            multiplicadorVida = 1.20;   // +20% nos estágios médios
+            multiplicadorAtaque = 1.20;
+        } else if (nivel <= 9) {
+            multiplicadorVida = 1.25;   // +25% nos estágios avançados
+            multiplicadorAtaque = 1.25;
+        } else {
+            multiplicadorVida = 1.30;   // +30% no chefão
+            multiplicadorAtaque = 1.30;
+        }
+
+        // ⭐ APLICA OS MULTIPLICADORES
+        this.vidaMax = (int)((60 + (nivel * 100)) * multiplicadorVida);
         this.vida = vidaMax;
-        this.ataqueBase = 20 + (nivel * 4);
+        this.ataqueBase = (int)((20 + (nivel * 4)) * multiplicadorAtaque);
         this.ataque = ataqueBase;
         this.defesaBase = 5 + (nivel * 3);
         this.defesa = defesaBase;
+
 
         this.efeitos = new HashMap<>();
     }
 
     // Construtor para chefões personalizados
     public Inimigo(String nome, int nivel, int vida, int ataque, int defesa) {
+
+        double multiplicador = 1.30;
+
         this.nome = nome;
         this.nivel = nivel;
-        this.vidaMax = vida;
+        this.vidaMax =  (int)(vida * multiplicador);
         this.vida = vida;
-        this.ataqueBase = ataque;
+        this.ataqueBase = (int)(ataque * multiplicador);
         this.ataque = ataque;
         this.defesaBase = defesa;
         this.defesa = defesa;

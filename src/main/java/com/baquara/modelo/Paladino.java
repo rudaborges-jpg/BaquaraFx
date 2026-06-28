@@ -13,7 +13,7 @@ public class Paladino extends Personagem implements AtributoEspecial, Entidade {
     private Map<Class<? extends EfeitoStatus>, EfeitoStatus> efeitos;
 
     public Paladino() {
-        super(PerTipo.PALADINO, "Paladino", 150, 22, 25);
+        super(PerTipo.PALADINO, "Paladino", 150, 24, 22);
         this.poderDivinoMaximo = 100;
         this.poderDivino = 100;
         this.feAbencoada = 0;
@@ -164,7 +164,7 @@ public class Paladino extends Personagem implements AtributoEspecial, Entidade {
         System.out.println("\n🛡️ " + nome + " invoca o ESPÍRITO SAGRADO!");
 
         int custo = 30 + (feAbencoada * 2);
-        if (custo > 70) custo = 70;
+        if (custo > 55) custo = 70;
 
         if (!consumirPoderDivino(custo)) {
             if (poderDivino > 15) {
@@ -178,11 +178,11 @@ public class Paladino extends Personagem implements AtributoEspecial, Entidade {
             }
         }
 
-        int cura = 40 + (nivel * 5) + (poderDivino / 4);
+        int cura = 25 + (nivel * 3) + (poderDivino / 4);
         curar(cura);
         System.out.println("💚 Curou " + cura + " de vida!");
 
-        int dano = 25 + (nivel * 3) + (feAbencoada * 3);
+        int dano = 25 + (nivel * 3) + (feAbencoada * 4);
         System.out.println("⚡ Luz divina atinge " + alvo.getNome() + " causando " + dano + " de dano!");
         alvo.tomarDano(dano);
 
@@ -197,16 +197,41 @@ public class Paladino extends Personagem implements AtributoEspecial, Entidade {
 
     @Override
     public String getDescricaoHabilidade() {
-        return "Cura " + (40 + (nivel * 5)) + " de vida e causa " +
-                (25 + (nivel * 3)) + " de dano sagrado.\n" +
-                "   📿 Quanto mais Fé Abençoada, mais forte fica!";
+        int fe = getFeAbencoada();
+        int poderAtual = getPoderDivino();
+        int poderMaximo = getPoderDivinoMaximo();
+
+        int curaBase = 25 + (nivel * 3);
+        int curaBonus = poderAtual / 5;
+        int curaTotal = curaBase + curaBonus;
+
+        int danoBase = 25 + (nivel * 3);
+        int danoBonus = fe * 3;
+        int danoTotal = danoBase + danoBonus;
+
+        int custo = 30 + (fe * 2);
+        if (custo > 70) custo = 70;
+
+        return "🛡️ ESPÍRITO SAGRADO\n" +
+                "   💚 Cura: " + curaBase + " + " + curaBonus + " = " + curaTotal + " de vida\n" +
+                "   ⚡ Dano: " + danoBase + " + " + danoBonus + " = " + danoTotal + " de dano\n" +
+                "   📿 Fé Abençoada: " + fe + " acúmulos (+" + (fe * 3) + " de dano)\n" +
+                "   💫 Custo: " + custo + " de Poder Divino\n" +
+                "   🙏 Poder Divino: " + poderAtual + "/" + poderMaximo;
     }
 
     @Override
     public void mostrarStatus() {
         super.mostrarStatus();
-        System.out.println("   🙏 Poder Divino: " + poderDivino + "/" + poderDivinoMaximo);
-        System.out.println("   📿 Fé Abençoada: " + feAbencoada + " acúmulos");
+
+        // ⭐ USANDO OS GETTERS
+        System.out.println("   🙏 Poder Divino: " + getPoderDivino() + "/" + getPoderDivinoMaximo());
+        System.out.println("   📿 Fé Abençoada: " + getFeAbencoada() + " acúmulos");
+
+        // Mostra o custo atual da habilidade
+        int custo = 30 + (getFeAbencoada() * 2);
+        if (custo > 70) custo = 70;
+        System.out.println("   💫 Custo da Habilidade: " + custo + " PD");
 
         // Mostra efeitos ativos
         for (EfeitoStatus efeito : efeitos.values()) {
@@ -252,4 +277,25 @@ public class Paladino extends Personagem implements AtributoEspecial, Entidade {
     public void recarregarCompletamente() {
         poderDivino = poderDivinoMaximo;
     }
+
+    @Override
+    protected void levelUp() {
+        nivel++;
+        experiencia = 0;
+
+
+        int aumentoVida = 40;
+        vidaMax += aumentoVida;
+        vida += aumentoVida;
+
+        ataque += 4;
+        defesa += 4;
+
+        System.out.println("\n🎉 " + nome + " subiu para o NÍVEL " + nivel + "!");
+        System.out.println("   ❤️ Vida +" + aumentoVida + " | ⚔️ Ataque +5 | 🛡️ Defesa +3 (Total: " + defesa + ")");
+
+        // Recarrega atributos especiais (Poder Divino)
+        recarregarPorNivel(nivel);
+    }
+
 }

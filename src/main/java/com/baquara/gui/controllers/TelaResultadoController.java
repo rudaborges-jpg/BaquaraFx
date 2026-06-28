@@ -1,9 +1,7 @@
 package com.baquara.gui.controllers;
 
 import com.baquara.controle.RankingManager;
-import com.baquara.modelo.Jogador;
-import com.baquara.modelo.Personagem;
-import com.baquara.modelo.AtributoEspecial;
+import com.baquara.modelo.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -111,7 +109,22 @@ public class TelaResultadoController {
         lblPersonagemAtaque.setText("⚔️ Ataque: " + p.getAtaque());
         lblPersonagemDefesa.setText("🛡️ Defesa: " + p.getDefesa());
 
-        if (p instanceof AtributoEspecial) {
+
+        if (p instanceof Cacadora) {
+            Cacadora cac = (Cacadora) p;
+            lblPersonagemAtributo.setText(
+                    "🎯 Penetração: " + cac.getPenetracao() + "/" +
+                            cac.getPenetracaoMaxima() +
+                            " | 🏹 Flechas: " + cac.getFlechasPrecisas()
+            );
+        } else if (p instanceof Paladino) {
+            Paladino pal = (Paladino) p;
+            lblPersonagemAtributo.setText(
+                    "🙏 PD: " + pal.getPoderDivino() + "/" +
+                            pal.getPoderDivinoMaximo() +
+                            " | 📿 Fé: " + pal.getFeAbencoada()
+            );
+        } else if (p instanceof AtributoEspecial) {
             AtributoEspecial attr = (AtributoEspecial) p;
             lblPersonagemAtributo.setText("✨ " + attr.getNomeAtributo() + ": " +
                     attr.getValorAtual() + "/" + attr.getValorMaximo());

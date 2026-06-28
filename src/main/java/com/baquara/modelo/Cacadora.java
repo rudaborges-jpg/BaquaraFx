@@ -13,7 +13,7 @@ public class Cacadora extends Personagem implements AtributoEspecial, Entidade {
     private Map<Class<? extends EfeitoStatus>, EfeitoStatus> efeitos;
 
     public Cacadora() {
-        super(PerTipo.CACADORA, "Caçadora", 110, 30, 12);
+        super(PerTipo.CACADORA, "Caçadora", 120, 28, 12);
         this.penetracaoMaxima = 100;
         this.penetracao = 100;
         this.flechasPrecisas = 0;
@@ -30,8 +30,12 @@ public class Cacadora extends Personagem implements AtributoEspecial, Entidade {
         if (penetracao >= quantidade) {
             penetracao -= quantidade;
             flechasPrecisas++;
-            System.out.println("🎯 Penetração consumida: " + quantidade +
-                    " (Restante: " + penetracao + "/" + penetracaoMaxima + ")");
+
+            // ⭐ Usando os getters para mostrar informações mais claras
+            System.out.println("🎯 Penetração consumida: " + quantidade);
+            System.out.println("   📊 Restante: " + getPenetracao() + "/" + getPenetracaoMaxima());
+            System.out.println("   🏹 Flechas Precisas: " + getFlechasPrecisas());
+            System.out.println("   🩸 Novo sangramento: " + (12 + (getFlechasPrecisas() * 2)) + "/rodada");
             return true;
         }
         System.out.println("❌ Penetração insuficiente! (" + penetracao + "/" + penetracaoMaxima + ")");
@@ -52,8 +56,13 @@ public class Cacadora extends Personagem implements AtributoEspecial, Entidade {
     public void recarregarPorEstagio(int estagioNumero) {
         int recarga = estagioNumero * 8;
         penetracao = Math.min(penetracaoMaxima, penetracao + recarga);
+
+        flechasPrecisas = 0;
+
         System.out.println("🏹 Penetração recarregada após estágio: +" + recarga +
-                " (" + penetracao + "/" + penetracaoMaxima + ")");
+                " (" + getPenetracao() + "/" + getPenetracaoMaxima() + ")");
+        System.out.println("🔄 Flechas Precisas resetadas para 0!");
+        System.out.println("   💡 Próximo sangramento: " + (12 + (getFlechasPrecisas() * 2)) + " de dano/rodada");
     }
 
     @Override
@@ -168,8 +177,8 @@ public class Cacadora extends Personagem implements AtributoEspecial, Entidade {
         System.out.println("💥 Rajada de flechas causa " + danoInicial + " de dano!");
         alvo.tomarDano(danoInicial);
 
-        int duracaoSangramento = 3;
-        int danoSangramentoPorRodada = 10 + (flechasPrecisas * 2);
+        int duracaoSangramento = 4;
+        int danoSangramentoPorRodada = 12 + (flechasPrecisas * 2);
 
         System.out.println("\n🩸 SANGRAMENTO APLICADO!");
         System.out.println("   ⏱️ Duração: " + duracaoSangramento + " rodadas");
@@ -186,8 +195,8 @@ public class Cacadora extends Personagem implements AtributoEspecial, Entidade {
 
         System.out.println("🏹 Flechas precisas acumuladas: " + flechasPrecisas);
 
-        int recuperacao = 8;
-        if (critico) recuperacao = 12;
+        int recuperacao = 10;
+        if (critico) recuperacao = 15;
         recuperarPenetracao(recuperacao);
         System.out.println("✨ +" + recuperacao + " de Penetração recuperada pelo acerto!");
     }
@@ -199,10 +208,20 @@ public class Cacadora extends Personagem implements AtributoEspecial, Entidade {
 
     @Override
     public String getDescricaoHabilidade() {
-        return "Causa " + (45 + (nivel * 4)) + " de dano + sangramento de " +
-                (10 + (flechasPrecisas * 2)) + " por 3 rodadas.\n" +
-                "   🎯 " + (int)(chanceCritico * 100) + "% de chance de crítico!\n" +
-                "   🩸 O sangramento acumula com flechas precisas!";
+        int danoBase = 45 + (nivel * 4);
+        int flechas = getFlechasPrecisas();  // ⭐ Usando o getter
+        int sangramentoBase = 12 + (flechas * 2);
+        int duracao = 4;
+        int penetracaoAtual = getPenetracao();  // ⭐ Usando o getter
+        int penetracaoMax = getPenetracaoMaxima();  // ⭐ Usando o getter
+
+        return "🌿 CHUVA DE FLECHAS\n" +
+                "   💥 Dano imediato: " + danoBase + " (" + (int)(chanceCritico * 100) + "% de crítico)\n" +
+                "   🩸 Sangramento: " + sangramentoBase + " de dano por " + duracao + " rodadas\n" +
+                "   ⏱️ Duração: " + duracao + " rodadas (renovável com novos usos)\n" +
+                "   🏹 Flechas Precisas: " + flechas + " (+2 de sangramento cada)\n" +
+                "   💫 Custo: 35 de Penetração (" + penetracaoAtual + "/" + penetracaoMax + " disponível)\n" +
+                "   🔄 Flechas resetam a cada estágio!";
     }
 
     @Override
@@ -218,11 +237,20 @@ public class Cacadora extends Personagem implements AtributoEspecial, Entidade {
     @Override
     public void mostrarStatus() {
         super.mostrarStatus();
-        System.out.println("   🎯 Penetração: " + penetracao + "/" + penetracaoMaxima);
+
+        // ⭐ Usando os getters em vez de acesso direto
+        System.out.println("   🎯 Penetração: " + getPenetracao() + "/" + getPenetracaoMaxima());
         System.out.println("   💫 Chance Crítico: " + (int)(chanceCritico * 100) + "%");
-        if (flechasPrecisas > 0) {
-            System.out.println("   🏹 Flechas Precisas: " + flechasPrecisas);
+
+        int flechas = getFlechasPrecisas();
+        if (flechas > 0) {
+            System.out.println("   🏹 Flechas Precisas: " + flechas + " (+" + (flechas * 2) + " de sangramento)");
         }
+
+        // Mostra o dano do sangramento atual
+        int sangramentoBase = 12 + (flechas * 2);
+        System.out.println("   🩸 Sangramento atual: " + sangramentoBase + " de dano por rodada");
+
         for (EfeitoStatus efeito : efeitos.values()) {
             if (efeito.estaAtivo()) {
                 System.out.println("   " + efeito.getDescricao());

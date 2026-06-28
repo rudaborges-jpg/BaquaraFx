@@ -124,8 +124,12 @@ public class TelaBatalhaController {
             int vidaAntes = inimigoAtual.getVida();
             int danoEsperado = sangramento.getDanoPorRodada();
 
-            adicionarDialogoEfeito("🩸 " + inimigoAtual.getNome() + " está sangrando! Perderá " +
+            piscarDanoSangramento(danoEsperado);
+
+            // ⭐ SUBSTITUIR adicionarDialogoEfeito POR adicionarDialogoSangramento
+            adicionarDialogoSangramento(inimigoAtual.getNome() + " está sangrando! Perderá " +
                     danoEsperado + " de vida esta rodada!");
+
             piscarBarraVidaInimigo(Color.RED);
             animarIconeSangramento();
         }
@@ -381,11 +385,39 @@ public class TelaBatalhaController {
             Personagem p = jogador.getPersonagem();
             double reducao = (double) p.getDefesa() / (p.getDefesa() + 50);
             int percentualReducao = (int)(reducao * 100);
+
             if (lblJogadorStatus != null) {
                 lblJogadorStatus.setText("⚔️ Ataque: " + p.getAtaque());
             }
             if (lblJogadorDefesa != null) {
                 lblJogadorDefesa.setText("🛡️ Defesa: " + p.getDefesa() + " (-" + percentualReducao + "% dano)");
+            }
+
+            if (p instanceof Cacadora) {
+                Cacadora cac = (Cacadora) p;
+                if (lblJogadorAtributo != null) {
+                    lblJogadorAtributo.setText(
+                            "🎯 Penetração: " + cac.getPenetracao() + "/" +
+                                    cac.getPenetracaoMaxima() +
+                                    " | 🏹 Flechas: " + cac.getFlechasPrecisas()
+                    );
+                }
+            } else if (p instanceof Paladino) {
+                Paladino pal = (Paladino) p;
+                if (lblJogadorAtributo != null) {
+                    lblJogadorAtributo.setText(
+                            "🙏 PD: " + pal.getPoderDivino() + "/" +
+                                    pal.getPoderDivinoMaximo() +
+                                    " | 📿 Fé: " + pal.getFeAbencoada()
+                    );
+                }
+            } else if (p instanceof AtributoEspecial attr) {
+                if (lblJogadorAtributo != null) {
+                    lblJogadorAtributo.setText(
+                            attr.getNomeAtributo() + ": " +
+                                    attr.getValorAtual() + "/" + attr.getValorMaximo()
+                    );
+                }
             }
         });
     }
@@ -493,7 +525,7 @@ public class TelaBatalhaController {
 
             atualizarStatusJogador();
             atualizarStatusDetalhadoJogador();
-            atualizarStatusInimigo();
+            atualizarStatusInimigoComAnimacao();
             atualizarStatusDetalhadoInimigo();
 
             voltarAoMenu();
@@ -597,7 +629,52 @@ public class TelaBatalhaController {
                 lblCooldown.setText("❌ Sem habilidade");
                 return;
             }
-            if (hab.podeUsar()) {
+            if (p instanceof Cacadora) {
+                Cacadora cac = (Cacadora) p;
+                int penetracaoAtual = cac.getPenetracao();
+                int penetracaoMax = cac.getPenetracaoMaxima();
+                int flechas = cac.getFlechasPrecisas();
+                int custo = 35;
+
+                if (hab.podeUsar()) {
+                    btnHabilidade.setDisable(false);
+                    lblCooldown.setText(
+                            "✨ PRONTA! (" + penetracaoAtual + "/" + penetracaoMax +
+                                    " Penetração | 🏹 " + flechas + " Flechas)"
+                    );
+                    lblCooldown.setStyle("-fx-text-fill: #4CAF50;");
+                } else {
+                    btnHabilidade.setDisable(true);
+                    lblCooldown.setText(
+                            "❌ Penetração insuficiente! (" + penetracaoAtual + "/" + penetracaoMax +
+                                    " | Precisa: " + custo + ")"
+                    );
+                    lblCooldown.setStyle("-fx-text-fill: #ff4444;");
+                }
+            } else if (p instanceof Paladino) {
+                Paladino pal = (Paladino) p;
+                int poderAtual = pal.getPoderDivino();
+                int poderMaximo = pal.getPoderDivinoMaximo();
+                int fe = pal.getFeAbencoada();
+                int custo = 30 + (fe * 2);
+                if (custo > 70) custo = 70;
+
+                if (hab.podeUsar()) {
+                    btnHabilidade.setDisable(false);
+                    lblCooldown.setText(
+                            "✨ PRONTA! (" + poderAtual + "/" + poderMaximo +
+                                    " PD | 📿 " + fe + " Fé | 💫 Custo: " + custo + ")"
+                    );
+                    lblCooldown.setStyle("-fx-text-fill: #4CAF50;");
+                } else {
+                    btnHabilidade.setDisable(true);
+                    lblCooldown.setText(
+                            "❌ PD insuficiente! (" + poderAtual + "/" + poderMaximo +
+                                    " | Precisa: " + custo + " PD)"
+                    );
+                    lblCooldown.setStyle("-fx-text-fill: #ff4444;");
+                }
+            } else if (hab.podeUsar()) {
                 btnHabilidade.setDisable(false);
                 AtributoEspecial attr = (AtributoEspecial) p;
                 lblCooldown.setText("✨ PRONTA! (" + attr.getValorAtual() + "/" + attr.getValorMaximo() + " " + attr.getNomeAtributo() + ")");
@@ -837,26 +914,26 @@ public class TelaBatalhaController {
 
     private int calcularDano(Dificuldade diff) {
         Personagem p = jogador.getPersonagem();
+
         int danoBase = p.getAtaque();
-        int multiplicador;
-        switch (diff) {
-            case FACIL: multiplicador = 1; break;
-            case MEDIO: multiplicador = 2; break;
-            case DIFICIL: multiplicador = 3; break;
-            default: multiplicador = 1;
-        }
+
+
         int multiplicadorEstagio = Math.max(1, estagioAtualNumero / 2);
-        int dano = danoBase * multiplicador * multiplicadorEstagio;
+
+        int dano = danoBase * multiplicadorEstagio;
+
         double variacao = 0.85 + (random.nextDouble() * 0.3);
         dano = (int)(dano * variacao);
-        return Math.max(10, Math.min(80, dano));
+
+
+        return Math.max(10,dano);
     }
 
     private int calcularDanoInimigo() {
         int danoBase = inimigoAtual.getAtaque();
         int multiplicador = estagioAtualNumero;
         if (estagioAtualNumero % 5 == 0) multiplicador *= 2;
-        int dano = danoBase + (multiplicador * 3);
+        int dano = danoBase + 5 + (multiplicador * 4);
         double variacao = 0.85 + (random.nextDouble() * 0.3);
         dano = (int)(dano * variacao);
         return Math.max(8, dano);
@@ -880,8 +957,9 @@ public class TelaBatalhaController {
         habilidadesUsadas++;
         int dano = hab.executar(inimigoAtual);
         danoTotalCausado += dano;
+
         adicionarDialogoAcerto("💥 Causou " + dano + " de dano devastador!");
-        atualizarStatusInimigo();
+        atualizarStatusInimigoComAnimacao();
         atualizarStatusDetalhadoInimigo();
         atualizarBotaoHabilidade();
         atualizarStatusJogador();
